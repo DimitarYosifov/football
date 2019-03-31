@@ -1,5 +1,7 @@
 let level = {
     gridContainer: null,
+    playerCardsContainer: null,
+    opponentCardsContainer: null,
     animationInProgress: false,
     setLevelBackground: function () {
         stage.gamePhase = "level";
@@ -89,6 +91,38 @@ let level = {
         lastX: 0,
         lastY: 0
     },
+    createPlayers: function () {
+        _this = this;                                    ///???
+        this.playerCardsContainer = new PIXI.Container();
+        this.playerCardsContainer.name = "playerCardsContainer";
+        this.playerCardsContainer.interactive = false;
+        let playerCardsContainer_w = width * 0.5;
+        let playerCardsContainer_h = height * 0.1;    //???????????? hardcoded, to  be calculated!!!!!
+//        let playerCardsContainer.width = 100;    
+//        let playerCardsContainer.height= 100;   
+//        let block_w = grid_w / 6
+//        let block_h = grid_h / 8;
+        let playerCardsContainer_y = 200;
+        let playerCardsContainer_x = 100;
+        for (let i = 0; i < 6; i++) {
+            let cardTexture = PIXI.Texture.fromImage(`images/players/player_id_001.png`);
+            let card = new PIXI.Sprite(cardTexture);
+            card.interactive = false;
+            card.buttonMode = false;
+//            card.anchor.x = 0.5; //??????????????????
+//            card.anchor.y = 0.5; //??????????????????
+
+
+            card.x =(width / 6) * i;
+            card.y = height * 0.88;
+            card.width =width / 6;
+            card.height = height * 0.12;
+            this.playerCardsContainer.addChild(card);
+        }
+        stage.addChild(this.playerCardsContainer)
+        console.log(this.playerCardsContainer);
+    },
+
     createLevelGrid: function () {
         _this = this;
         this.gridContainer = new PIXI.Container();
@@ -106,7 +140,7 @@ let level = {
             _this.moveCoordinates.lastY = e.data.global.y;
         });
         this.gridContainer.on('pointerup', function (e) {
-
+            //TODO
         });
         let grid_w = width * 0.9;
         let grid_h = width * 1.15;

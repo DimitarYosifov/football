@@ -27,6 +27,7 @@ loader.load(setup);
 function setup() {
     level.setLevelBackground();
     level.createLevelGrid();
+    level.createPlayers();
 
     animationLoop();
 }
