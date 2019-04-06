@@ -1,6 +1,17 @@
 {
-    "name": "football_match_3", "version": "1.0.0", "keywords": [
-        "util", "functional", "server", "client", "browser"
-    ], "author": "User", "contributors": [
-    ], "dependencies": {}
+    "name": "football_match_3",
+    "version": "1.0.0",
+    "keywords": [
+        "util",
+        "functional",
+        "server",
+        "client",
+        "browser"
+    ],
+    "author": "User",
+    "contributors": [],
+    "dependencies": {
+        "@pixi/filter-glow": "^2.7.0",
+        "pixi-filters": "^2.7.1"
+    }
 }

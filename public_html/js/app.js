@@ -13,8 +13,8 @@ let height = 0;
 })();
 
 const renderer = PIXI.autoDetectRenderer(width, height, {
-    transparent: true,
-        resolution: 1
+    transparent: false,
+    resolution: 1
 });
 
 gameWindow.appendChild(renderer.view);
@@ -39,3 +39,4 @@ function animationLoop() {
 
 
 
+    
