@@ -3,14 +3,15 @@ const gameWindow = document.getElementById('gameWindow');
 let width = 0;
 let height = 0;
 
-(function resolution() {
+function resolution() {
     width = window.innerWidth > 550 ? 550 : window.innerWidth;
     height = window.innerHeight > 900 ? 900 : window.innerHeight;
     console.log(width);
     console.log(height);
     gameWindow.style.height = height;
     gameWindow.style.width = width;
-})();
+};
+ resolution() 
 
 const renderer = PIXI.autoDetectRenderer(width, height, {
     transparent: false,
