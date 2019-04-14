@@ -10,8 +10,9 @@ function resolution() {
     console.log(height);
     gameWindow.style.height = height;
     gameWindow.style.width = width;
-};
- resolution() 
+}
+;
+resolution()
 
 const renderer = PIXI.autoDetectRenderer(width, height, {
     transparent: false,
@@ -28,7 +29,8 @@ loader.load(setup);
 function setup() {
     level.setLevelBackground();
     level.createLevelGrid();
-    level.createPlayers();
+    level.createPlayerCards();
+    level.createOpponentCards();
 
     animationLoop();
 }

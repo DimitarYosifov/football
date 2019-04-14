@@ -91,7 +91,8 @@ let level = {
         lastX: 0,
         lastY: 0
     },
-    createPlayers: function () {
+
+    createPlayerCards: function () {
         _this = this;                                    ///???
         this.playerCardsContainer = new PIXI.Container();
         this.playerCardsContainer.name = "playerCardsContainer";
@@ -102,15 +103,9 @@ let level = {
             let container = new PIXI.Container();
             container.index = i;
 //stats            
-            container.stats = {
-                defense_current: 0,
-                defense_color: "FF1D00",
-                defense_full: 20,
-                attack_current: 0,
-                attack_color: "FF9702",
-                attack_full: 20,
-                special: null
-            };
+            container.stats = lineUps.player[i];
+
+
 //card background
             let cardTexture = PIXI.Texture.fromImage(`images/players/player_id_011.png`);
             let card = new PIXI.Sprite(cardTexture);
@@ -127,7 +122,7 @@ let level = {
             let shoe = new PIXI.Sprite(shoeTexture);
             shoe.interactive = false;
             shoe.buttonMode = false;
-            shoe.x = (width / 6) * i;
+            shoe.x = (width / 5.95) * i;
             shoe.y = height * 0.885;
             shoe.width = width / 21;
             shoe.height = width / 21// height * 0.03;
@@ -140,7 +135,7 @@ let level = {
                 strokeThickness: 4
             }
             );
-            attackValuesText.position.set((width / 6) * i + width / 6, height * 0.885);
+            attackValuesText.position.set((width / 6.05) * i + width / 6, height * 0.885);
             attackValuesText.anchor.x = 1;
 
 
@@ -150,8 +145,8 @@ let level = {
             let glove = new PIXI.Sprite(gloveTexture);
             glove.interactive = false;
             glove.buttonMode = false;
-            glove.x = (width / 6) * i;
-            glove.y = height * 0.97;
+            glove.x = (width / 5.95) * i;
+            glove.y = height * 0.965;
             glove.width = width / 21;
             glove.height = width / 21// height * 0.03;
             glove.tint = '0x' + container.stats.defense_color;
@@ -162,7 +157,7 @@ let level = {
                 stroke: '#FFFFFF',
                 strokeThickness: 4
             });
-            defenseValuesText.position.set((width / 6) * i + width / 6, height * 0.97);
+            defenseValuesText.position.set((width / 6.05) * i + width / 5.95, height * 0.97);
             defenseValuesText.anchor.x = 1;
 
 
@@ -184,6 +179,93 @@ let level = {
         }
         stage.addChild(this.playerCardsContainer)
         console.log(this.playerCardsContainer);
+    },
+
+    createOpponentCards: function () {
+        _this = this;                                    ///???
+        this.opponentCardsContainer = new PIXI.Container();
+        this.opponentCardsContainer.name = "playerCardsContainer";
+        this.opponentCardsContainer.interactive = false;
+        let opponentCardsContainer_w = width * 0.5;
+        let opponentCardsContainer_h = height * 0.1;    //???????????? hardcoded, to  be calculated!!!!!
+        for (let i = 0; i < 6; i++) {
+            let container = new PIXI.Container();
+            container.index = i;
+//stats            
+            container.stats = container.stats = lineUps.opponent[i];
+//card background
+            let cardTexture = PIXI.Texture.fromImage(`images/players/player_id_011.png`);
+            let card = new PIXI.Sprite(cardTexture);
+            card.interactive = false;
+            card.buttonMode = false;
+            card.x = (width / 6) * i;
+            card.y = 0;
+            card.width = width / 6;
+            card.height = height * 0.12;
+//             card.tint = '0x2F7F07';
+
+//attack section
+            let shoeTexture = PIXI.Texture.fromImage(`images/shoe.png`);
+            let shoe = new PIXI.Sprite(shoeTexture);
+            shoe.interactive = false;
+            shoe.buttonMode = false;
+            shoe.x = (width / 5.95) * i;
+            shoe.y = height * 0.005;
+            shoe.width = width / 21;
+            shoe.height = width / 21// height * 0.03;
+            shoe.tint = '0x' + container.stats.attack_color;
+
+            let attackValuesText = new PIXI.Text(container.stats.attack_current + '/' + container.stats.attack_full, {
+                fontSize: height / 75 + 'px',
+                fill: '#' + container.stats.attack_color, align: 'center',
+                stroke: '#FFFFFF',
+                strokeThickness: 4
+            }
+            );
+            attackValuesText.position.set((width / 6) * i + width / 6.1, height * 0.005);
+            attackValuesText.anchor.x = 1;
+
+
+
+//defense section
+            let gloveTexture = PIXI.Texture.fromImage(`images/glove2.png`);
+            let glove = new PIXI.Sprite(gloveTexture);
+            glove.interactive = false;
+            glove.buttonMode = false;
+            glove.x = (width / 5.95) * i;
+            glove.y = height * 0.09;
+            glove.width = width / 21;
+            glove.height = width / 21// height * 0.03;
+            glove.tint = '0x' + container.stats.defense_color;
+
+            let defenseValuesText = new PIXI.Text(container.stats.defense_current + '/' + container.stats.defense_full, {
+                fontSize: height / 75 + 'px',
+                fill: '#' + container.stats.defense_color, align: 'center',
+                stroke: '#FFFFFF',
+                strokeThickness: 4
+            });
+            defenseValuesText.position.set((width / 6) * i + width / 6.1, height * 0.095);
+            defenseValuesText.anchor.x = 1;
+
+
+            console.log(glove);
+
+//border
+            let border = new PIXI.Graphics();
+            border.lineStyle(3, 0xd0c639, 1);
+            border.drawRect((width / 6) * i, height * 0, width / 6, height * 0.122);    //0.120 not 0.118 ???
+            console.log(container);
+//add children
+            container.addChild(card);
+            container.addChild(attackValuesText);
+            container.addChild(defenseValuesText);
+            container.addChild(shoe);
+            container.addChild(glove);
+            container.addChild(border);
+            this.opponentCardsContainer.addChild(container);
+        }
+        stage.addChild(this.opponentCardsContainer)
+        console.log(this.opponentCardsContainer);
     },
 
     createLevelGrid: function () {
