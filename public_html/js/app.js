@@ -31,6 +31,7 @@ function setup() {
     level.createLevelGrid();
     level.createPlayerCards();
     level.createOpponentCards();
+    level.checkGridForMatches();
 
     animationLoop();
 }

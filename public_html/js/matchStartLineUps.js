@@ -8,7 +8,8 @@ let lineUps = {
             attack_color: "B200FF",
             attack_full: 20,
             special: null,
-            position: "GK"
+            position: "GK",
+            player_img_id: '011'
         },
         {
             defense_current: 0,
@@ -18,7 +19,8 @@ let lineUps = {
             attack_color: "2F7F07",
             attack_full: 20,
             special: null,
-            position: "DF1"
+            position: "DF1",
+            player_img_id: '001'
         },
         {
             defense_current: 0,
@@ -28,7 +30,8 @@ let lineUps = {
             attack_color: "3052FF",
             attack_full: 20,
             special: null,
-            position: "DF2"
+            position: "DF2",
+            player_img_id: '007'
         },
         {
             defense_current: 0,
@@ -38,7 +41,8 @@ let lineUps = {
             attack_color: "FF9702",
             attack_full: 20,
             special: null,
-            position: "MD1"
+            position: "MD1",
+            player_img_id: '008'
         },
         {
             defense_current: 0,
@@ -48,7 +52,8 @@ let lineUps = {
             attack_color: "E2D841",
             attack_full: 20,
             special: null,
-            position: "MD2"
+            position: "MD2",
+            player_img_id: '018'
         },
         {
             defense_current: 0,
@@ -58,7 +63,8 @@ let lineUps = {
             attack_color: "FF9702",
             attack_full: 20,
             special: null,
-            position: "F"
+            position: "F",
+            player_img_id: '010'
         }
     ],
     opponent: [
@@ -70,7 +76,8 @@ let lineUps = {
             attack_color: "B200FF",
             attack_full: 20,
             special: null,
-            position: "GK"
+            position: "GK",
+            opponent_img_id: '009'
         },
         {
             defense_current: 0,
@@ -80,7 +87,8 @@ let lineUps = {
             attack_color: "2F7F07",
             attack_full: 20,
             special: null,
-            position: "DF1"
+            position: "DF1",
+            opponent_img_id: '003'
         },
         {
             defense_current: 0,
@@ -90,7 +98,8 @@ let lineUps = {
             attack_color: "FF1D00",
             attack_full: 20,
             special: null,
-            position: "DF2"
+            position: "DF2",
+            opponent_img_id: '004'
         },
         {
             defense_current: 0,
@@ -100,7 +109,8 @@ let lineUps = {
             attack_color: "FF9702",
             attack_full: 20,
             special: null,
-            position: "MD1"
+            position: "MD1",
+            opponent_img_id: '005'
         },
         {
             defense_current: 0,
@@ -110,7 +120,8 @@ let lineUps = {
             attack_color: "E2D841",
             attack_full: 20,
             special: null,
-            position: "MD2"
+            position: "MD2",
+            opponent_img_id: '006'
         },
         {
             defense_current: 0,
@@ -120,7 +131,8 @@ let lineUps = {
             attack_color: "B200FF",
             attack_full: 20,
             special: null,
-            position: "F"
+            position: "F",
+            opponent_img_id: '007'
         }
     ]
 };
