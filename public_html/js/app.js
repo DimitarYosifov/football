@@ -10,9 +10,10 @@ function resolution() {
     console.log(height);
     gameWindow.style.height = height;
     gameWindow.style.width = width;
+    console.log(gameWindow.clientWidth);
 }
 ;
-resolution()
+resolution();
 
 const renderer = PIXI.autoDetectRenderer(width, height, {
     transparent: false,

@@ -245,23 +245,18 @@ let level = {
             this.opponentCardsContainer.addChild(container);
         }
         stage.addChild(this.opponentCardsContainer)
-        console.log(this.opponentCardsContainer);
+//        console.log(this.opponentCardsContainer);
     },
     checkGridForMatches: function () {
-
-
-//        console.log(this.gridContainer);
-//        return 
         let matches = [];
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 6; col++) {
-//                  console.log(row + '/' + col);
-
                 let match = {
                     row: row,
                     col: col,
                     matchesRightward: 1,
-                    matchesDownward: 1
+                    matchesDownward: 1,
+                    type: this.gridContainer.children[row].children[col].type
                 };
 //              check right
                 for (let x = col; x < 6 - 1; x++) {
@@ -279,22 +274,19 @@ let level = {
                         break;
                     }
                 }
-
                 if (match.matchesRightward >= 3 || match.matchesDownward >= 3) {
                     matches.push(match);
                 }
-                console.table(match);
             }
         }
         return matches;
     },
-
     createLevelGrid: function () {
         _this = this;
         this.gridContainer = new PIXI.Container();
         this.gridContainer.name = "gridContainer";
         this.gridContainer.interactive = true;
-        console.log(this.moveCoordinates.startX);
+//        console.log(this.moveCoordinates.startX);
         this.gridContainer.on('pointerdown', function (e) {
             _this.moveCoordinates.startX = e.data.global.x;
             _this.moveCoordinates.startY = e.data.global.y;
@@ -338,10 +330,8 @@ let level = {
                 block.on('pointerup', this.onDragEnd)
 //                        .on('pointerupoutside', onDragEnd)
                 block.on('pointermove', this.onDragMove);
-                block.gridPosition = {
-                    x: row,
-                    y: col
-                };
+                block.gridPosition_x = row;
+                block.gridPosition_y = col;
                 block.type = img;
                 block.x = grid_x + block_w * col;
                 block.y = grid_y + block_h * row;
@@ -371,120 +361,49 @@ let level = {
             let dir = Object.keys(directions).find(key => directions[key] === max);
             if (
                     (level.moveCoordinates.startY === level.moveCoordinates.lastY && level.moveCoordinates.startX === level.moveCoordinates.lastX) ||
-                    (dir === "down" && this.gridPosition.x === 7) ||
-                    (dir === "up" && this.gridPosition.x === 0) ||
-                    (dir === "right" && this.gridPosition.y === 5) ||
-                    (dir === "left" && this.gridPosition.y === 0)
+                    (dir === "down" && this.gridPosition_x === 7) ||
+                    (dir === "up" && this.gridPosition_x === 0) ||
+                    (dir === "right" && this.gridPosition_y === 5) ||
+                    (dir === "left" && this.gridPosition_y === 0)
                     ) {
                 return;
             }
             level.animationInProgress = true;
-            level.swapBlocks(this.gridPosition, dir);
+            level.swapBlocks(this.gridPosition_x, this.gridPosition_y, dir);
         }
     },
     onDragEnd: function (e) {
         this.dragging = false;
     },
-    swapBlocks: function (block1, dir) {
-        let item1 = this.gridContainer.children[block1.x].children[block1.y];
+    swapBlocks: function (block1_x, block1_y, dir) {
+        let item1 = this.gridContainer.children[block1_x].children[block1_y];
         let item2;
         switch (dir) {
             case "down":
-                item2 = this.gridContainer.children[block1.x + 1].children[block1.y];
+                item2 = this.gridContainer.children[block1_x + 1].children[block1_y];
                 break;
             case "up":
-                item2 = this.gridContainer.children[block1.x - 1].children[block1.y];
+                item2 = this.gridContainer.children[block1_x - 1].children[block1_y];
                 break;
             case "left":
-                item2 = this.gridContainer.children[block1.x].children[block1.y - 1];
+                item2 = this.gridContainer.children[block1_x].children[block1_y - 1];
                 break;
             case "right":
-                item2 = this.gridContainer.children[block1.x].children[block1.y + 1];
-                break;
+                item2 = this.gridContainer.children[block1_x].children[block1_y + 1];
             default:
                 break;
         }
-
-//        var canvas;
-//        var context;
-//        var proton;
-//        var renderer;
-//        var emitter;
-//        var stats;
-//
-//        Main();
-//
-//        function Main() {
-//            initCanvas();
-//            addStats();
-//            createProton();
-//            tick();
-//            moveEmitter();
-//        }
-//
-//        function initCanvas() {
-//            canvas = document.getElementById("rrr");
-//            canvas.width = window.innerWidth;
-//            canvas.height = window.innerHeight;
-//            context = canvas.getContext('2d');
-//            context.globalCompositeOperation = "lighter";
-//        }
-//
-//        function addStats() {
-//            stats = new Stats();
-//            stats.setMode(2);
-//            stats.domElement.style.position = 'absolute';
-//            stats.domElement.style.left = '0px';
-//            stats.domElement.style.top = '0px';
-//            document.body.appendChild(stats.domElement);
-//        }
-//
-//        function createProton(image) {
-//            proton = new Proton;
-//            emitter = new Proton.Emitter();
-//            emitter.rate = new Proton.Rate(new Proton.Span(10, 20), new Proton.Span(.05, .2));
-//
-//            emitter.addInitialize(new Proton.Body('images/ball_red.png', 2));
-//            emitter.addInitialize(new Proton.Mass(1));
-//            emitter.addInitialize(new Proton.Radius(1, 12));
-//            emitter.addInitialize(new Proton.Life(1, 3));
-//            emitter.addInitialize(new Proton.V(new Proton.Span(1, 3), new Proton.Span(-20, 20), 'polar'));
-//            emitter.addBehaviour(new Proton.RandomDrift(11, 21, .05));
-//            emitter.addBehaviour(new Proton.Alpha(1, 0.1));
-//
-//            emitter.addBehaviour(new Proton.Scale(0.01, 0.06));
-//            emitter.p.x = canvas.width / 2;
-//            emitter.p.y = canvas.height / 2;
-//            emitter.emit();
-//            proton.addEmitter(emitter);
-//
-//            renderer = new Proton.CanvasRenderer(canvas);
-//            proton.addRenderer(renderer);
-//        }
-//
-//        function moveEmitter() {
-////            TweenLite.to(emitter.p, 1, {
-////                x:0.1,//, Math.random() * window.innerWidth,
-////                delay: 0,
-////                onComplete: moveEmitter
-////            });
-//        }
-//
-//        function tick() {
-//            requestAnimationFrame(tick);
-//
-//            stats.begin();
-////            emitter.rotation += 0.5;
-//            proton.update();
-//            stats.end();
-//        }
-
-
-
-
-
-
-        TweenMax.to(item1, 0.2, {y: item2.y, x: item2.x, scaleX: 22, scaleY: 3, repeat: 0, yoyo: true, ease: Linear.easeNone});
+        TweenMax.to(item1, 0.2, {y: item2.y, x: item2.x, scaleX: 22, scaleY: 3, repeat: 0, yoyo: true, ease: Linear.easeNone, onComplete: function () {
+                let type1 = item1.type;
+                let gridPosition1 = item1.gridPosition;
+                item1.type = item2.type;
+                item1.gridPosition = item2.gridPosition;
+                item2.type = type1;
+                item2.gridPosition = gridPosition1;
+                if (level.checkGridForMatches().length !== 0) {
+                    Main(level.checkGridForMatches());
+                }
+            }});
         TweenMax.to(item2, 0.2, {y: item1.y, x: item1.x, repeat: 0, yoyo: true, ease: Linear.easeNone});
     }
 };
