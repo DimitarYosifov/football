@@ -22,14 +22,18 @@ function createProton(matches) {
     let col = matches[0].col;
 //  horizontal
     if (matches[0].matchesRightward > 1) {
+        fillingCardsPoints.matchColor(matches[0].type, matches[0].matchesRightward);
         for (let i = 0; i < matches[0].matchesRightward; i++) {
             emit(row, col + i, matches[0].type);
         }
     }
 //  vertical
     if (matches[0].matchesDownward > 1) {
+
+        fillingCardsPoints.matchColor(matches[0].type, matches[0].matchesDownward);
+        console.log(matches[0]);
         for (let i = 0; i < matches[0].matchesDownward; i++) {
-            emit(row+ i, col , matches[0].type);
+            emit(row + i, col, matches[0].type);
         }
     }
     function emit(row, col, type) {

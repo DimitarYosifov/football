@@ -3,6 +3,7 @@ let level = {
     playerCardsContainer: null,
     opponentCardsContainer: null,
     animationInProgress: false,
+    playerTurn : true,
     setLevelBackground: function () {
         stage.gamePhase = "level";
         let background = PIXI.Texture.fromImage('images/pitch.png');
@@ -172,7 +173,7 @@ let level = {
     createOpponentCards: function () {
         _this = this; ///???
         this.opponentCardsContainer = new PIXI.Container();
-        this.opponentCardsContainer.name = "playerCardsContainer";
+        this.opponentCardsContainer.name = "opponentCardsContainer";
         this.opponentCardsContainer.interactive = false;
         let opponentCardsContainer_w = width * 0.5;
         let opponentCardsContainer_h = height * 0.1; //???????????? hardcoded, to  be calculated!!!!!
@@ -400,6 +401,10 @@ let level = {
                 item1.gridPosition = item2.gridPosition;
                 item2.type = type1;
                 item2.gridPosition = gridPosition1;
+                
+                console.log(level.checkGridForMatches());
+                
+                
                 if (level.checkGridForMatches().length !== 0) {
                     Main(level.checkGridForMatches());
                 }
