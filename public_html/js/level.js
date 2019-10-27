@@ -3,7 +3,7 @@ let level = {
     playerCardsContainer: null,
     opponentCardsContainer: null,
     animationInProgress: false,
-    playerTurn : true,
+    playerTurn: true,
     setLevelBackground: function () {
         stage.gamePhase = "level";
         let background = PIXI.Texture.fromImage('images/pitch.png');
@@ -252,6 +252,16 @@ let level = {
         let matches = [];
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 6; col++) {
+
+                let thisBlock = this.gridContainer.children[row].children[col].type;
+                let previousBlock_right = this.gridContainer.children[row].children[col - 1] ? this.gridContainer.children[row].children[col - 1].type : null;
+                let previousBlock_down = this.gridContainer.children[row - 1] ? this.gridContainer.children[row - 1].children[col].type : null;
+
+//              PREVENTS ERROR WHEN MATCHING MORE THAN 3 BLOCKS ...
+                if (thisBlock === previousBlock_right || thisBlock === previousBlock_down) {
+                    continue;
+                }
+
                 let match = {
                     row: row,
                     col: col,
@@ -259,27 +269,35 @@ let level = {
                     matchesDownward: 1,
                     type: this.gridContainer.children[row].children[col].type
                 };
+
 //              check right
                 for (let x = col; x < 6 - 1; x++) {
-                    if (this.gridContainer.children[row].children[x].type === this.gridContainer.children[row].children[x + 1].type) {
+                    let thisBlock = this.gridContainer.children[row].children[x].type;  
+                    let nextBlock_right = this.gridContainer.children[row].children[x + 1].type;
+                    if (thisBlock === nextBlock_right) {
                         match.matchesRightward++;
                     } else {
                         break;
                     }
                 }
+
 //              check down
                 for (let y = row; y < 8 - 1; y++) {
-                    if (this.gridContainer.children[y].children[col].type === this.gridContainer.children[y + 1].children[col].type) {
+                    let thisBlock = this.gridContainer.children[y].children[col].type;
+                    let nextBlock_down = this.gridContainer.children[y + 1].children[col].type;
+                    if (thisBlock === nextBlock_down) {
                         match.matchesDownward++;
                     } else {
                         break;
                     }
                 }
+
                 if (match.matchesRightward >= 3 || match.matchesDownward >= 3) {
                     matches.push(match);
                 }
             }
         }
+        console.table(matches);
         return matches;
     },
     createLevelGrid: function () {
@@ -401,13 +419,15 @@ let level = {
                 item1.gridPosition = item2.gridPosition;
                 item2.type = type1;
                 item2.gridPosition = gridPosition1;
-                
-                console.log(level.checkGridForMatches());
-                
-                
-                if (level.checkGridForMatches().length !== 0) {
-                    Main(level.checkGridForMatches());
+
+//                console.log(level.checkGridForMatches());
+
+//                START OF PROTON EFFECT AFTER MATCH
+                let matches = level.checkGridForMatches();
+                if (matches.length !== 0) {
+                    Main(matches);
                 }
+
             }});
         TweenMax.to(item2, 0.2, {y: item1.y, x: item1.x, repeat: 0, yoyo: true, ease: Linear.easeNone});
     }
