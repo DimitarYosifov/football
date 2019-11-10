@@ -1,4 +1,4 @@
-`<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <title>Football</title>
@@ -20,29 +20,44 @@
         <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineMax.min.js"></script>-->
     </head>
     <body>
-        <div id='gameWindow' style="  margin: 0 auto; width: 10px; height: 10px"></div>
-        <canvas id="rrr" style=" width: 10px; height: 10px"></canvas>
+        <div id='gameWindow' style="  margin: 0 auto;"></div>
+        <canvas id="rrr" style=""></canvas>
         <script  src="js/app.js" type="module" ></script>
     </body>
+
+
+    <!-- 
+    TODO LIST:
+                config file!!
+                fillingcardspoints not to be a function but a class, plus createOpponentCards and createPlayerCards may be in there two. last two methods need optimization too redundant and hardcoded and messy
+                proton or pixi-particles...
+                createPlayerCards  & createOpponentCards- these two methods to be in a separate class file along with setLevelBackground => setBackground so that it can be reusable from everywhere in the app
+                database-firebase probably
+                all pointer events to be in separate file for reuse.:)
+                node-server..+ pass and username
+                mobile suport
+                resize function
     
-    
-<!--       
-INFO!!!!!!!!!
-        players' pics effect paint.net
-        photo->glow= 3/13/38,
-        photo=>vignette= 0/0/0.7/1,
-        width=90,
-        height= 160
-    
-    BALL COLORS:  
-           RED: 'FF1D00'
-           BLUE: '3052FF'
-           GREEN: '2F7F07'
-           YELLOW: 'E2D841'
-           ORANGE 'FF9702'
-           PURPLE: 'B200FF'
-    
-    INSIDE "PUBLIC_HTML" FOLDER
-    npm install -g browser-sync                          //JUST ONCE IF NOT ALREADY INSTALLED
-    browser-sync start --server --index index.html-->
+                gulp, webpack and babel 
+    -->
+
+    <!--       
+    INFO!!!!!!!!!
+            players' pics effect paint.net
+            photo->glow= 3/13/38,
+            photo=>vignette= 0/0/0.7/1,
+            width=90,
+            height= 160
+        
+        BALL COLORS:  
+               RED: 'FF1D00'
+               BLUE: '3052FF'
+               GREEN: '2F7F07'
+               YELLOW: 'E2D841'
+               ORANGE 'FF9702'
+               PURPLE: 'B200FF'
+        
+        INSIDE "PUBLIC_HTML" FOLDER
+        npm install -g browser-sync                          //JUST ONCE IF NOT ALREADY INSTALLED
+        browser-sync start --server --index index.html-->
 </html>
