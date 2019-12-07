@@ -289,18 +289,19 @@ export default class Level {
         this.gridContainer.on('pointerup', function (e) {
             //TODO
         });
-        let grid_w = this.width * 0.9;
-        let grid_h = this.width * 1.15;
+     let grid_h = this.height * 0.76;
+
+        let grid_w = grid_h * 0.7;
         let block_w = grid_w / 6
         let block_h = grid_h / 8;
-        let grid_y = (this.height - this.width * 1.15) / 2 + block_h / 2;
-        let grid_x = this.width * 0.05 + block_w / 2;
+        let grid_y = block_h / 2 + (this.height - grid_h) / 2;// this.height * 0.15// (this.height - this.width * 1.15) / 2 + block_h / 2;
+        let grid_x = block_h / 2 + ((this.width - grid_w) / 2);// this.width * 0.05 + block_w / 2;
         //---to be deleted---------------------------------------------------------------------------------------//
-        let gridWrapper = new PIXI.Graphics();
-        gridWrapper.lineStyle(1, 0x000000);
-        gridWrapper.drawRect(this.width * 0.05, (this.height - this.width * 1.15) / 2, this.width * 0.9, this.width * 1.15);
+        // let gridWrapper = new PIXI.Graphics();
+        // gridWrapper.lineStyle(1, 0x000000);
+        // gridWrapper.drawRect(this.width * 0.05, (this.height - this.width * 1.15) / 2, this.width * 0.9, this.width * 1.15);
         //-------------------------------------------------------------------------------------------------------//
-        for (let row = 0; row < 8; row++) {
+       for (let row = 0; row < 8; row++) {
             let rowContainer = new PIXI.Container();
             for (let col = 0; col < 6; col++) {
                 let figureMissing = true;
