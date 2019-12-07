@@ -1,9 +1,10 @@
-import lineUps from "./matchStartLineUps.js";
+import LineUps from "./LineUps.js";
+import Card from "./LevelCards.js";
 
 export default class Level {
 
     constructor(app) {
-        this.lineUps = new lineUps();
+        this.lineUps = new LineUps();
         this.stage = app.stage;
         this.width = app.width;
         this.height = app.height;
@@ -118,164 +119,105 @@ export default class Level {
         this.playerCardsContainer = new PIXI.Container();
         this.playerCardsContainer.name = "playerCardsContainer";
         this.playerCardsContainer.interactive = false;
-        let playerCardsContainer_w = this.width * 0.5;
-        let playerCardsContainer_h = this.height * 0.1; //???????????? hardcoded, to  be calculated!!!!!
+
         for (let i = 0; i < 6; i++) {
-            let container = new PIXI.Container();
-            container.index = i;
 
-            //stats            
-            container.stats = this.lineUps.player[i];
+            let card = new Card({
+                index: i,
+                stats: this.lineUps.player[i],
+                font_size: this.height / 75 + 'px',
 
-            //card background
-            let cardTexture = PIXI.Texture.fromImage(`images/players/player_id_${this.lineUps.player[i].player_img_id}.png`);
-            let card = new PIXI.Sprite(cardTexture);
-            card.interactive = false;
-            card.buttonMode = false;
-            card.x = (this.width / 6) * i;
-            card.y = this.height * 0.88;
-            card.width = this.width / 6;
-            card.height = this.height * 0.12;
-            //card.tint = '0x2F7F07';
+                cardTexture: `images/players/player_id_${this.lineUps.player[i].player_img_id}.png`,
+                card_x: (this.width / 6) * i,
+                card_y: this.height * 0.88,
+                card_width: this.width / 6,
+                card_height: this.height * 0.12,
 
-            //attack section
-            let shoeTexture = PIXI.Texture.fromImage(`images/shoe.png`);
-            let shoe = new PIXI.Sprite(shoeTexture);
-            shoe.interactive = false;
-            shoe.buttonMode = false;
-            shoe.x = (this.width / 5.95) * i;
-            shoe.y = this.height * 0.885;
-            shoe.width = this.width / 21;
-            shoe.height = this.width / 21;
-            shoe.tint = '0x' + container.stats.attack_color;
-            let attackValuesText = new PIXI.Text(container.stats.attack_current + '/' + container.stats.attack_full, {
-                fontSize: this.height / 75 + 'px',
-                fill: '#' + container.stats.attack_color, align: 'center',
-                stroke: '#FFFFFF',
-                strokeThickness: 4
-            }
-            );
-            attackValuesText.position.set((this.width / 6.05) * i + this.width / 6, this.height * 0.885);
-            attackValuesText.anchor.x = 1;
+                shoeTexture: `images/shoe.png`,
+                shoe_x: (this.width / 5.95) * i,
+                shoe_y: this.height * 0.885,
+                shoe_width: this.width / 21,
+                shoe_height: this.width / 21,
 
-            //defense section
-            let gloveTexture = PIXI.Texture.fromImage(`images/glove2.png`);
-            let glove = new PIXI.Sprite(gloveTexture);
-            glove.interactive = false;
-            glove.buttonMode = false;
-            glove.x = (this.width / 5.95) * i;
-            glove.y = this.height * 0.965;
-            glove.width = this.width / 21;
-            glove.height = this.width / 21// height * 0.03;
-            glove.tint = '0x' + container.stats.defense_color;
-            let defenseValuesText = new PIXI.Text(container.stats.defense_current + '/' + container.stats.defense_full, {
-                fontSize: this.height / 75 + 'px',
-                fill: '#' + container.stats.defense_color, align: 'center',
-                stroke: '#FFFFFF',
-                strokeThickness: 4
-            });
-            defenseValuesText.position.set((this.width / 6.05) * i + this.width / 5.95, this.height * 0.97);
-            defenseValuesText.anchor.x = 1;
+                attack_text: {
+                    x: (this.width / 6.05) * i + this.width / 6,
+                    y: this.height * 0.885
+                },
 
-            //border
-            let border = new PIXI.Graphics();
-            border.lineStyle(3, 0xd0c639, 1);
-            border.drawRect((this.width / 6) * i, this.height * 0.88, this.width / 6, this.height * 0.118); //0.120 not 0.118 ???
+                gloveTexture: `images/glove2.png`,
+                glove_x: (this.width / 5.95) * i,
+                glove_y: this.height * 0.965,
+                glove_width: this.width / 21,
+                glove_height: this.width / 21,
 
-            //add children
-            container.addChild(card);
-            container.addChild(attackValuesText);
-            container.addChild(defenseValuesText);
-            container.addChild(shoe);
-            container.addChild(glove);
-            container.addChild(border);
-            this.playerCardsContainer.addChild(container);
+                defense_text: {
+                    x: (this.width / 6.05) * i + this.width / 5.95,
+                    y: this.height * 0.97
+                },
+
+                border_x: (this.width / 6) * i,
+                border_y: this.height * 0.88,
+                border_width: this.width / 6,
+                border_height: this.height * 0.118
+            })
+
+            this.playerCardsContainer.addChild(card.container);
         }
+
         this.stage.addChild(this.playerCardsContainer)
     }
-
 
     createOpponentCards() {
         this.opponentCardsContainer = new PIXI.Container();
         this.opponentCardsContainer.name = "opponentCardsContainer";
         this.opponentCardsContainer.interactive = false;
-        let opponentCardsContainer_w = this.width * 0.5;
-        let opponentCardsContainer_h = this.height * 0.1; //???????????? hardcoded, to  be calculated!!!!!
+        
         for (let i = 0; i < 6; i++) {
-            let container = new PIXI.Container();
-            container.index = i;
 
-            //stats            
-            container.stats = container.stats = this.lineUps.opponent[i];
+            let card = new Card({
+                index: i,
+                stats: this.lineUps.opponent[i],
+                font_size: this.height / 75 + 'px',
 
-            //card background
-            let cardTexture = PIXI.Texture.fromImage(`images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}.png`);
-            let card = new PIXI.Sprite(cardTexture);
-            card.interactive = false;
-            card.buttonMode = false;
-            card.x = (this.width / 6) * i;
-            card.y = 0;
-            card.width = this.width / 6;
-            card.height = this.height * 0.12;
-            //card.tint = '0x2F7F07';
+                cardTexture: `images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}.png`,
+                card_x: (this.width / 6) * i,
+                card_y:0,
+                card_width: this.width / 6,
+                card_height: this.height * 0.12,
 
+                shoeTexture: `images/shoe.png`,
+                shoe_x: (this.width / 5.95) * i,
+                shoe_y: this.height * 0.005,
+                shoe_width: this.width / 21,
+                shoe_height: this.width / 21,
 
-            //attack section
-            let shoeTexture = PIXI.Texture.fromImage(`images/shoe.png`);
-            let shoe = new PIXI.Sprite(shoeTexture);
-            shoe.interactive = false;
-            shoe.buttonMode = false;
-            shoe.x = (this.width / 5.95) * i;
-            shoe.y = this.height * 0.005;
-            shoe.width = this.width / 21;
-            shoe.height = this.width / 21;
-            shoe.tint = '0x' + container.stats.attack_color;
-            let attackValuesText = new PIXI.Text(container.stats.attack_current + '/' + container.stats.attack_full, {
-                fontSize: this.height / 75 + 'px',
-                fill: '#' + container.stats.attack_color, align: 'center',
-                stroke: '#FFFFFF',
-                strokeThickness: 4
-            }
-            );
-            attackValuesText.position.set((this.width / 6) * i + this.width / 6.1, this.height * 0.005);
-            attackValuesText.anchor.x = 1;
+                attack_text: {
+                    x: (this.width / 6) * i + this.width / 6.1,
+                    y: this.height * 0.005
+                },
 
-            //defense section
-            let gloveTexture = PIXI.Texture.fromImage(`images/glove2.png`);
-            let glove = new PIXI.Sprite(gloveTexture);
-            glove.interactive = false;
-            glove.buttonMode = false;
-            glove.x = (this.width / 5.95) * i;
-            glove.y = this.height * 0.09;
-            glove.width = this.width / 21;
-            glove.height = this.width / 21;
-            glove.tint = '0x' + container.stats.defense_color;
-            let defenseValuesText = new PIXI.Text(container.stats.defense_current + '/' + container.stats.defense_full, {
-                fontSize: this.height / 75 + 'px',
-                fill: '#' + container.stats.defense_color, align: 'center',
-                stroke: '#FFFFFF',
-                strokeThickness: 4
-            });
-            defenseValuesText.position.set((this.width / 6) * i + this.width / 6.1, this.height * 0.095);
-            defenseValuesText.anchor.x = 1;
+                gloveTexture: `images/glove2.png`,
+                glove_x: (this.width / 5.95) * i,
+                glove_y:  this.height * 0.09,
+                glove_width: this.width / 21,
+                glove_height: this.width / 21,
 
-            //border
-            let border = new PIXI.Graphics();
-            border.lineStyle(3, 0xd0c639, 1);
-            border.drawRect((this.width / 6) * i, this.height * 0, this.width / 6, this.height * 0.122); //0.120 not 0.118 ???
+                defense_text: {
+                    x:(this.width / 6) * i + this.width / 6.1,
+                    y: this.height * 0.095
+                },
 
-            //add children
-            container.addChild(card);
-            container.addChild(attackValuesText);
-            container.addChild(defenseValuesText);
-            container.addChild(shoe);
-            container.addChild(glove);
-            container.addChild(border);
-            this.opponentCardsContainer.addChild(container);
+                border_x:(this.width / 6) * i,
+                border_y:  this.height * 0,
+                border_width: this.width / 6,
+                border_height: this.height * 0.122
+            })
+
+            this.opponentCardsContainer.addChild(card.container);
         }
+
         this.stage.addChild(this.opponentCardsContainer)
     }
-
 
     checkGridForMatches() {
         let matches = [];
@@ -329,7 +271,6 @@ export default class Level {
         return matches;
     }
 
-
     createLevelGrid() {
         let _this = this;
         this.gridContainer = new PIXI.Container();
@@ -374,7 +315,7 @@ export default class Level {
                 block.buttonMode = true;
                 block.anchor.x = 0.5; //??????????????????
                 block.anchor.y = 0.5; //??????????????????
-                
+
                 block.on('pointerdown', this.onDragStart);
                 block.on('pointerup', this.onDragEnd)
 //  TODO        block.on('pointerupoutside', onDragEnd)
@@ -382,7 +323,7 @@ export default class Level {
 
                 block.gridPosition_x = row;
                 block.gridPosition_y = col;
-                
+
                 block.type = img;
                 block.x = grid_x + block_w * col;
                 block.y = grid_y + block_h * row;
@@ -395,14 +336,12 @@ export default class Level {
         this.stage.addChild(this.gridContainer);
     }
 
-
     onDragStart = (e) => {
         this.gridPosition_x = e.currentTarget.gridPosition_x;
         this.gridPosition_y = e.currentTarget.gridPosition_y;
         this.data = e.data;
         this.dragging = true;
     }
-
 
     onDragMove = (e) => {
         if (this.dragging && !this.animationInProgress) {
@@ -429,11 +368,9 @@ export default class Level {
         }
     }
 
-
     onDragEnd(e) {
         this.dragging = false;
     }
-
 
     swapBlocks(block1_x, block1_y, dir) {
         let item1 = this.gridContainer.children[block1_x].children[block1_y];
