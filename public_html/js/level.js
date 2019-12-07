@@ -1,11 +1,14 @@
 import LineUps from "./LineUps.js";
 import Card from "./LevelCards.js";
+//import ProtonEffects from "./ProtonEffects.js";
+
 
 export default class Level {
 
     constructor(app) {
         this.lineUps = new LineUps();
         this.stage = app.stage;
+        this.proton = app.proton;
         this.width = app.width;
         this.height = app.height;
         this.gridContainer = null;
@@ -171,7 +174,7 @@ export default class Level {
         this.opponentCardsContainer = new PIXI.Container();
         this.opponentCardsContainer.name = "opponentCardsContainer";
         this.opponentCardsContainer.interactive = false;
-        
+
         for (let i = 0; i < 6; i++) {
 
             let card = new Card({
@@ -181,7 +184,7 @@ export default class Level {
 
                 cardTexture: `images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}.png`,
                 card_x: (this.width / 6) * i,
-                card_y:0,
+                card_y: 0,
                 card_width: this.width / 6,
                 card_height: this.height * 0.12,
 
@@ -198,17 +201,17 @@ export default class Level {
 
                 gloveTexture: `images/glove2.png`,
                 glove_x: (this.width / 5.95) * i,
-                glove_y:  this.height * 0.09,
+                glove_y: this.height * 0.09,
                 glove_width: this.width / 21,
                 glove_height: this.width / 21,
 
                 defense_text: {
-                    x:(this.width / 6) * i + this.width / 6.1,
+                    x: (this.width / 6) * i + this.width / 6.1,
                     y: this.height * 0.095
                 },
 
-                border_x:(this.width / 6) * i,
-                border_y:  this.height * 0,
+                border_x: (this.width / 6) * i,
+                border_y: this.height * 0,
                 border_width: this.width / 6,
                 border_height: this.height * 0.122
             })
@@ -289,8 +292,7 @@ export default class Level {
         this.gridContainer.on('pointerup', function (e) {
             //TODO
         });
-     let grid_h = this.height * 0.76;
-
+        let grid_h = this.height * 0.76;
         let grid_w = grid_h * 0.7;
         let block_w = grid_w / 6
         let block_h = grid_h / 8;
@@ -301,7 +303,7 @@ export default class Level {
         // gridWrapper.lineStyle(1, 0x000000);
         // gridWrapper.drawRect(this.width * 0.05, (this.height - this.width * 1.15) / 2, this.width * 0.9, this.width * 1.15);
         //-------------------------------------------------------------------------------------------------------//
-       for (let row = 0; row < 8; row++) {
+        for (let row = 0; row < 8; row++) {
             let rowContainer = new PIXI.Container();
             for (let col = 0; col < 6; col++) {
                 let figureMissing = true;
@@ -346,24 +348,36 @@ export default class Level {
 
     onDragMove = (e) => {
         if (this.dragging && !this.animationInProgress) {
+            /*   
+             gets block height and divides it by 3,
+             the least drag/swipe distance
+             to start blocks swap.
+             ...needs better solution here!!!
+             */
+            let dist = this.gridContainer.children[0].children[0].height / 3;
+
             let directions = {
                 left: this.moveCoordinates.startX - this.moveCoordinates.lastX,
                 right: this.moveCoordinates.lastX - this.moveCoordinates.startX,
                 up: this.moveCoordinates.startY - this.moveCoordinates.lastY,
                 down: this.moveCoordinates.lastY - this.moveCoordinates.startY
             };
+
             let arr = Object.values(directions);
             let max = Math.max(...arr);
+
             let dir = Object.keys(directions).find(key => directions[key] === max);
             if (
                     (this.moveCoordinates.startY === this.moveCoordinates.lastY && this.moveCoordinates.startX === this.moveCoordinates.lastX) ||
                     (dir === "down" && this.gridPosition_x === 7) ||
                     (dir === "up" && this.gridPosition_x === 0) ||
                     (dir === "right" && this.gridPosition_y === 5) ||
-                    (dir === "left" && this.gridPosition_y === 0)
-                    ) {
+                    (dir === "left" && this.gridPosition_y === 0) ||
+                    max < dist)
+            {
                 return;
             }
+
             this.animationInProgress = true;
             this.swapBlocks(this.gridPosition_x, this.gridPosition_y, dir);
         }
@@ -391,7 +405,7 @@ export default class Level {
             default:
                 break;
         }
-        TweenMax.to(item1, 0.2, {y: item2.y, x: item2.x, scaleX: 22, scaleY: 3, repeat: 0, yoyo: true, ease: Linear.easeNone, onComplete: function () {
+        TweenMax.to(item1, 0.2, {y: item2.y, x: item2.x, ease: Linear.easeNone, onComplete: () => {
                 let type1 = item1.type;
                 let gridPosition1 = item1.gridPosition;
                 item1.type = item2.type;
@@ -400,11 +414,13 @@ export default class Level {
                 item2.gridPosition = gridPosition1;
 
 //                START OF PROTON EFFECT AFTER MATCH
-//                let matches = level.checkGridForMatches();
-//                if (matches.length !== 0) {
-//                    Main(matches);
-//                }
+                let matches = this.checkGridForMatches();
+                console.log(matches);
+                if (matches.length !== 0) {
+                    this.proton.Main(matches, this.width, this.height);
+                }
             }});
+//        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
         TweenMax.to(item2, 0.2, {y: item1.y, x: item1.x, repeat: 0, yoyo: true, ease: Linear.easeNone});
     }
 }

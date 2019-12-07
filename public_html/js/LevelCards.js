@@ -1,6 +1,5 @@
 export default class LevelCards {
     constructor(data) {
-        console.log(data);
         this.index = data.index;
         this.stats = data.stats;
         this.cardTexture = data.cardTexture;
