@@ -25,22 +25,18 @@ export default class ProtonEffects {
         this.context.globalCompositeOperation = "lighter";
     }
     createProton(matches) {
-        console.log(matches);
         let row = matches[0].row;
         let col = matches[0].col;
-//  horizontal
 
         let emit = (row, col, type) => {
-//            let width =
-//            let height= 
-            let grid_x = window.innerWidth / 2 - gameWindow.clientWidth / 2;
-//        let grid_y = window.innerHeight / 2 - gameWindow.clientHeight / 2;
-            let grid_w = this.width * 0.87;
-            let grid_h = this.width * 1.12;
+            let grid_h = this.height * 0.65;
+            let grid_w = grid_h * 0.75;
             let block_w = grid_w / 6;
             let block_h = grid_h / 8;
-            let x = grid_x + col * block_w + block_w;
-            let y = (this.height - this.width * 1.15) / 2 + row * block_h + block_h;
+
+            let x = window.innerWidth / 2 - grid_h * 0.7 / 2 + col * block_w + block_w / 2;
+            let y = window.innerHeight / 2 - grid_h / 2 + row * block_h + block_h / 2;
+
             let emitter = new Proton.Emitter();
             emitter.rate = new Proton.Rate(new Proton.Span(1, 3), new Proton.Span(.05, .2));
             emitter.addInitialize(new Proton.Body(`images/${type}.png`, 2));
@@ -62,20 +58,14 @@ export default class ProtonEffects {
             }, 1000);
         }
 
-
+//  horizontal
         if (matches[0].matchesRightward > 1) {
-//            fillingCardsPoints.matchColor(matches[0].type, matches[0].matchesRightward);
-
-
             for (let i = 0; i < matches[0].matchesRightward; i++) {
                 emit(row, col + i, matches[0].type);
             }
         }
 //  vertical
         if (matches[0].matchesDownward > 1) {
-
-//            fillingCardsPoints.matchColor(matches[0].type, matches[0].matchesDownward);
-            console.log(matches[0]);
             for (let i = 0; i < matches[0].matchesDownward; i++) {
                 emit(row + i, col, matches[0].type);
             }

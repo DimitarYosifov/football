@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.6/pixi.js"></script>
+        <script src="libraries/PIXI.TextInput.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenLite.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineLite.min.js"></script>
@@ -29,15 +30,19 @@
 
     <!-- 
     TODO LIST:
-                fillingcardspoint useless!!!!!!!!!!!
+    DONE        fix proton match coordinates
+                disable landscape
+    DONE        fillingcardspoint useless!!!!!!!!!!!
+                fix password asterisk problem...
                 config file!!
+                login btns
+                add font...
                 fillingcardspoints not to be a function but a class, plus createOpponentCards and createPlayerCards may be in there two. last two methods need optimization too redundant and hardcoded and messy
                 proton or pixi-particles...
     DONE?       createPlayerCards  & createOpponentCards- these two methods to be in a separate class file 
                 along with setLevelBackground => setBackground so that it can be reusable from everywhere in the app
                 database-firebase probably
     DONE?       fix drag!!! important!!!!
-                all pointer events to be in separate file for reuse.:)
     DONE?       node-server..
                 + pass and username
                 mobile suport

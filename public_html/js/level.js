@@ -1,11 +1,19 @@
 import LineUps from "./LineUps.js";
 import Card from "./LevelCards.js";
-//import ProtonEffects from "./ProtonEffects.js";
-
-
+import SetBackground from "./SetBackground.js";
+//const TextInput = require('pixi-text-input')
 export default class Level {
 
     constructor(app) {
+        
+        
+        
+        
+        
+        
+        
+        
+        this.app = app;
         this.lineUps = new LineUps();
         this.stage = app.stage;
         this.proton = app.proton;
@@ -16,30 +24,23 @@ export default class Level {
         this.opponentCardsContainer = null;
         this.animationInProgress = false;
         this.playerTurn = true;
+        
+        
+        
+     
+        
+        
+        
+        
 
-        this.moveCoordinates = {
-            startX: 0,
-            startY: 0,
-            lastX: 0,
-            lastY: 0
-        }
+        this.moveCoordinates = {startX: 0, startY: 0, lastX: 0, lastY: 0}
 
-        this.setLevelBackground();
+        this.bg = new SetBackground(this.app, {gamePhase: "level", bgTexture: 'images/pitch.png', bg_x: 0, bg_y: 0, bg_width: this.width, bg_height: this.height});
+
         this.createLevelGrid();
         this.createPlayerCards();
         this.createOpponentCards();
         this.checkGridForMatches();
-    }
-
-    setLevelBackground() {
-        this.stage.gamePhase = "level";
-        let background = PIXI.Texture.fromImage('images/pitch.png');
-        let bg = new PIXI.Sprite(background);
-        bg.position.x = 0;
-        bg.position.y = 0;
-        bg.width = this.width;
-        bg.height = this.height;
-        this.stage.addChild(bg);
     }
 
     generateRandomBlock() {
@@ -292,12 +293,12 @@ export default class Level {
         this.gridContainer.on('pointerup', function (e) {
             //TODO
         });
-        let grid_h = this.height * 0.76;
-        let grid_w = grid_h * 0.7;
+        let grid_h = this.height * 0.65;
+        let grid_w = grid_h * 0.75;
         let block_w = grid_w / 6
         let block_h = grid_h / 8;
-        let grid_y = block_h / 2 + (this.height - grid_h) / 2;// this.height * 0.15// (this.height - this.width * 1.15) / 2 + block_h / 2;
-        let grid_x = block_h / 2 + ((this.width - grid_w) / 2);// this.width * 0.05 + block_w / 2;
+        let grid_y = block_h / 2 + (this.height - grid_h) / 2; // this.height * 0.15// (this.height - this.width * 1.15) / 2 + block_h / 2;
+        let grid_x = block_h / 2 + ((this.width - grid_w) / 2); // this.width * 0.05 + block_w / 2;
         //---to be deleted---------------------------------------------------------------------------------------//
         // let gridWrapper = new PIXI.Graphics();
         // gridWrapper.lineStyle(1, 0x000000);
@@ -413,11 +414,10 @@ export default class Level {
                 item2.type = type1;
                 item2.gridPosition = gridPosition1;
 
-//                START OF PROTON EFFECT AFTER MATCH
+//              START OF PROTON EFFECT AFTER MATCH
                 let matches = this.checkGridForMatches();
-                console.log(matches);
                 if (matches.length !== 0) {
-                    this.proton.Main(matches, this.width, this.height);
+//                    this.proton.Main(matches, this.width, this.height);
                 }
             }});
 //        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
