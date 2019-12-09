@@ -1,3 +1,5 @@
+import Card from "./LevelCards.js";
+
 export default class SetBackground {
 
     constructor(app, data) {
