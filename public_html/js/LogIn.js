@@ -1,13 +1,13 @@
 //import Config from "./Config.js";
 
-
 export default class LogIn {
 
     constructor(app) {
+
+//       TODO   --CHECK LOCAL STORAGE FOR CREDENTIALS
+//input could be normal bootstrap inputs
         this.stage = app.stage;
         this.app = app;
-        
-        console.log(this);
 
 
 //USERNAME
@@ -31,7 +31,7 @@ export default class LogIn {
         this.username.y = app.height * 0.25
         this.stage.addChild(this.username)
         this.username.on('keydown', keycode => {
-            console.log(this.username)
+//            console.log(this.username);
         })
 
 
@@ -69,7 +69,7 @@ export default class LogIn {
             this.password.text = asterisk.repeat(this.password.text.length);
             this.pass += lastLetter;
         })
-        this.stage.addChild(this.password)
+        this.stage.addChild(this.password);
 
 //      GO BUTTON
         this.goBtnStyle = new PIXI.TextStyle({
@@ -90,16 +90,12 @@ export default class LogIn {
         this.goText.x = app.width * 0.92 - this.goText.width //* 0.5;
         this.goText.y = app.height * 0.54;
         this.goText.buttonMode = true;
-        this.goText.interactive = true;
+        this.goText.interactive = false;
         this.goText.on("pointerdown", () => {
-//            this.enableInputs.apply([this.username, this.password]);
-//            TweenMax.to(this.loginText, 0.5, {y: 100});
+            this.validate();
         });
-
         this.goText.alpha = 0;
         this.stage.addChild(this.goText);
-
-
 //      BUTTON  LOGIN
         this.btnStyle = new PIXI.TextStyle({
 //        fontFamily: fontFamily,
@@ -121,25 +117,25 @@ export default class LogIn {
         this.loginText.buttonMode = true;
         this.loginText.interactive = true;
         this.loginText.on("pointerdown", () => {
-//            this.enableInputs.apply([this.username, this.password]);
-
+            this.registerText.interactive = true;
             this.enableInputs();
-
+            TweenMax.to(this.registerText, 0.5, {alpha: 0.5});
+            TweenMax.to(this.loginText, 0.5, {alpha: 1});
+            this.loginText.interactive = false;
         });
         this.stage.addChild(this.loginText);
-
 //      BUTTON  REGISTER
         this.registerText = new PIXI.Text("Register", this.btnStyle);
         this.registerText.x = app.width * 0.92 - this.registerText.width //* 0.5;
         this.registerText.y = app.height * 0.63;
         this.registerText.buttonMode = true;
         this.registerText.interactive = true;
-        this.enableInputs.bind(this.registerText)
         this.registerText.on("pointerdown", () => {
-//            this.enableInputs.apply([this.username, this.password])
             this.enableInputs();
-
-//                        alert();
+            TweenMax.to(this.loginText, 0.5, {alpha: 0.5});
+            TweenMax.to(this.registerText, 0.5, {alpha: 1});
+            this.registerText.interactive = false;
+            this.loginText.interactive = true;
         });
         this.stage.addChild(this.registerText);
     }
@@ -149,18 +145,37 @@ export default class LogIn {
         TweenMax.to(this.username, 0.5, {alpha: 1});
         this.username.disabled = false;
         this.username.focus();
-
         TweenMax.to(this.password, 0.5, {alpha: 1});
         this.password.disabled = false;
+        if (!this.picked) {
 
-        TweenMax.to(this.loginText, 0.5, {y: this.app.height * 0.63, x: this.app.width * 0.92 - this.loginText.width / 2});
-        TweenMax.to(this.loginText.scale, 0.5, {y: .5, x: .5});
+            this.goText.interactive = true;
+            TweenMax.to(this.loginText, 0.5, {y: this.app.height * 0.63, x: this.app.width * 0.92 - this.loginText.width / 2});
+            TweenMax.to(this.loginText.scale, 0.5, {y: .5, x: .5});
+            TweenMax.to(this.registerText, 0.5, {y: this.app.height * 0.69, x: this.app.width * 0.92 - this.registerText.width / 2});
+            TweenMax.to(this.registerText.scale, 0.5, {y: .5, x: .5});
+            TweenMax.to(this.goText, 1, {alpha: 1});
+        }
+        this.picked = true;
+    }
 
-        TweenMax.to(this.registerText, 0.5, {y: this.app.height * 0.69, x: this.app.width * 0.92 - this.registerText.width / 2});
-        TweenMax.to(this.registerText.scale, 0.5, {y: .5, x: .5});
+    validate() {
+//TODO CHECK USER, and user input,
+//        IF OK...
+//TODO write to local storage
+        this.stage.removeChildren();
+        this.app.startLevel();
+        TweenMax.killAll();
 
-        TweenMax.to(this.goText, 1, {alpha: 1});
+        $.ajax({
+            url: 'login',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({user: this.username.text, pass: this.pass}),
+            success: function (response) {
+                console.log(response);
+            }
+        });
     }
 
 }
-

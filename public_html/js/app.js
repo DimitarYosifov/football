@@ -10,9 +10,12 @@ export default class App extends Stage {
 
     constructor() {
         super();
-//        this.proton = new ProtonEffects();
-//        this.level = new Level(this);
         this.login = new LogIn(this);
+    }
+
+    startLevel() {
+        this.proton = new ProtonEffects();
+        this.level = new Level(this);
     }
 }
 
