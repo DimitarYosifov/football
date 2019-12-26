@@ -1,75 +1,25 @@
-//import Config from "./Config.js";
-
+"use strict";
 export default class LogIn {
 
     constructor(app) {
 
-//       TODO   --CHECK LOCAL STORAGE FOR CREDENTIALS
-//input could be normal bootstrap inputs
         this.stage = app.stage;
         this.app = app;
 
 
-//USERNAME
-        this.username = new PIXI.TextInput({
-            input: {
-                fontSize: '36px',
-                padding: '12px',
-                width: app.width * 0.8 + 'px',
-                color: '#26272E'
-            },
-            box: {
-                default: {fill: 0xE8E9F3, rounded: 12, stroke: {color: 0xCBCEE0, width: 3}},
-                focused: {fill: 0xE1E3EE, rounded: 12, stroke: {color: 0xABAFC6, width: 3}},
-                disabled: {fill: 0xDBDBDB, rounded: 12}
-            }
-        })
-        this.username.disabled = true;
-        this.username.alpha = 0.2;
-        this.username.placeholder = 'Username'
-        this.username.x = app.width * 0.08;
-        this.username.y = app.height * 0.25
-        this.stage.addChild(this.username)
-        this.username.on('keydown', keycode => {
-//            console.log(this.username);
-        })
+        //apply inputs style
+        this.wrapper = document.querySelector("#wrapper");
+        this.wrapper.style.width = this.app.width * 0.8 + "px";
+        this.wrapper.style.height = this.app.height / 5 + "px";
+        this.wrapper.style.opacity = 0.6;
+        this.wrapper.style.pointerEvents = "none";
 
+        this.username = document.querySelector("#username");
+        this.username.style.marginBottom = app.height * 0.05 + "px";
+        this.username.oninput = this.inputLength;
 
-        //PASSWORD
-        this.password = new PIXI.TextInput({
-            input: {
-                fontSize: '36px',
-                padding: '12px',
-                width: app.width * 0.8 + 'px',
-                color: '#26272E'
-            },
-            box: {
-                default: {fill: 0xE8E9F3, rounded: 12, stroke: {color: 0xCBCEE0, width: 3}},
-                focused: {fill: 0xE1E3EE, rounded: 12, stroke: {color: 0xABAFC6, width: 3}},
-                disabled: {fill: 0xDBDBDB, rounded: 12}
-            }
-        })
-
-        this.password.disabled = true;
-        this.password.alpha = 0.2;
-        this.password.placeholder = 'Password'
-        this.password.x = app.width * 0.08;
-        this.password.y = app.height * 0.4
-
-        this.pass = ""
-
-//        this.password.on('keydown', keycode => {
-//            this.password.pass=this.password.text.slice(-1);
-//        })
-
-        this.password.on('keyup', keycode => {
-            let asterisk = "*";
-            let lastLetter = this.password.text.slice(-1);
-            console.log(lastLetter);
-            this.password.text = asterisk.repeat(this.password.text.length);
-            this.pass += lastLetter;
-        })
-        this.stage.addChild(this.password);
+        this.password = document.querySelector("#password");
+        this.password.oninput = this.inputLength;
 
 //      GO BUTTON
         this.goBtnStyle = new PIXI.TextStyle({
@@ -117,6 +67,7 @@ export default class LogIn {
         this.loginText.buttonMode = true;
         this.loginText.interactive = true;
         this.loginText.on("pointerdown", () => {
+            this.action = "login";
             this.registerText.interactive = true;
             this.enableInputs();
             TweenMax.to(this.registerText, 0.5, {alpha: 0.5});
@@ -131,6 +82,7 @@ export default class LogIn {
         this.registerText.buttonMode = true;
         this.registerText.interactive = true;
         this.registerText.on("pointerdown", () => {
+            this.action = "register";
             this.enableInputs();
             TweenMax.to(this.loginText, 0.5, {alpha: 0.5});
             TweenMax.to(this.registerText, 0.5, {alpha: 1});
@@ -138,44 +90,62 @@ export default class LogIn {
             this.loginText.interactive = true;
         });
         this.stage.addChild(this.registerText);
+
     }
 
     enableInputs = () => {
-
-        TweenMax.to(this.username, 0.5, {alpha: 1});
-        this.username.disabled = false;
-        this.username.focus();
-        TweenMax.to(this.password, 0.5, {alpha: 1});
-        this.password.disabled = false;
+        TweenMax.to(this.wrapper, 0.5, {opacity: 1});
+        this.wrapper.style.pointerEvents = "auto";
         if (!this.picked) {
-
-            this.goText.interactive = true;
             TweenMax.to(this.loginText, 0.5, {y: this.app.height * 0.63, x: this.app.width * 0.92 - this.loginText.width / 2});
             TweenMax.to(this.loginText.scale, 0.5, {y: .5, x: .5});
             TweenMax.to(this.registerText, 0.5, {y: this.app.height * 0.69, x: this.app.width * 0.92 - this.registerText.width / 2});
             TweenMax.to(this.registerText.scale, 0.5, {y: .5, x: .5});
-            TweenMax.to(this.goText, 1, {alpha: 1});
+            TweenMax.to(this.goText, 1, {alpha: 0.6});
         }
         this.picked = true;
     }
 
     validate() {
-//TODO CHECK USER, and user input,
-//        IF OK...
-//TODO write to local storage
-        this.stage.removeChildren();
-        this.app.startLevel();
-        TweenMax.killAll();
-
         $.ajax({
-            url: 'login',
+            url: this.action, //login or register
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({user: this.username.text, pass: this.pass}),
-            success: function (response) {
-                console.log(response);
+            data: JSON.stringify({user: this.username.value, pass: this.password.value}),
+            success: (res) => {
+                if (res.nameInUse) {
+                    this.clearUserInput();
+                    window.alert("name in use!"); //TODO... 
+                    return;
+                }
+                if (res.authorized) {
+                    localStorage.setItem("match3football", res.storageItem);
+                    this.stage.removeChildren();
+                    this.app.startLevel();
+                    TweenMax.killAll();
+                    this.username.remove();
+                    this.password.remove();
+                } else if (!res.authorized) {
+                    this.clearUserInput();
+                    window.alert("invalid username or password!"); //TODO...
+                }
             }
         });
     }
 
+    clearUserInput() {
+        this.username.value = "";
+        this.password.value = "";
+        this.inputLength();
+    }
+
+//on input change. if any is empty, disable GO btn
+    inputLength = () => {
+        if (this.username.value === "" || this.password.value === "") {
+            this.goText.disabled = true;
+            TweenMax.to(this.goText, 0.15, {alpha: 0.6, interactive: false});
+            return;
+        }
+        TweenMax.to(this.goText, 0.3, {alpha: 1, interactive: true});
+    }
 }

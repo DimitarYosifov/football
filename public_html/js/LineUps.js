@@ -1,6 +1,5 @@
 export default class LineUps {
     constructor() {
-        
 //      at some point this data will come from DB....TODO
         this.player = [
             {

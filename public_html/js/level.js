@@ -7,13 +7,6 @@ export default class Level {
 
     constructor(app) {
         
-        
-        
-        
-        
-        
-        
-        
         this.app = app;
         this.lineUps = new LineUps();
         this.stage = app.stage;
@@ -25,14 +18,6 @@ export default class Level {
         this.opponentCardsContainer = null;
         this.animationInProgress = false;
         this.playerTurn = true;
-        
-        
-        
-     
-        
-        
-        
-        
 
         this.moveCoordinates = {startX: 0, startY: 0, lastX: 0, lastY: 0}
 
