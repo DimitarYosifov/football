@@ -1,5 +1,10 @@
+import config from "./Config.js";
+
 export default class LevelCards {
     constructor(data) {
+
+        this.config = config;
+
         this.index = data.index;
         this.stats = data.stats;
         this.cardTexture = data.cardTexture;
@@ -56,6 +61,7 @@ export default class LevelCards {
         shoe.height = this.shoe_height;
         shoe.tint = '0x' + this.container.stats.attack_color;
         let attackValuesText = new PIXI.Text(this.container.stats.attack_current + '/' + this.container.stats.attack_full, {
+            fontFamily: this.config.mainFont,
             fontSize: this.font_size,
             fill: '#' + this.container.stats.attack_color, align: 'center',
             stroke: '#FFFFFF',
@@ -74,6 +80,7 @@ export default class LevelCards {
         glove.height = this.glove_height
         glove.tint = '0x' + this.container.stats.defense_color;
         let defenseValuesText = new PIXI.Text(this.container.stats.defense_current + '/' + this.container.stats.defense_full, {
+            fontFamily: this.config.mainFont,
             fontSize: this.font_size,
             fill: '#' + this.container.stats.defense_color, align: 'center',
             stroke: '#FFFFFF',

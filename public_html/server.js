@@ -22,10 +22,10 @@ router.get('*', function (req, res, next) {
     res.render('index.html', {});
 });
 const config_firebase = {
-    apiKey: 'AIzaSyDYp_KxuwRFcXue0uk3Cz1it5rBr0PlsOA',
-    authDomain: 'meeting-5a6ef.firebaseapp.com',
-    databaseURL: 'meeting-5a6ef.firebaseio.com',
-    storageBucket: 'meeting-5a6ef.appspot.com'
+    apiKey: 'AIzaSyB6CoLU9BDQyk998IlqyIY7cVwSR-fvsSw',
+    authDomain: 'football-d4256.firebaseapp.com',
+    databaseURL: 'football-d4256.firebaseio.com',
+    storageBucket: 'football-d4256.appspot.com'
 };
 app.listen(port, function () {});
 
@@ -37,7 +37,7 @@ app.post('/login', async  (req, res) => {
     let user = req.body.user;
     let pass = req.body.pass;
 
-    firebase.database().ref("/users_game/").orderByChild("name").equalTo(user).once('value').then(function (snapshot) {
+    firebase.database().ref("/users/").orderByChild("name").equalTo(user).once('value').then(function (snapshot) {
 
         let db_pass;
         res.set('Content-Type', 'application/json');
@@ -79,7 +79,7 @@ app.post('/register', async (req, res) => {
     let user = req.body.user;
     let pass = req.body.pass;
 //    is name already taken
-    firebase.database().ref("/users_game/").orderByChild("name").equalTo(user).once('value').then(function (snapshot) {
+    firebase.database().ref("/users/").orderByChild("name").equalTo(user).once('value').then(function (snapshot) {
         let name;
         try {
             name = Object.values(snapshot.val())[0].name;
@@ -99,7 +99,7 @@ app.post('/register', async (req, res) => {
             const salt = await bcrypt.genSalt();
             const hashedPassword = await bcrypt.hash(pass, salt);
             res.set('Content-Type', 'application/json');
-            firebase.database().ref('/users_game/' + user).set({
+            firebase.database().ref('/users/' + user).set({
                 name: user,
                 password: hashedPassword
             }, function (error) {
@@ -124,13 +124,52 @@ app.post('/register', async (req, res) => {
 
 app.post('/storageData', async (req, res) => {
     let data = req.body.data;
-    firebase.database().ref("/users_game/").orderByChild("password").equalTo(data).once('value').then(function (snapshot) {
+    firebase.database().ref("/users/").orderByChild("password").equalTo(data).once('value').then(function (snapshot) {
+        res.set('Content-Type', 'application/json');
         res.status(200);
         res.json({
             authorized: Object.values(snapshot.val())[0].password !== undefined ? true : false
         });
     });
 });
+
+app.post('/addClub', async (req, res) => {
+    let name = req.body.name;
+    let players = req.body.players;
+    
+    firebase.database().ref('/clubs/' + name).set({
+        name: name,
+        players: players
+    }, function (error) {
+        if (error) {
+            res.set('Content-Type', 'application/json');
+            res.status(500);
+            res.json({
+                success: false
+            });
+        } else {
+            res.set('Content-Type', 'application/json');
+            res.status(200);
+            res.json({
+                success: true,
+//                players:
+            });
+        }
+    });
+});
+
+app.post('/getClubsPlayers', async (req, res) => {
+    let name = req.body.name;
+    firebase.database().ref("/clubs/").orderByChild("name").equalTo(name).once('value').then(function (snapshot) {
+        res.status(200);
+        res.json({
+            clubData: Object.values(snapshot.val())[0]
+        });
+    });
+});
+
+
+
 
 
 

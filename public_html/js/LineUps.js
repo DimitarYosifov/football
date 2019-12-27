@@ -1,7 +1,10 @@
+import config from "./Config.js";
+
 export default class LineUps {
-    constructor() {
-//      at some point this data will come from DB....TODO
-        this.player = [
+    constructor(clubName1, clubName2, onPlayerCardsData) {
+
+        this.onPlayerCardsData = onPlayerCardsData;
+        this.testClub1 = [
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
@@ -69,7 +72,8 @@ export default class LineUps {
                 player_img_id: '010'
             }
         ];
-        this.opponent = [
+
+        this.testClub2 = [
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
@@ -137,5 +141,38 @@ export default class LineUps {
                 opponent_img_id: '007'
             }
         ]
+
+        this.clubData(clubName1);
+        this.clubData(clubName2, true);
+
+    }
+    clubData = (clubName, secondTeam) => {
+        if (config.addTeam) {//for tests only for now...add club to DB
+            $.ajax({
+                url: "addClub",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({name: clubName, players: this[clubName]}),
+                success: (res) => {
+                    console.log(res);
+                }
+            });
+        } else {
+            console.log(clubName);
+            $.ajax({
+                url: "getClubsPlayers",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({name: clubName}),
+                success: (res) => {
+                    if (!secondTeam) {
+                        this.player = res.clubData.players;
+                    } else {
+                        this.opponent = res.clubData.players;
+                        this.onPlayerCardsData();
+                    }
+                }
+            });
+        }
     }
 }

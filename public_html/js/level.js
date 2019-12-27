@@ -2,13 +2,24 @@ import LineUps from "./LineUps.js";
 import Card from "./LevelCards.js";
 import SetBackground from "./SetBackground.js";
 
-//const TextInput = require('pixi-text-input')
 export default class Level {
 
     constructor(app) {
-        
+
         this.app = app;
-        this.lineUps = new LineUps();
+
+        this.onPlayerCardsData = () => {
+            if (!this.lineUps.player || !this.lineUps.opponent) {
+                return;
+            }
+            this.createLevelGrid();
+            this.createPlayerCards();
+            this.createOpponentCards();
+            this.checkGridForMatches();
+        }
+
+        this.lineUps = new LineUps("testClub1", "testClub2", this.onPlayerCardsData);
+
         this.stage = app.stage;
         this.proton = app.proton;
         this.width = app.width;
@@ -22,11 +33,6 @@ export default class Level {
         this.moveCoordinates = {startX: 0, startY: 0, lastX: 0, lastY: 0}
 
         this.bg = new SetBackground(this.app, {gamePhase: "level", bgTexture: 'images/pitch.png', bg_x: 0, bg_y: 0, bg_width: this.width, bg_height: this.height});
-
-        this.createLevelGrid();
-        this.createPlayerCards();
-        this.createOpponentCards();
-        this.checkGridForMatches();
     }
 
     generateRandomBlock() {
@@ -84,7 +90,6 @@ export default class Level {
                 }
             }
         };
-
 
         let checkUp = function () {
             if (_row < 2) {

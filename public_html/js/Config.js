@@ -1,4 +1,6 @@
 export default {
-    hasLogin: true
+    hasLogin: false,
+    mainFont: 'Girassol',
+    addTeam: false                //for tests and adding teams to DB
 }
     

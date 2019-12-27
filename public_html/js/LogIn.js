@@ -4,14 +4,14 @@ export default class LogIn {
     constructor(app) {
 
         this.stage = app.stage;
+        this.stage.alpha = 0;
         this.app = app;
-
 
         //apply inputs style
         this.wrapper = document.querySelector("#wrapper");
         this.wrapper.style.width = this.app.width * 0.8 + "px";
         this.wrapper.style.height = this.app.height / 5 + "px";
-        this.wrapper.style.opacity = 0.6;
+        this.wrapper.style.opacity = 0;
         this.wrapper.style.pointerEvents = "none";
 
         this.username = document.querySelector("#username");
@@ -23,8 +23,8 @@ export default class LogIn {
 
 //      GO BUTTON
         this.goBtnStyle = new PIXI.TextStyle({
-//        fontFamily: fontFamily,
-            fontSize: "46px", //make it percentage of width or height
+            fontFamily: this.app.config.mainFont,
+            fontSize: this.app.height * 0.06 + "px",
             fontWeight: 'bold',
             fill: ['#ffffff'],
             dropShadow: true,
@@ -37,8 +37,8 @@ export default class LogIn {
             padding: 10
         });
         this.goText = new PIXI.Text("Go", this.goBtnStyle);
-        this.goText.x = app.width * 0.92 - this.goText.width //* 0.5;
-        this.goText.y = app.height * 0.54;
+        this.goText.x = app.width * 0.90 - this.goText.width //* 0.5;
+        this.goText.y = app.height * 0.47;
         this.goText.buttonMode = true;
         this.goText.interactive = false;
         this.goText.on("pointerdown", () => {
@@ -48,8 +48,8 @@ export default class LogIn {
         this.stage.addChild(this.goText);
 //      BUTTON  LOGIN
         this.btnStyle = new PIXI.TextStyle({
-//        fontFamily: fontFamily,
-            fontSize: "36px", //make it percentage of width or height
+            fontFamily: this.app.config.mainFont,
+            fontSize: this.app.height * 0.04 + "px",
             fontWeight: 'bold',
             fill: ['#ffffff'],
             dropShadow: true,
@@ -62,7 +62,7 @@ export default class LogIn {
             padding: 10
         });
         this.loginText = new PIXI.Text("Login", this.btnStyle);
-        this.loginText.x = app.width * 0.92 - this.loginText.width //* 0.5;
+        this.loginText.x = app.width * 0.9 - this.loginText.width //* 0.5;
         this.loginText.y = app.height * 0.57;
         this.loginText.buttonMode = true;
         this.loginText.interactive = true;
@@ -77,7 +77,7 @@ export default class LogIn {
         this.stage.addChild(this.loginText);
 //      BUTTON  REGISTER
         this.registerText = new PIXI.Text("Register", this.btnStyle);
-        this.registerText.x = app.width * 0.92 - this.registerText.width //* 0.5;
+        this.registerText.x = app.width * 0.9 - this.registerText.width //* 0.5;
         this.registerText.y = app.height * 0.63;
         this.registerText.buttonMode = true;
         this.registerText.interactive = true;
@@ -91,15 +91,20 @@ export default class LogIn {
         });
         this.stage.addChild(this.registerText);
 
+        TweenMax.delayedCall(1.2, () => {
+            TweenMax.to(this.wrapper, 0.5, {opacity: 0.6});
+            TweenMax.to(this.stage, 0.5, {alpha: 1});
+        })
+
     }
 
     enableInputs = () => {
         TweenMax.to(this.wrapper, 0.5, {opacity: 1});
         this.wrapper.style.pointerEvents = "auto";
         if (!this.picked) {
-            TweenMax.to(this.loginText, 0.5, {y: this.app.height * 0.63, x: this.app.width * 0.92 - this.loginText.width / 2});
+            TweenMax.to(this.loginText, 0.5, {y: this.app.height * 0.63, x: this.app.width * 0.9 - this.loginText.width / 2});
             TweenMax.to(this.loginText.scale, 0.5, {y: .5, x: .5});
-            TweenMax.to(this.registerText, 0.5, {y: this.app.height * 0.69, x: this.app.width * 0.92 - this.registerText.width / 2});
+            TweenMax.to(this.registerText, 0.5, {y: this.app.height * 0.69, x: this.app.width * 0.9 - this.registerText.width / 2});
             TweenMax.to(this.registerText.scale, 0.5, {y: .5, x: .5});
             TweenMax.to(this.goText, 1, {alpha: 0.6});
         }
@@ -120,11 +125,13 @@ export default class LogIn {
                 }
                 if (res.authorized) {
                     localStorage.setItem("match3football", res.storageItem);
-                    this.stage.removeChildren();
-                    this.app.startLevel();
-                    TweenMax.killAll();
-                    this.username.remove();
-                    this.password.remove();
+                    TweenMax.to(this.wrapper, 0.7, {opacity: 0});
+                    TweenMax.to(this.stage, 0.7, {alpha: 0, onComplete: () => {
+                            this.stage.removeChildren();
+                            this.app.startLevel();
+                            TweenMax.killAll();
+                            this.wrapper.remove();
+                        }});
                 } else if (!res.authorized) {
                     this.clearUserInput();
                     window.alert("invalid username or password!"); //TODO...
