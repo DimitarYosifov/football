@@ -19,6 +19,7 @@ export default class ProtonEffects {
     }
     initCanvas() {
         this.canvas = document.getElementById("rrr");
+        window.alert(window.innerWidth);
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.context = this.canvas.getContext('2d');

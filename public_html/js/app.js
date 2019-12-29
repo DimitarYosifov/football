@@ -9,6 +9,7 @@ export default class App extends Stage {
     constructor() {
 
         super();
+        
         this.config = config;
         this.storageData = localStorage.getItem('match3football');
         if (this.storageData) {

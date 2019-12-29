@@ -4,7 +4,7 @@ export default class LevelCards {
     constructor(data) {
 
         this.config = config;
-
+        this.font_size = data.font_size;
         this.index = data.index;
         this.stats = data.stats;
         this.cardTexture = data.cardTexture;
@@ -60,16 +60,8 @@ export default class LevelCards {
         shoe.width = this.shoe_width;
         shoe.height = this.shoe_height;
         shoe.tint = '0x' + this.container.stats.attack_color;
-        let attackValuesText = new PIXI.Text(this.container.stats.attack_current + '/' + this.container.stats.attack_full, {
-            fontFamily: this.config.mainFont,
-            fontSize: this.font_size,
-            fill: '#' + this.container.stats.attack_color, align: 'center',
-            stroke: '#FFFFFF',
-            strokeThickness: 4
-        }
-        );
-        attackValuesText.position.set(this.attack_text.x, this.attack_text.y);
-        attackValuesText.anchor.x = 1;
+
+
 
         //defense section
         let gloveTexture = PIXI.Texture.fromImage(this.gloveTexture);
@@ -79,27 +71,44 @@ export default class LevelCards {
         glove.width = this.glove_width;
         glove.height = this.glove_height
         glove.tint = '0x' + this.container.stats.defense_color;
+
+        //border
+        let border = new PIXI.Graphics();
+        border.lineStyle(1, 0xd0c639, 1);
+        border.drawRect(this.border_x, this.border_y, this.border_width, this.border_height);
+
+        //add children
+        this.container.addChild(card);
+
+        let attackValuesText = new PIXI.Text(this.container.stats.attack_current + '/' + this.container.stats.attack_full, {
+            fontFamily: this.config.mainFont,
+            fontSize: this.font_size,
+            fill: '#' + this.container.stats.attack_color, align: 'center',
+            stroke: '#000000',
+            strokeThickness: 4
+        });
+        attackValuesText.position.set(this.attack_text.x, this.attack_text.y);
+        attackValuesText.anchor.x = 1;
+
         let defenseValuesText = new PIXI.Text(this.container.stats.defense_current + '/' + this.container.stats.defense_full, {
             fontFamily: this.config.mainFont,
             fontSize: this.font_size,
             fill: '#' + this.container.stats.defense_color, align: 'center',
-            stroke: '#FFFFFF',
+            stroke: '#000000',
             strokeThickness: 4
         });
         defenseValuesText.position.set(this.defense_text.x, this.defense_text.y);
         defenseValuesText.anchor.x = 1;
 
-        //border
-        let border = new PIXI.Graphics();
-        border.lineStyle(3, 0xd0c639, 1);
-        border.drawRect(this.border_x, this.border_y, this.border_width, this.border_height);
-
-        //add children
-        this.container.addChild(card);
         this.container.addChild(attackValuesText);
         this.container.addChild(defenseValuesText);
+
         this.container.addChild(shoe);
         this.container.addChild(glove);
         this.container.addChild(border);
+//        TweenMax.delayedCall(1, () => {
+//            TweenMax.to(this.container, 0.5, {alpha: 1});
+//        })
+//        console.log(this.container);
     }
 }

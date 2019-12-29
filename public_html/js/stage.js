@@ -3,27 +3,40 @@
 export default class Stage {
 
     constructor() {
-        this.stage;
-        this.gameWindow = document.getElementById('gameWindow');
-        this.width = 0;
-        this.height = 0;
-        let resolutiion = () => {
-            this.width = window.innerWidth > 550 ? 550 : window.innerWidth;
-            this.height = window.innerHeight > 900 ? 900 : window.innerHeight;
-            this.gameWindow.style.height = this.height;
-            this.gameWindow.style.width = this.width;
+
+        this.canvas = document.getElementById("stage");
+        this.stage = new PIXI.Container();
+
+        let resolutiion = () => { //16:9
+            
+            this.width = Math.round(window.innerWidth) > 450 ? 450 : Math.round(window.innerWidth);
+
+            this.stage.width = this.width;
+            this.canvas.width = this.width;
+
+            if (this.width * 1.77 > window.innerHeight) {
+                this.height = window.innerHeight;
+                this.canvas.height = this.height
+                this.stage.height = this.height
+            } else {
+                this.height = Math.round(this.width * 1.77);
+                this.canvas.height = this.height;
+                this.stage.height = this.height;
+            }
+
+            this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height, {
+                transparent: false,
+                resolution: 1,
+                view: this.canvas
+            });
         }
+
         resolutiion();
 
 
-        this.renderer = PIXI.autoDetectRenderer(this.width, this.height, {
-            transparent: false,
-            resolution: 1
-        });
 
+//                emitter = null,
 
-        this.gameWindow.appendChild(this.renderer.view);
-        this.stage = new PIXI.Container();
 
         this.animationLoop = () => {
             this.renderer.render(this.stage);
@@ -36,26 +49,33 @@ export default class Stage {
 
         this.loader = PIXI.loader;
         this.loader.add('spriteSheet', "images/pitch.png");
+        this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
+
         this.loader.load(this.setup);
-//       window.onresize = resolutiion;
+
+//        window.onresize = this.resize;
+        window.onresize = resolutiion;
 //       ТODO... fucked up
-
-
-
-
-
-
     }
+
 //  TODO
-    resize() {
-        if (window.innerWidth / window.innerHeight >= ratio) {
-            var w = window.innerHeight * ratio;
-            var h = window.innerHeight;
-        } else {
-            var w = window.innerWidth;
-            var h = window.innerWidth / ratio;
-        }
-        renderer.view.style.width = w + 'px';
-        renderer.view.style.height = h + 'px';
+    resize = () => {
+//        if (!this.canvas.width > 450) {
+        //style.transform = (`scaleX(${window.innerWidth / this.startWidth })`);
+
+
+//            this.canvas.style.left = (window.innerWidth / 2) - (this.canvas.width / 2) + "px";
+//            console.log(this.stage.width);
+//        }
+
+//        if (window.innerWidth / window.innerHeight >= ratio) {
+//            var w = window.innerHeight * ratio;
+//            var h = window.innerHeight;
+//        } else {
+//            var w = window.innerWidth;
+//            var h = window.innerWidth / ratio;
+//        }
+//        renderer.view.style.width = w + 'px';
+//        renderer.view.style.height = h + 'px';
     }
 }

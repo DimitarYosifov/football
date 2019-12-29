@@ -90,6 +90,7 @@ export default class LogIn {
             this.loginText.interactive = true;
         });
         this.stage.addChild(this.registerText);
+        this.wrapper.style.display = "block";
 
         TweenMax.delayedCall(1.2, () => {
             TweenMax.to(this.wrapper, 0.5, {opacity: 0.6});
@@ -131,6 +132,7 @@ export default class LogIn {
                             this.app.startLevel();
                             TweenMax.killAll();
                             this.wrapper.remove();
+                            this.wrapper.style.display = "none"
                         }});
                 } else if (!res.authorized) {
                     this.clearUserInput();

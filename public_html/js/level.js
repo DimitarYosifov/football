@@ -1,29 +1,35 @@
 import LineUps from "./LineUps.js";
 import Card from "./LevelCards.js";
 import SetBackground from "./SetBackground.js";
+import config from "./Config.js";
 
 export default class Level {
 
     constructor(app) {
 
         this.app = app;
-
+        this.config = config;
         this.onPlayerCardsData = () => {
             if (!this.lineUps.player || !this.lineUps.opponent) {
                 return;
             }
+            
             this.createLevelGrid();
             this.createPlayerCards();
             this.createOpponentCards();
             this.checkGridForMatches();
+            TweenMax.delayedCall(1, () => {
+                TweenMax.to(this.stage, 0.5, {alpha: 1});
+            })
         }
 
         this.lineUps = new LineUps("testClub1", "testClub2", this.onPlayerCardsData);
 
         this.stage = app.stage;
+        this.stage.alpha = 0;
         this.proton = app.proton;
-        this.width = app.width;
-        this.height = app.height;
+        this.width = app.width / this.config.rendererResolution;
+        this.height = app.height / this.config.rendererResolution;
         this.gridContainer = null;
         this.playerCardsContainer = null;
         this.opponentCardsContainer = null;
@@ -32,7 +38,15 @@ export default class Level {
 
         this.moveCoordinates = {startX: 0, startY: 0, lastX: 0, lastY: 0}
 
-        this.bg = new SetBackground(this.app, {gamePhase: "level", bgTexture: 'images/pitch.png', bg_x: 0, bg_y: 0, bg_width: this.width, bg_height: this.height});
+        this.bg = new SetBackground(this.app,
+                {
+                    gamePhase: "level",
+                    bgTexture: 'images/pitch.png',
+                    bg_x: -this.width * 0.005,
+                    bg_y: -this.height * 0.005,
+                    bg_width: this.width * 1.005, bg_height: this.height * 1.005
+                }
+        );
     }
 
     generateRandomBlock() {
@@ -120,7 +134,7 @@ export default class Level {
             let card = new Card({
                 index: i,
                 stats: this.lineUps.player[i],
-                font_size: this.height / 75 + 'px',
+                font_size: this.height / 45 + 'px',
 
                 cardTexture: `images/players/player_id_${this.lineUps.player[i].player_img_id}.png`,
                 card_x: (this.width / 6) * i,
@@ -130,30 +144,30 @@ export default class Level {
 
                 shoeTexture: `images/shoe.png`,
                 shoe_x: (this.width / 5.95) * i,
-                shoe_y: this.height * 0.885,
+                shoe_y: this.height * 0.882,
                 shoe_width: this.width / 21,
                 shoe_height: this.width / 21,
 
                 attack_text: {
-                    x: (this.width / 6.05) * i + this.width / 6,
-                    y: this.height * 0.885
+                    x: (this.width / 6) * i + this.width / 6,
+                    y: this.height * 0.88
                 },
 
                 gloveTexture: `images/glove2.png`,
                 glove_x: (this.width / 5.95) * i,
-                glove_y: this.height * 0.965,
+                glove_y: this.height * 0.968,
                 glove_width: this.width / 21,
                 glove_height: this.width / 21,
 
                 defense_text: {
-                    x: (this.width / 6.05) * i + this.width / 5.95,
+                    x: (this.width / 6) * i + this.width / 6,
                     y: this.height * 0.97
                 },
 
                 border_x: (this.width / 6) * i,
-                border_y: this.height * 0.88,
+                border_y: this.height * 0.879,
                 border_width: this.width / 6,
-                border_height: this.height * 0.118
+                border_height: this.height * 0.12
             })
 
             this.playerCardsContainer.addChild(card.container);
@@ -172,7 +186,7 @@ export default class Level {
             let card = new Card({
                 index: i,
                 stats: this.lineUps.opponent[i],
-                font_size: this.height / 75 + 'px',
+                font_size: this.height / 45 + 'px',
 
                 cardTexture: `images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}.png`,
                 card_x: (this.width / 6) * i,
@@ -187,8 +201,8 @@ export default class Level {
                 shoe_height: this.width / 21,
 
                 attack_text: {
-                    x: (this.width / 6) * i + this.width / 6.1,
-                    y: this.height * 0.005
+                    x: (this.width / 6) * i + this.width / 6,
+                    y: this.height * 0.002
                 },
 
                 gloveTexture: `images/glove2.png`,
@@ -198,8 +212,8 @@ export default class Level {
                 glove_height: this.width / 21,
 
                 defense_text: {
-                    x: (this.width / 6) * i + this.width / 6.1,
-                    y: this.height * 0.095
+                    x: (this.width / 6) * i + this.width / 6,
+                    y: this.height * 0.092
                 },
 
                 border_x: (this.width / 6) * i,
