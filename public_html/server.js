@@ -17,7 +17,7 @@ app.use(express.static(__dirname + '/'));
 app.use(bodyParser.json());
 app.use(router);
 app.use(bodyParser.urlencoded({extended: false}));
-//app.use(cors());
+app.use(cors());
 router.get('*', function (req, res, next) {
     res.render('index.html', {});
 });
@@ -41,6 +41,7 @@ app.post('/login', async  (req, res) => {
 
         let db_pass;
         res.set('Content-Type', 'application/json');
+        res.set( "Access-Control-Allow-Origin", "*",);
         try {
             db_pass = Object.values(snapshot.val())[0].password;
         } catch (e) {                                            // no such user

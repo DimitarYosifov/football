@@ -114,9 +114,13 @@ export default class LogIn {
 
     validate() {
         $.ajax({
-            url: this.action, //login or register
+            url: "https://laughing-lalande-549883.netlify.com/login", //login or register
             type: 'POST',
+            mode: 'cors',
             contentType: 'application/json',
+            Accept: 'application/json',
+            Origin: "http://localhost:3000",
+//            "Access-Control-Allow-Origin": "*",
             data: JSON.stringify({user: this.username.value, pass: this.password.value}),
             success: (res) => {
                 if (res.nameInUse) {
