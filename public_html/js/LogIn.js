@@ -116,7 +116,7 @@ export default class LogIn {
         $.ajax({
             url: "https://pensive-sammet-59b61f.netlify.com/", //login or register
             type: 'POST',
-            mode: 'cors',
+//            mode: 'cors',
             contentType: 'application/json',
 //            Accept: 'application/json',
 //            Origin: "http://localhost:3000",
