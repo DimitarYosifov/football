@@ -114,7 +114,7 @@ export default class LogIn {
 
     validate() {
         $.ajax({
-            url: "https://laughing-lalande-549883.netlify.com/login", //login or register
+            url: "https://pensive-sammet-59b61f.netlify.com/", //login or register
             type: 'POST',
             mode: 'cors',
             contentType: 'application/json',
