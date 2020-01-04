@@ -118,8 +118,8 @@ export default class LogIn {
             type: 'POST',
             mode: 'cors',
             contentType: 'application/json',
-            Accept: 'application/json',
-            Origin: "http://localhost:3000",
+//            Accept: 'application/json',
+//            Origin: "http://localhost:3000",
 //            "Access-Control-Allow-Origin": "*",
             data: JSON.stringify({user: this.username.value, pass: this.password.value}),
             success: (res) => {

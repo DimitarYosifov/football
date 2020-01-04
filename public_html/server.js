@@ -41,7 +41,7 @@ app.post('/login', async  (req, res) => {
 
         let db_pass;
         res.set('Content-Type', 'application/json');
-        res.set( "Access-Control-Allow-Origin", "*",);
+//        res.set( "Access-Control-Allow-Origin", "*",);
         try {
             db_pass = Object.values(snapshot.val())[0].password;
         } catch (e) {                                            // no such user
