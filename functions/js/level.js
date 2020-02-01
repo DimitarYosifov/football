@@ -7,19 +7,23 @@ export default class Level {
 
     constructor(app) {
 
+        console.log("lvl")
         this.app = app;
         this.config = config;
         this.onPlayerCardsData = () => {
+
+            console.log(this.lineUps.player + "  /  " + this.lineUps.opponent);
+            
             if (!this.lineUps.player || !this.lineUps.opponent) {
                 return;
             }
-            
+
             this.createLevelGrid();
             this.createPlayerCards();
             this.createOpponentCards();
             this.checkGridForMatches();
             TweenMax.delayedCall(1, () => {
-                TweenMax.to(this.stage, 0.5, {alpha: 1});
+                TweenMax.to(this.stage, 0.5, { alpha: 1 });
             })
         }
 
@@ -36,16 +40,16 @@ export default class Level {
         this.animationInProgress = false;
         this.playerTurn = true;
 
-        this.moveCoordinates = {startX: 0, startY: 0, lastX: 0, lastY: 0}
+        this.moveCoordinates = { startX: 0, startY: 0, lastX: 0, lastY: 0 }
 
         this.bg = new SetBackground(this.app,
-                {
-                    gamePhase: "level",
-                    bgTexture: 'images/pitch.png',
-                    bg_x: -this.width * 0.005,
-                    bg_y: -this.height * 0.005,
-                    bg_width: this.width * 1.005, bg_height: this.height * 1.005
-                }
+            {
+                gamePhase: "level",
+                bgTexture: 'images/pitch.png',
+                bg_x: -this.width * 0.005,
+                bg_y: -this.height * 0.005,
+                bg_width: this.width * 1.005, bg_height: this.height * 1.005
+            }
         );
     }
 
@@ -80,7 +84,7 @@ export default class Level {
             case x > 98 && x <= 100:
                 a = "red_cross";
                 break;
-            default :
+            default:
                 a = "error";
                 break;
         }
@@ -121,7 +125,7 @@ export default class Level {
                 }
             }
         };
-        return   checkUp() || checkLeft();
+        return checkUp() || checkLeft();
     }
 
     createPlayerCards() {
@@ -169,7 +173,7 @@ export default class Level {
                 border_width: this.width / 6,
                 border_height: this.height * 0.12
             })
-
+            console.log(card)
             this.playerCardsContainer.addChild(card.container);
         }
 
@@ -237,7 +241,7 @@ export default class Level {
                 let previousBlock_right = this.gridContainer.children[row].children[col - 1] ? this.gridContainer.children[row].children[col - 1].type : null;
                 let previousBlock_down = this.gridContainer.children[row - 1] ? this.gridContainer.children[row - 1].children[col].type : null;
 
-//              PREVENTS ERROR WHEN MATCHING MORE THAN 3 BLOCKS ...
+                //              PREVENTS ERROR WHEN MATCHING MORE THAN 3 BLOCKS ...
                 if (thisBlock === previousBlock_right || thisBlock === previousBlock_down) {
                     continue;
                 }
@@ -250,7 +254,7 @@ export default class Level {
                     type: this.gridContainer.children[row].children[col].type
                 };
 
-//              check right
+                //              check right
                 for (let x = col; x < 6 - 1; x++) {
                     let thisBlock = this.gridContainer.children[row].children[x].type;
                     let nextBlock_right = this.gridContainer.children[row].children[x + 1].type;
@@ -261,7 +265,7 @@ export default class Level {
                     }
                 }
 
-//              check down
+                //              check down
                 for (let y = row; y < 8 - 1; y++) {
                     let thisBlock = this.gridContainer.children[y].children[col].type;
                     let nextBlock_down = this.gridContainer.children[y + 1].children[col].type;
@@ -327,7 +331,7 @@ export default class Level {
 
                 block.on('pointerdown', this.onDragStart);
                 block.on('pointerup', this.onDragEnd)
-//  TODO        block.on('pointerupoutside', onDragEnd)
+                //  TODO        block.on('pointerupoutside', onDragEnd)
                 block.on('pointermove', this.onDragMove)
 
                 block.gridPosition_x = row;
@@ -374,13 +378,12 @@ export default class Level {
 
             let dir = Object.keys(directions).find(key => directions[key] === max);
             if (
-                    (this.moveCoordinates.startY === this.moveCoordinates.lastY && this.moveCoordinates.startX === this.moveCoordinates.lastX) ||
-                    (dir === "down" && this.gridPosition_x === 7) ||
-                    (dir === "up" && this.gridPosition_x === 0) ||
-                    (dir === "right" && this.gridPosition_y === 5) ||
-                    (dir === "left" && this.gridPosition_y === 0) ||
-                    max < dist)
-            {
+                (this.moveCoordinates.startY === this.moveCoordinates.lastY && this.moveCoordinates.startX === this.moveCoordinates.lastX) ||
+                (dir === "down" && this.gridPosition_x === 7) ||
+                (dir === "up" && this.gridPosition_x === 0) ||
+                (dir === "right" && this.gridPosition_y === 5) ||
+                (dir === "left" && this.gridPosition_y === 0) ||
+                max < dist) {
                 return;
             }
 
@@ -411,7 +414,8 @@ export default class Level {
             default:
                 break;
         }
-        TweenMax.to(item1, 0.2, {y: item2.y, x: item2.x, ease: Linear.easeNone, onComplete: () => {
+        TweenMax.to(item1, 0.2, {
+            y: item2.y, x: item2.x, ease: Linear.easeNone, onComplete: () => {
                 let type1 = item1.type;
                 let gridPosition1 = item1.gridPosition;
                 item1.type = item2.type;
@@ -419,13 +423,14 @@ export default class Level {
                 item2.type = type1;
                 item2.gridPosition = gridPosition1;
 
-//              START OF PROTON EFFECT AFTER MATCH
+                //              START OF PROTON EFFECT AFTER MATCH
                 let matches = this.checkGridForMatches();
                 if (matches.length !== 0) {
-//                    this.proton.Main(matches, this.width, this.height);
+                    //                    this.proton.Main(matches, this.width, this.height);
                 }
-            }});
-//        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
-        TweenMax.to(item2, 0.2, {y: item1.y, x: item1.x, repeat: 0, yoyo: true, ease: Linear.easeNone});
+            }
+        });
+        //        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
+        TweenMax.to(item2, 0.2, { y: item1.y, x: item1.x, repeat: 0, yoyo: true, ease: Linear.easeNone });
     }
 }

@@ -1,51 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Football</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!--fonts-->
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
-        <link href="css/css-main.css" rel="stylesheet" type="text/css"/>
+<head>
+    <title>Football</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link href="https://fonts.googleapis.com/css?family=Girassol&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">        
-        <link href="https://fonts.googleapis.com/css?family=Risque&display=swap" rel="stylesheet">
+    <!--fonts-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+    <link href="css/css-main.css" rel="stylesheet" type="text/css" />
 
-
-
-        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.6/pixi.js"></script>
-        <script src="libraries/PIXI.TextInput.js" type="text/javascript"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenLite.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineLite.min.js"></script> 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineMax.min.js"></script>
-        <!--<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>-->
-
-        <script src="proton.js" type="text/javascript"></script>
+    <link href="https://fonts.googleapis.com/css?family=Girassol&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Risque&display=swap" rel="stylesheet">
 
 
-        <!--???-->
-        <!--<script src="https://cdn.jsdelivr.net/npm/pixi-filters@2.6.1/dist/pixi-filters.js"></script>-->
-        <!--<script src="https://gitcdn.link/repo/pixijs/pixi.js/dev/bin/pixi.js"></script>-->
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>-->
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenLite.min.js"></script>-->
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineMax.min.js"></script>-->
-    </head>
-    <body>
-        <canvas id='stage' style="  margin: 0 auto;"></canvas>
-        <!--<canvas id="rrr" style=""></canvas>-->
-        <form id="wrapper" style="display: none; position: absolute; top: 35%; left: 50%; transform: translate(-50%,-55%);">
-            <input id="username" class="form-control form-control-lg" type="text" placeholder="Username" autocomplete="on">
-            <input id="password" class="form-control form-control-lg" type="password" placeholder="Password" autocomplete="on">
-        </form>
-        <script src="js/app.js" type="module" ></script>
-    </body>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.6/pixi.js"></script>
+    <script src="libraries/PIXI.TextInput.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenLite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineLite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineMax.min.js"></script>
+    <!--<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>-->
+
+    <script src="proton.js" type="text/javascript"></script>
 
 
-    <!-- 
+    <!--???-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/pixi-filters@2.6.1/dist/pixi-filters.js"></script>-->
+    <!--<script src="https://gitcdn.link/repo/pixijs/pixi.js/dev/bin/pixi.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenLite.min.js"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineMax.min.js"></script>-->
+</head>
+
+<body>
+    <canvas id='stage' style="  margin: 0 auto;"></canvas>
+    <!--<canvas id="rrr" style=""></canvas>-->
+    <form id="wrapper"
+        style="display: block; position: absolute; top: 35%; left: 50%; transform: translate(-50%,-55%);">
+        <input id="username" class="form-control form-control-lg" type="text" placeholder="Username" autocomplete="on">
+        <input id="password" class="form-control form-control-lg" type="password" placeholder="Password"
+            autocomplete="on">
+        <button type="button" id="go">Go</button>
+        <button type="button" id="login">Login</button>
+        <button type="button" id="register">Register</button>
+    </form>
+    <script src="js/app.js" type="module"></script> 
+</body>
+
+
+<!-- 
     TODO LIST:
     DONE        fade effect between scenes
     DONE        set font family to inputs also
@@ -59,6 +66,8 @@
                 config file!!
     DONE        login btns
     DONE        add font...
+                make name generator
+                moreplayers pics
                 fillingcardspoints not to be a function but a class, plus createOpponentCards and createPlayerCards may be in there two. last two methods need optimization too redundant and hardcoded and messy
                 proton or pixi-particles...
     DONE?       createPlayerCards  & createOpponentCards- these two methods to be in a separate class file 
@@ -74,7 +83,7 @@
                 all events drag click etc  in sepatate file for reuse....events dispatcher?
     -->
 
-    <!--       
+<!--       
     INFO!!!!!!!!!
             players' pics effect paint.net
             photo->glow= 3/13/38,
@@ -94,12 +103,13 @@
         npm install -g browser-sync                          //JUST ONCE IF NOT ALREADY INSTALLED
     browser-sync start --server --index index.html-->
 
-    <!--node server.js-->  
+<!--node server.js-->
 
-    <!-- firebase serve                  //local -->
-    <!-- firebase deploy                 //deploy -->
-    
-    
+<!-- firebase serve                  //local -->
+<!-- firebase deploy                 //deploy -->
+
+
 <!--    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     https://www.youtube.com/watch?v=LOeioOKUKI8     - firebase nose -express server tutorial!!!!!!!-->
+
 </html>

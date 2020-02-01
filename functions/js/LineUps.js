@@ -4,6 +4,7 @@ export default class LineUps {
     constructor(clubName1, clubName2, onPlayerCardsData) {
 
         this.onPlayerCardsData = onPlayerCardsData;
+        this.clubName2 = clubName2;
         this.testClub1 = [
             {
                 defense_current: 0,
@@ -143,7 +144,7 @@ export default class LineUps {
         ]
 
         this.clubData(clubName1);
-        this.clubData(clubName2, true);
+        // this.clubData(clubName2, true);
 
     }
     clubData = (clubName, secondTeam) => {
@@ -152,7 +153,7 @@ export default class LineUps {
                 url: "addClub",
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({name: clubName, players: this[clubName]}),
+                data: JSON.stringify({ name: clubName, players: this[clubName] }),
                 success: (res) => {
                     console.log(res);
                 }
@@ -163,14 +164,17 @@ export default class LineUps {
                 url: "getClubsPlayers",
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({name: clubName}),
+                data: JSON.stringify({ name: clubName }),
                 success: (res) => {
                     if (!secondTeam) {
                         this.player = res.clubData.players;
+                        this.clubData(this.clubName2, true);
                     } else {
                         this.opponent = res.clubData.players;
                         this.onPlayerCardsData();
                     }
+                }, error: () => {
+                    alert("err")
                 }
             });
         }
