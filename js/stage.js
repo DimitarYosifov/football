@@ -4,6 +4,13 @@ export default class Stage {
 
     constructor() {
 
+        // Use the native window resolution as the default resolution
+        // will support high-density displays when rendering
+        PIXI.settings.RESOLUTION = window.devicePixelRatio;
+
+        // Disable interpolation when scaling, will make texture be pixelated
+        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
         this.canvas = document.getElementById("stage");
         this.stage = new PIXI.Container();
 
@@ -11,14 +18,23 @@ export default class Stage {
 
             this.width = Math.round(window.innerWidth) > 450 ? 450 : Math.round(window.innerWidth);
 
-            this.stage.width = this.width;
-            this.canvas.width = this.width;
+            // this.stage.width = this.width;
+            // this.canvas.width = this.width;
 
             if (this.width * 1.77 > window.innerHeight) {
                 this.height = window.innerHeight;
             } else {
                 this.height = Math.round(this.width * 1.77);
             }
+
+            if (window.innerHeight < 450 * 1.77) {
+                this.height = window.innerHeight;
+                this.width = window.innerHeight * 0.562;
+            }
+
+            this.stage.width = this.width;
+            this.canvas.width = this.width;
+
             this.canvas.height = this.height;
             this.stage.height = this.height;
             this.renderer.resize(this.canvas.width, this.canvas.height);
@@ -27,9 +43,11 @@ export default class Stage {
 
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height, {
             transparent: true,
-            resolution: 1,
+            resolution: 3,// window.devicePixelRatio,//2, //7 :) //DPR
             view: this.canvas,
-            autoResize: true
+            autoResize: true,
+            autoDensity: true,
+            antialias: true
         });
 
         resolutiion();
