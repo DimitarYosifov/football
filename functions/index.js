@@ -213,5 +213,6 @@ user = function (callback) {
 };
 
 
-exports.app = functions.https.onRequest(app);
+// exports.app = functions.https.onRequest(app);
+exports.app = functions.region('us-central1').https.onRequest(app);
 
