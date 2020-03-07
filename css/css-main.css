@@ -1,25 +1,21 @@
-
 @font-face {
     font-family: Girassol-Regular;
     src: url(../fonts/Girassol-Regular.ttf);
 }
 
-
-*{
+* {
     margin: 0;
     padding: 0;
     font-family: 'Girassol', cursive;
     /*font-family: 'Indie Flower', cursive;*/
     /*font-family: 'Risque', cursive;*/
-
-
 }
-body{
+
+body {
     background: black;
-
 }
 
-#wrapper input:not(#go){
+#wrapper input:not(#go) {
     padding: .5rem 1rem;
     font-size: 1.25rem;
     line-height: 1.5;
@@ -31,13 +27,13 @@ body{
     background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: .25rem;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     overflow: visible;
     margin: 0;
     box-sizing: border-box;
 }
 
-#go{
+#go {
     display: none;
     background: transparent;
     color: white;
@@ -49,7 +45,7 @@ body{
     position: absolute;
 }
 
-#login{
+#login {
     display: none;
     font-size: 1em;
     border: none;
@@ -61,7 +57,7 @@ body{
     color: white;
 }
 
-#register{
+#register {
     display: none;
     font-size: 1em;
     border: none;
@@ -73,7 +69,7 @@ body{
     color: white;
 }
 
-#stage{
+#stage {
     display: block;
     margin: 0 auto;
     position: absolute;
@@ -84,16 +80,20 @@ body{
         height: 800px;*/
 }
 
-#wrapper{
+#wrapper {
     box-sizing: border-box;
 }
 
-#proton_canvas{
+#proton_canvas {
     position: absolute;
     top: 0px
 }
+
+
+/* 
 @media screen and (orientation:landscape) {
     body{
-        /*background: red; test*/
+        background: red; test
     }
-}
+} 
+*/

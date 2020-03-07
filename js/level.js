@@ -35,19 +35,18 @@ export default class Level {
         this.playerCardsContainer = null;
         this.opponentCardsContainer = null;
         this.animationInProgress = false;
-        this.playerTurn = true;
+        this.playerTurn = true; //should be rondom or host's
 
         this.moveCoordinates = { startX: 0, startY: 0, lastX: 0, lastY: 0 }
 
-        this.bg = new SetBackground(this.app,
-            {
-                gamePhase: "level",
-                bgTexture: 'images/pitch.png',
-                bg_x: -this.width * 0.005,
-                bg_y: -this.height * 0.005,
-                bg_width: this.width * 1.005, bg_height: this.height * 1.005
-            }
-        );
+        this.bg = new SetBackground(this.app, {
+            gamePhase: "level",
+            bgTexture: 'images/pitch.png',
+            bg_x: -this.width * 0.005,
+            bg_y: -this.height * 0.005,
+            bg_width: this.width * 1.005,
+            bg_height: this.height * 1.005
+        });
     }
 
     generateRandomBlock() {
@@ -89,7 +88,7 @@ export default class Level {
     }
 
     createNonMatchingGrid(_row, _col, img, rowContainer, gridContainer) {
-        let checkLeft = function () {
+        let checkLeft = function() {
             if (_col < 2) {
                 return false;
             }
@@ -106,7 +105,7 @@ export default class Level {
             }
         };
 
-        let checkUp = function () {
+        let checkUp = function() {
             if (_row < 2) {
                 return false;
             }
@@ -251,7 +250,7 @@ export default class Level {
                     (thisBlock === nextBlock_right1 && thisBlock === prevBlock_left1)
                 ) {
                     matches.push(match);
-                    continue;                                    // already match, no need to check downwards
+                    continue; // already match, no need to check downwards
                 }
 
                 //              check down
@@ -274,8 +273,8 @@ export default class Level {
                     prevBlock_Up2 = this.gridContainer.children[row - 2].children[col] ? this.gridContainer.children[row - 2].children[col].type : null;
                 }
 
-                if ((thisBlock === prevBlock_Up1 && thisBlock === prevBlock_Up2)
-                    || (thisBlock === nextBlock_down1 && thisBlock === nextBlock_down2) ||
+                if ((thisBlock === prevBlock_Up1 && thisBlock === prevBlock_Up2) ||
+                    (thisBlock === nextBlock_down1 && thisBlock === nextBlock_down2) ||
                     (thisBlock === nextBlock_down1 && thisBlock === prevBlock_Up1)
                 ) {
                     matches.push(match);
@@ -290,17 +289,17 @@ export default class Level {
         this.gridContainer = new PIXI.Container();
         this.gridContainer.name = "gridContainer";
         this.gridContainer.interactive = true;
-        this.gridContainer.on('pointerdown', function (e) {
+        this.gridContainer.on('pointerdown', function(e) {
             _this.moveCoordinates.startX = e.data.global.x;
             _this.moveCoordinates.startY = e.data.global.y;
             _this.moveCoordinates.lastX = e.data.global.x;
             _this.moveCoordinates.lastY = e.data.global.y;
         });
-        this.gridContainer.on('pointermove', function (e) {
+        this.gridContainer.on('pointermove', function(e) {
             _this.moveCoordinates.lastX = e.data.global.x;
             _this.moveCoordinates.lastY = e.data.global.y;
         });
-        this.gridContainer.on('pointerup', function (e) {
+        this.gridContainer.on('pointerup', function(e) {
             //TODO
         });
         let grid_h = this.height * 0.65;
@@ -339,7 +338,7 @@ export default class Level {
 
                 block.on('pointerdown', this.onDragStart);
                 block.on('pointerup', this.onDragEnd)
-                //  TODO        block.on('pointerupoutside', onDragEnd)
+                    //  TODO        block.on('pointerupoutside', onDragEnd)
                 block.on('pointermove', this.onDragMove)
 
                 block.gridPosition_x = row;
@@ -405,6 +404,7 @@ export default class Level {
     }
 
     swapBlocks(block1_x, block1_y, dir) {
+        this.swapDirection = dir;
         let item1 = this.gridContainer.children[block1_x].children[block1_y];
         let item2;
         switch (dir) {
@@ -422,15 +422,38 @@ export default class Level {
             default:
                 break;
         }
+
+
+
         TweenMax.to(item1, 0.2, {
-            y: item2.y, x: item2.x, ease: Linear.easeNone, onComplete: () => {
+            y: item2.y,
+            x: item2.x,
+            ease: Linear.easeNone,
+            onComplete: () => {
+
+
+
                 let type1 = item1.type;
                 let gridPosition1 = item1.gridPosition;
                 item1.type = item2.type;
                 item1.gridPosition = item2.gridPosition;
                 item2.type = type1;
                 item2.gridPosition = gridPosition1;
-
+                this.swappedBlocksCoords = [{
+                        row: item1.gridPosition_y,
+                        col: item1.gridPosition_x,
+                        type: item1.type,
+                        x: item1.x,
+                        y: item1.y
+                    },
+                    {
+                        row: item2.gridPosition_y,
+                        col: item2.gridPosition_x,
+                        type: item2.type,
+                        x: item2.x,
+                        y: item2.y
+                    }
+                ];
                 //              START OF PROTON EFFECT AFTER MATCH
                 let matches = this.checkGridForMatches();
                 if (matches.length !== 0) {
@@ -443,7 +466,44 @@ export default class Level {
         TweenMax.to(item2, 0.2, { y: item1.y, x: item1.x, repeat: 0, yoyo: true, ease: Linear.easeNone });
     }
 
-    gatherMatchingBlocks(){
-        alert("ok")
+    //animate matching blocks to currently moved block position
+    gatherMatchingBlocks(matches) {
+
+        let swappedBlock1 = this.swappedBlocksCoords[0];
+        let swappedBlock2 = this.swappedBlocksCoords[1];
+        let blocksMatchingswappedBlock1 = matches.filter(m => m.type === swappedBlock1.type);
+
+        blocksMatchingswappedBlock1.forEach((block) => {
+            if (block.row === swappedBlock1.row && block.col === swappedBlock1.col) {
+                return; //this is the targeted block
+            }
+
+            let x_dist = Math.abs(block.col - swappedBlock1.col);
+            let y_dist = Math.abs(block.row - swappedBlock1.row);
+            let blockWidth = this.gridContainer.children[block.row].children[block.col].width;
+            let blockHeight = this.gridContainer.children[block.row].children[block.col].height;
+            let x_modifier = this.swapDirection === "left" ? -blockWidth : this.swapDirection === "right" ? blockWidth : 0;
+            let y_modifier = this.swapDirection === "up" ? -blockHeight : this.swapDirection === "down" ? blockHeight : 0;
+            let newX = swappedBlock1.x;
+            let newY = swappedBlock1.y;
+            console.log(this.gridContainer.children[block.row].children[block.col].x)
+            console.log(this.gridContainer.children[block.row].children[block.col].y)
+
+            TweenMax.to(this.gridContainer.children[block.row].children[block.col], 0.3, {
+                x: newX + x_modifier,
+                y: newY + y_modifier,
+                ease: Linear.easeNone,
+                onComplete: () => {
+                    TweenMax.killAll();
+                }
+            });
+
+
+        });
+
+        // let swappedBlock2 = this.swappedBlocksCoords[1];
+        // let blocksMatchingswappedBlock2 = matches.filter(m => m.type === swappedBlock2.type);
+
+
     }
 }

@@ -1,4 +1,3 @@
-
 export default class ProtonEffects {
 
     constructor(app) {
@@ -65,8 +64,8 @@ export default class ProtonEffects {
 
         this.level = this.app.getLevel();
         TweenMax.delayedCall(1, () => {
-          this.level.gatherMatchingBlocks();
-          TweenMax.killAll();
+            this.level.gatherMatchingBlocks(matches);
+            // TweenMax.killAll();
         })
 
     }
