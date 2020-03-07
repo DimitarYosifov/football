@@ -1,19 +1,16 @@
 import LineUps from "./LineUps.js";
 import Card from "./LevelCards.js";
 import SetBackground from "./SetBackground.js";
-import config from "./Config.js";
+import Config from "./Config.js";
 
 export default class Level {
 
     constructor(app) {
 
-        console.log("lvl")
         this.app = app;
-        this.config = config;
+        this.config = Config;
         this.onPlayerCardsData = () => {
 
-            console.log(this.lineUps.player + "  /  " + this.lineUps.opponent);
-            
             if (!this.lineUps.player || !this.lineUps.opponent) {
                 return;
             }
@@ -173,7 +170,6 @@ export default class Level {
                 border_width: this.width / 6,
                 border_height: this.height * 0.12
             })
-            console.log(card)
             this.playerCardsContainer.addChild(card.container);
         }
 
@@ -237,46 +233,51 @@ export default class Level {
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 6; col++) {
 
-                let thisBlock = this.gridContainer.children[row].children[col].type;
-                let previousBlock_right = this.gridContainer.children[row].children[col - 1] ? this.gridContainer.children[row].children[col - 1].type : null;
-                let previousBlock_down = this.gridContainer.children[row - 1] ? this.gridContainer.children[row - 1].children[col].type : null;
-
-                //              PREVENTS ERROR WHEN MATCHING MORE THAN 3 BLOCKS ...
-                if (thisBlock === previousBlock_right || thisBlock === previousBlock_down) {
-                    continue;
-                }
-
                 let match = {
                     row: row,
                     col: col,
-                    matchesRightward: 1,
-                    matchesDownward: 1,
                     type: this.gridContainer.children[row].children[col].type
                 };
 
                 //              check right
-                for (let x = col; x < 6 - 1; x++) {
-                    let thisBlock = this.gridContainer.children[row].children[x].type;
-                    let nextBlock_right = this.gridContainer.children[row].children[x + 1].type;
-                    if (thisBlock === nextBlock_right) {
-                        match.matchesRightward++;
-                    } else {
-                        break;
-                    }
+                let thisBlock = this.gridContainer.children[row].children[col].type;
+                let nextBlock_right1 = this.gridContainer.children[row].children[col + 1] ? this.gridContainer.children[row].children[col + 1].type : null;
+                let nextBlock_right2 = this.gridContainer.children[row].children[col + 2] ? this.gridContainer.children[row].children[col + 2].type : null;
+                let prevBlock_left1 = this.gridContainer.children[row].children[col - 1] ? this.gridContainer.children[row].children[col - 1].type : null;
+                let prevBlock_left2 = this.gridContainer.children[row].children[col - 2] ? this.gridContainer.children[row].children[col - 2].type : null;
+
+                if ((thisBlock === nextBlock_right1 && thisBlock === nextBlock_right2) ||
+                    (thisBlock === prevBlock_left1 && thisBlock === prevBlock_left2) ||
+                    (thisBlock === nextBlock_right1 && thisBlock === prevBlock_left1)
+                ) {
+                    matches.push(match);
+                    continue;                                    // already match, no need to check downwards
                 }
 
                 //              check down
-                for (let y = row; y < 8 - 1; y++) {
-                    let thisBlock = this.gridContainer.children[y].children[col].type;
-                    let nextBlock_down = this.gridContainer.children[y + 1].children[col].type;
-                    if (thisBlock === nextBlock_down) {
-                        match.matchesDownward++;
-                    } else {
-                        break;
-                    }
+                let nextBlock_down1 = null
+                if (this.gridContainer.children[row + 1]) {
+                    nextBlock_down1 = this.gridContainer.children[row + 1].children[col] ? this.gridContainer.children[row + 1].children[col].type : null;
                 }
 
-                if (match.matchesRightward >= 3 || match.matchesDownward >= 3) {
+                let nextBlock_down2 = null;
+                if (this.gridContainer.children[row + 2]) {
+                    nextBlock_down2 = this.gridContainer.children[row + 2].children[col] ? this.gridContainer.children[row + 2].children[col].type : null;
+                }
+
+                let prevBlock_Up1 = null;
+                if (this.gridContainer.children[row - 1]) {
+                    prevBlock_Up1 = this.gridContainer.children[row - 1].children[col] ? this.gridContainer.children[row - 1].children[col].type : null;
+                }
+                let prevBlock_Up2 = null;
+                if (this.gridContainer.children[row - 2]) {
+                    prevBlock_Up2 = this.gridContainer.children[row - 2].children[col] ? this.gridContainer.children[row - 2].children[col].type : null;
+                }
+
+                if ((thisBlock === prevBlock_Up1 && thisBlock === prevBlock_Up2)
+                    || (thisBlock === nextBlock_down1 && thisBlock === nextBlock_down2) ||
+                    (thisBlock === nextBlock_down1 && thisBlock === prevBlock_Up1)
+                ) {
                     matches.push(match);
                 }
             }
@@ -318,10 +319,17 @@ export default class Level {
             for (let col = 0; col < 6; col++) {
                 let figureMissing = true;
                 let img;
-                while (figureMissing) {
-                    img = this.generateRandomBlock();
-                    figureMissing = this.createNonMatchingGrid(row, col, img, rowContainer, this.gridContainer);
+
+                // check if grid ispredefined(debug purposes)
+                if (!this.config.isGridInDebug) {
+                    while (figureMissing) {
+                        img = this.generateRandomBlock();
+                        figureMissing = this.createNonMatchingGrid(row, col, img, rowContainer, this.gridContainer);
+                    }
+                } else {
+                    img = this.config.debugGrid[row][col];
                 }
+
                 let blockTexture = PIXI.Texture.fromImage(`images/${img}.png`);
                 let block = new PIXI.Sprite(blockTexture);
                 block.interactive = true;
@@ -426,11 +434,16 @@ export default class Level {
                 //              START OF PROTON EFFECT AFTER MATCH
                 let matches = this.checkGridForMatches();
                 if (matches.length !== 0) {
-                    //                    this.proton.Main(matches, this.width, this.height);
+                    console.log(matches)
+                    this.proton.Main(matches, this.width, this.height); //works but  lags on too many matches , needs adjustment
                 }
             }
         });
         //        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
         TweenMax.to(item2, 0.2, { y: item1.y, x: item1.x, repeat: 0, yoyo: true, ease: Linear.easeNone });
+    }
+
+    gatherMatchingBlocks(){
+        alert("ok")
     }
 }

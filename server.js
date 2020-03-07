@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+// const functions = require('firebase-functions');
 // const express = require("express");
 // const app = express();
 
@@ -214,5 +214,5 @@ user = function (callback) {
 
 
 // exports.app = functions.https.onRequest(app);
-exports.app = functions.region('us-central1').https.onRequest(app);
+// exports.app = functions.region('us-central1').https.onRequest(app);
 

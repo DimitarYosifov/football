@@ -40,10 +40,9 @@ export default class Stage {
             this.renderer.resize(this.canvas.width, this.canvas.height);
         }
 
-
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height, {
             transparent: true,
-            resolution: 3,// window.devicePixelRatio,//2, //7 :) //DPR
+            resolution: 2,// window.devicePixelRatio,//2, //7 :) //DPR
             view: this.canvas,
             autoResize: true,
             autoDensity: true,
@@ -51,10 +50,6 @@ export default class Stage {
         });
 
         resolutiion();
-
-
-        //                emitter = null,
-
 
         this.animationLoop = () => {
             this.renderer.render(this.stage);
@@ -71,29 +66,6 @@ export default class Stage {
 
         this.loader.load(this.setup);
 
-        //        window.onresize = this.resize;
         window.onresize = resolutiion;
-        //       ТODO... fucked up
-    }
-
-    //  TODO
-    resize = () => {
-        //        if (!this.canvas.width > 450) {
-        //style.transform = (`scaleX(${window.innerWidth / this.startWidth })`);
-
-
-        //            this.canvas.style.left = (window.innerWidth / 2) - (this.canvas.width / 2) + "px";
-        //            console.log(this.stage.width);
-        //        }
-
-        //        if (window.innerWidth / window.innerHeight >= ratio) {
-        //            var w = window.innerHeight * ratio;
-        //            var h = window.innerHeight;
-        //        } else {
-        //            var w = window.innerWidth;
-        //            var h = window.innerWidth / ratio;
-        //        }
-        //        renderer.view.style.width = w + 'px';
-        //        renderer.view.style.height = h + 'px';
     }
 }

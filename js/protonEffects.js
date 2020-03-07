@@ -1,7 +1,8 @@
 
 export default class ProtonEffects {
 
-    constructor() {
+    constructor(app) {
+        this.app = app;
         this.canvas;
         this.context;
         this.proton = new Proton;
@@ -18,12 +19,11 @@ export default class ProtonEffects {
         }
     }
     initCanvas() {
-        this.canvas = document.getElementById("rrr");
-        window.alert(window.innerWidth);
+        this.canvas = document.getElementById("proton_canvas");
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.context = this.canvas.getContext('2d');
-        this.context.globalCompositeOperation = "lighter";
+        // this.context.globalCompositeOperation = "lighter";   
     }
     createProton(matches) {
         let row = matches[0].row;
@@ -59,18 +59,16 @@ export default class ProtonEffects {
             }, 1000);
         }
 
-//  horizontal
-        if (matches[0].matchesRightward > 1) {
-            for (let i = 0; i < matches[0].matchesRightward; i++) {
-                emit(row, col + i, matches[0].type);
-            }
+        for (let matchIdx = 0; matchIdx < matches.length; matchIdx++) {
+            emit(matches[matchIdx].row, matches[matchIdx].col, matches[matchIdx].type);
         }
-//  vertical
-        if (matches[0].matchesDownward > 1) {
-            for (let i = 0; i < matches[0].matchesDownward; i++) {
-                emit(row + i, col, matches[0].type);
-            }
-        }
+
+        this.level = this.app.getLevel();
+        TweenMax.delayedCall(1, () => {
+          this.level.gatherMatchingBlocks();
+          TweenMax.killAll();
+        })
+
     }
     tick() {
         requestAnimationFrame(this.tick.bind(this));
