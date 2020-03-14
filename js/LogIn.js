@@ -6,6 +6,7 @@ export default class LogIn {
         this.stage = app.stage;
         this.stage.alpha = 0;
         this.app = app;
+        this.config = this.app.config;
 
         //apply inputs style
         this.wrapper = document.querySelector("#wrapper");
@@ -105,8 +106,8 @@ export default class LogIn {
                 }
                 if (res.authorized) {
                     localStorage.setItem("match3football", res.storageItem);
-                    TweenMax.to(this.wrapper, 0.7, { opacity: 0 });
-                    TweenMax.to(this.stage, 0.7, {
+                    TweenMax.to(this.wrapper, this.config.fadeTimeBetweenPhases, { opacity: 0 });
+                    TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
                         alpha: 0, onComplete: () => {
                             this.stage.removeChildren();
                             this.app.startLevel();

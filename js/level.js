@@ -19,8 +19,9 @@ export default class Level {
             this.createPlayerCards();
             this.createOpponentCards();
             this.checkGridForMatches();
+
             TweenMax.delayedCall(1, () => {
-                TweenMax.to(this.stage, 0.5, { alpha: 1 });
+                TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, { alpha: 1 });
             })
         }
 
@@ -88,7 +89,7 @@ export default class Level {
     }
 
     createNonMatchingGrid(_row, _col, img, rowContainer, gridContainer) {
-        let checkLeft = function() {
+        let checkLeft = function () {
             if (_col < 2) {
                 return false;
             }
@@ -105,7 +106,7 @@ export default class Level {
             }
         };
 
-        let checkUp = function() {
+        let checkUp = function () {
             if (_row < 2) {
                 return false;
             }
@@ -289,17 +290,17 @@ export default class Level {
         this.gridContainer = new PIXI.Container();
         this.gridContainer.name = "gridContainer";
         this.gridContainer.interactive = true;
-        this.gridContainer.on('pointerdown', function(e) {
+        this.gridContainer.on('pointerdown', function (e) {
             _this.moveCoordinates.startX = e.data.global.x;
             _this.moveCoordinates.startY = e.data.global.y;
             _this.moveCoordinates.lastX = e.data.global.x;
             _this.moveCoordinates.lastY = e.data.global.y;
         });
-        this.gridContainer.on('pointermove', function(e) {
+        this.gridContainer.on('pointermove', function (e) {
             _this.moveCoordinates.lastX = e.data.global.x;
             _this.moveCoordinates.lastY = e.data.global.y;
         });
-        this.gridContainer.on('pointerup', function(e) {
+        this.gridContainer.on('pointerup', function (e) {
             //TODO
         });
         let grid_h = this.height * 0.65;
@@ -313,6 +314,9 @@ export default class Level {
         // gridWrapper.lineStyle(1, 0x000000);
         // gridWrapper.drawRect(this.width * 0.05, (this.height - this.width * 1.15) / 2, this.width * 0.9, this.width * 1.15);
         //-------------------------------------------------------------------------------------------------------//
+
+        let visibilityDelay = 0;
+
         for (let row = 0; row < 8; row++) {
             let rowContainer = new PIXI.Container();
             for (let col = 0; col < 6; col++) {
@@ -338,7 +342,7 @@ export default class Level {
 
                 block.on('pointerdown', this.onDragStart);
                 block.on('pointerup', this.onDragEnd)
-                    //  TODO        block.on('pointerupoutside', onDragEnd)
+                //  TODO        block.on('pointerupoutside', onDragEnd)
                 block.on('pointermove', this.onDragMove)
 
                 block.gridPosition_x = row;
@@ -349,7 +353,14 @@ export default class Level {
                 block.y = grid_y + block_h * row;
                 block.width = block_h * 0.9;
                 block.height = block_h * 0.9;
+                block.alpha = 0;;
                 rowContainer.addChild(block);
+
+                setTimeout(() => {
+                    block.alpha = 1;
+                }, visibilityDelay + this.config.fadeTimeBetweenPhases * 1000 + 1000);
+
+                visibilityDelay += 15;
             }
             this.gridContainer.addChild(rowContainer);
         }
@@ -423,15 +434,11 @@ export default class Level {
                 break;
         }
 
-
-
         TweenMax.to(item1, 0.2, {
             y: item2.y,
             x: item2.x,
             ease: Linear.easeNone,
             onComplete: () => {
-
-
 
                 let type1 = item1.type;
                 let gridPosition1 = item1.gridPosition;
@@ -439,26 +446,27 @@ export default class Level {
                 item1.gridPosition = item2.gridPosition;
                 item2.type = type1;
                 item2.gridPosition = gridPosition1;
-                this.swappedBlocksCoords = [{
-                        row: item1.gridPosition_y,
-                        col: item1.gridPosition_x,
-                        type: item1.type,
-                        x: item1.x,
-                        y: item1.y
-                    },
-                    {
-                        row: item2.gridPosition_y,
-                        col: item2.gridPosition_x,
-                        type: item2.type,
-                        x: item2.x,
-                        y: item2.y
-                    }
-                ];
                 //              START OF PROTON EFFECT AFTER MATCH
                 let matches = this.checkGridForMatches();
+
                 if (matches.length !== 0) {
-                    console.log(matches)
+                    for (let m = 0; m < matches.length; m++) {
+                        if (matches[m].row === item2.gridPosition_x && matches[m].col === item2.gridPosition_y) {
+                            matches[m].beingSwapped = true;
+                            this.matchingSwappedItem = 1;
+                        } else if (((matches[m].row === item1.gridPosition_x) && (matches[m].col === item1.gridPosition_y))) {
+                            matches[m].beingSwapped = true;
+                            this.matchingSwappedItem = 2;
+                        }
+                        else {
+                            matches[m].dir = this.swapDirection;
+                        }
+                    }
                     this.proton.Main(matches, this.width, this.height); //works but  lags on too many matches , needs adjustment
+                    // this.gatherMatchingBlocks(matches);
+                    TweenMax.delayedCall(1, () => {
+                        this.increaseCardsPointsAfterMatch(matches);
+                    })
                 }
             }
         });
@@ -468,42 +476,108 @@ export default class Level {
 
     //animate matching blocks to currently moved block position
     gatherMatchingBlocks(matches) {
+        let beingSwapped = matches.filter(e => e.beingSwapped);
 
-        let swappedBlock1 = this.swappedBlocksCoords[0];
-        let swappedBlock2 = this.swappedBlocksCoords[1];
-        let blocksMatchingswappedBlock1 = matches.filter(m => m.type === swappedBlock1.type);
+        for (let m = 0; m < beingSwapped.length; m++) {
+            let thisColorMatches = matches.filter(e => e.type === beingSwapped[m].type);
+            let targetBlock = this.gridContainer.children[beingSwapped[m].row].children[beingSwapped[m].col];
+            console.log(matches)
 
-        blocksMatchingswappedBlock1.forEach((block) => {
-            if (block.row === swappedBlock1.row && block.col === swappedBlock1.col) {
-                return; //this is the targeted block
-            }
+            for (let e = 0; e < thisColorMatches.length; e++) {
 
-            let x_dist = Math.abs(block.col - swappedBlock1.col);
-            let y_dist = Math.abs(block.row - swappedBlock1.row);
-            let blockWidth = this.gridContainer.children[block.row].children[block.col].width;
-            let blockHeight = this.gridContainer.children[block.row].children[block.col].height;
-            let x_modifier = this.swapDirection === "left" ? -blockWidth : this.swapDirection === "right" ? blockWidth : 0;
-            let y_modifier = this.swapDirection === "up" ? -blockHeight : this.swapDirection === "down" ? blockHeight : 0;
-            let newX = swappedBlock1.x;
-            let newY = swappedBlock1.y;
-            console.log(this.gridContainer.children[block.row].children[block.col].x)
-            console.log(this.gridContainer.children[block.row].children[block.col].y)
+                let newX = targetBlock.x;
+                let newY = targetBlock.y;
 
-            TweenMax.to(this.gridContainer.children[block.row].children[block.col], 0.3, {
-                x: newX + x_modifier,
-                y: newY + y_modifier,
-                ease: Linear.easeNone,
-                onComplete: () => {
-                    TweenMax.killAll();
+                if (!thisColorMatches[e].beingSwapped) {
+                    console.log(this.matchingSwappedItem)
+
+
+                    if (this.matchingSwappedItem === 1) {
+                        switch (thisColorMatches[e].dir) { // this hacky weird " * 1.1 "  is to fix wrong caalculations...unknown  bug 
+                            case "down":
+                                newY += this.gridContainer.children[0].children[0].height * 1.1;
+                                break;
+                            case "up":
+                                newY -= this.gridContainer.children[0].children[0].height * 1.1;
+                                break;
+                            case "left":
+                                newX -= this.gridContainer.children[0].children[0].width * 1.1;
+                                break;
+                            case "right":
+                                newX += this.gridContainer.children[0].children[0].width * 1.1;
+                            default:
+                                break;
+                        }
+                    } else if (this.matchingSwappedItem === 2) {
+                        switch (thisColorMatches[e].dir) { // this hacky weird " * 1.1 "  is to fix wrong caalculations...unknown  bug 
+                            case "down":
+                                newY -= this.gridContainer.children[0].children[0].height * 1.1;
+                                break;
+                            case "up":
+                                newY += this.gridContainer.children[0].children[0].height * 1.1;
+                                break;
+                            case "left":
+                                newX += this.gridContainer.children[0].children[0].width * 1.1;
+                                break;
+                            case "right":
+                                newX -= this.gridContainer.children[0].children[0].width * 1.1;
+                            default:
+                                break;
+                        }
+                    }
+
+                    let tweenTarget = this.gridContainer.children[thisColorMatches[e].row].children[thisColorMatches[e].col];
+
+                    TweenMax.to(tweenTarget, 0.15, {
+                        x: newX,
+                        y: newY,
+                        ease: Linear.easeNone,
+                        onComplete: () => {
+                            // TweenMax.killAll();
+                            // this.increaseCardsPointsAfterMatch(matches);
+                        }
+                    });
                 }
-            });
+            }
+        }
+    }
 
+    increaseCardsPointsAfterMatch(matches) {
 
-        });
+        let colors = {
+            'FF1D00': "ball_red",     // RED:
+            '3052FF': "ball_blue",    // BLUE:
+            '2F7F07': "ball_green",   // GREEN:
+            'E2D841': "ball_yellow",  // YELLOW:
+            'FF9702': "ball_orange",  // ORANGE
+            'B200FF': "ball_purple"   // PURPLE:
+        }
 
-        // let swappedBlock2 = this.swappedBlocksCoords[1];
-        // let blocksMatchingswappedBlock2 = matches.filter(m => m.type === swappedBlock2.type);
+        if (this.playerTurn) {
+            console.log(this.playerCardsContainer);
+            for (let cardIdx = 0; cardIdx < this.playerCardsContainer.children.length; cardIdx++) {
 
+                let card = this.playerCardsContainer.children[cardIdx];
+                let defenceColor = colors[card.stats.defense_color];
+                let attackColor = colors[card.stats.attack_color];
+                let def_points = matches.filter(e => e.type === defenceColor).length;
+                let atk_points = matches.filter(e => e.type === attackColor).length;
 
+                if (def_points > 0) {
+                    card.stats.defense_current += def_points;
+                    card.getChildByName("defenseValuesText").text = `${card.stats.defense_current}/${card.stats.defense_full}`
+                }
+
+                if (atk_points > 0) {
+                    card.stats.attack_current += atk_points;
+                    card.getChildByName("attackValuesText").text = `${card.stats.attack_current}/${card.stats.attack_full}`
+                }
+            }
+        }
+
+        //TODO... => add opponent points same as player in the function above
+        //TODO... => add yellow card, red card ana injury.....
+        //TODO... => check for full attack or defence
+        //TODO... => add sort of animations to show card gained points...
     }
 }

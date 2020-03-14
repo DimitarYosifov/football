@@ -100,15 +100,18 @@ export default class LevelCards {
         defenseValuesText.position.set(this.defense_text.x, this.defense_text.y);
         defenseValuesText.anchor.x = 1;
 
+        attackValuesText.name = "attackValuesText";
+        defenseValuesText.name = "defenseValuesText";
+        
         this.container.addChild(attackValuesText);
         this.container.addChild(defenseValuesText);
 
         this.container.addChild(shoe);
         this.container.addChild(glove);
         this.container.addChild(border);
-//        TweenMax.delayedCall(1, () => {
-//            TweenMax.to(this.container, 0.5, {alpha: 1});
-//        })
-//        console.log(this.container);
+        //        TweenMax.delayedCall(1, () => {
+        //            TweenMax.to(this.container, 0.5, {alpha: 1});
+        //        })
+        //        console.log(this.container);
     }
 }

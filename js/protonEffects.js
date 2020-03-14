@@ -38,15 +38,15 @@ export default class ProtonEffects {
             let y = window.innerHeight / 2 - grid_h / 2 + row * block_h + block_h / 2;
 
             let emitter = new Proton.Emitter();
-            emitter.rate = new Proton.Rate(new Proton.Span(1, 3), new Proton.Span(.05, .2));
+            emitter.rate = new Proton.Rate(new Proton.Span(1,50), new Proton.Span(.05, .2));
             emitter.addInitialize(new Proton.Body(`images/${type}.png`, 2));
             emitter.addInitialize(new Proton.Mass(1));
-            emitter.addInitialize(new Proton.Radius(1, 12));
-            emitter.addInitialize(new Proton.Life(0, 2));
-            emitter.addInitialize(new Proton.V(new Proton.Span(1, 1), new Proton.Span(-20, 20), 'polar'));
-            emitter.addBehaviour(new Proton.RandomDrift(50, 50, 0.2));
+            emitter.addInitialize(new Proton.Radius(1, 25));
+            emitter.addInitialize(new Proton.Life(0, 0.5));
+            emitter.addInitialize(new Proton.V(new Proton.Span(1, 1), new Proton.Span(-500, 500), 'polar'));
+            emitter.addBehaviour(new Proton.RandomDrift(100, 100, 0.2));
             emitter.addBehaviour(new Proton.Alpha(1, 0.1));
-            emitter.addBehaviour(new Proton.Scale(0.01, 0.7));
+            emitter.addBehaviour(new Proton.Scale(0.01, 0.02));
             emitter.p.x = x;
             emitter.p.y = y;
             emitter.emit();
@@ -55,7 +55,7 @@ export default class ProtonEffects {
             this.proton.addRenderer(this.protonRenderer);
             setTimeout(() => {
                 this.proton.removeEmitter(emitter);
-            }, 1000);
+            }, 500);
         }
 
         for (let matchIdx = 0; matchIdx < matches.length; matchIdx++) {
@@ -63,7 +63,7 @@ export default class ProtonEffects {
         }
 
         this.level = this.app.getLevel();
-        TweenMax.delayedCall(1, () => {
+        TweenMax.delayedCall(0.51, () => {
             this.level.gatherMatchingBlocks(matches);
             // TweenMax.killAll();
         })
