@@ -364,7 +364,7 @@ export default class Level {
             }
             this.gridContainer.addChild(rowContainer);
         }
-        this.stage.addChild(this.gridContainer);
+        this.stage.addChild(this.gridContainer); 
     }
 
     onDragStart = (e) => {
