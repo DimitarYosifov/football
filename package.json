@@ -8,10 +8,12 @@
         "client",
         "browser"
     ],
+    "engines": {
+        "node": "12.14.1"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "webpack ./server.js bundle.js",
-        "run": "nodemon server.js"
+        "start": "nodemon server.js"
     },
     "author": "User",
     "contributors": [],
