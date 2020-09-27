@@ -9,6 +9,8 @@ export default class Level {
 
         this.app = app;
         this.config = Config;
+        this.gridArrays = [];
+        this.globalBlocksPositions = [[], [], [], [], [], [], [], []]
         this.onPlayerCardsData = () => {
 
             if (!this.lineUps.player || !this.lineUps.opponent) {
@@ -323,7 +325,7 @@ export default class Level {
                 let figureMissing = true;
                 let img;
 
-                // check if grid ispredefined(debug purposes)
+                // check if grid is predefined(debug purposes)
                 if (!this.config.isGridInDebug) {
                     while (figureMissing) {
                         img = this.generateRandomBlock();
@@ -353,6 +355,12 @@ export default class Level {
                 block.y = grid_y + block_h * row;
                 block.width = block_h * 0.9;
                 block.height = block_h * 0.9;
+
+                this.globalBlocksPositions[row].push({
+                    x: block.x,
+                    y: block.y
+                })
+
                 block.alpha = 0;;
                 rowContainer.addChild(block);
 
@@ -363,8 +371,9 @@ export default class Level {
                 visibilityDelay += 15;
             }
             this.gridContainer.addChild(rowContainer);
+            this.gridArrays.push(rowContainer.children.map(c => c.type));
         }
-        this.stage.addChild(this.gridContainer); 
+        this.stage.addChild(this.gridContainer);
     }
 
     onDragStart = (e) => {
@@ -416,6 +425,7 @@ export default class Level {
 
     swapBlocks(block1_x, block1_y, dir) {
         this.swapDirection = dir;
+        this.selectedBlock = { row: block1_x, col: block1_y };
         let item1 = this.gridContainer.children[block1_x].children[block1_y];
         let item2;
         switch (dir) {
@@ -476,59 +486,22 @@ export default class Level {
 
     //animate matching blocks to currently moved block position
     gatherMatchingBlocks(matches) {
-        let beingSwapped = matches.filter(e => e.beingSwapped);
 
+
+        this.nullifyMatchesInGridArray(matches);
+        let beingSwapped = matches.filter(e => e.beingSwapped);
         for (let m = 0; m < beingSwapped.length; m++) {
+
             let thisColorMatches = matches.filter(e => e.type === beingSwapped[m].type);
-            let targetBlock = this.gridContainer.children[beingSwapped[m].row].children[beingSwapped[m].col];
-            console.log(matches)
 
             for (let e = 0; e < thisColorMatches.length; e++) {
-
-                let newX = targetBlock.x;
-                let newY = targetBlock.y;
+                let targetBlock = thisColorMatches.filter(x => x.beingSwapped)[0];
+                let tweenTarget = this.gridContainer.children[thisColorMatches[e].row].children[thisColorMatches[e].col];
 
                 if (!thisColorMatches[e].beingSwapped) {
-                    console.log(this.matchingSwappedItem)
-
-
-                    if (this.matchingSwappedItem === 1) {
-                        switch (thisColorMatches[e].dir) { // this hacky weird " * 1.1 "  is to fix wrong caalculations...unknown  bug 
-                            case "down":
-                                newY += this.gridContainer.children[0].children[0].height * 1;
-                                break;
-                            case "up":
-                                newY -= this.gridContainer.children[0].children[0].height * 1;
-                                break;
-                            case "left":
-                                newX -= this.gridContainer.children[0].children[0].width * 1;
-                                break;
-                            case "right":
-                                newX += this.gridContainer.children[0].children[0].width * 1;
-                            default:
-                                break;
-                        }
-                    } else if (this.matchingSwappedItem === 2) {
-                        switch (thisColorMatches[e].dir) { // this hacky weird " * 1.1 "  is to fix wrong caalculations...unknown  bug 
-                            case "down":
-                                newY -= this.gridContainer.children[0].children[0].height * 1;
-                                break;
-                            case "up":
-                                newY += this.gridContainer.children[0].children[0].height * 1;
-                                break;
-                            case "left":
-                                newX += this.gridContainer.children[0].children[0].width * 1;
-                                break;
-                            case "right":
-                                newX -= this.gridContainer.children[0].children[0].width * 1;
-                            default:
-                                break;
-                        }
-                    }
-
-                    let tweenTarget = this.gridContainer.children[thisColorMatches[e].row].children[thisColorMatches[e].col];
-
-                    TweenMax.to(tweenTarget, 0.15, {
+                    let newX = this.globalBlocksPositions[targetBlock.row][targetBlock.col].x;
+                    let newY = this.globalBlocksPositions[targetBlock.row][targetBlock.col].y;
+                    TweenMax.to(tweenTarget, .25, {
                         x: newX,
                         y: newY,
                         alpha: 0,
@@ -539,7 +512,27 @@ export default class Level {
                         }
                     });
                 }
+                else {
+                    let blockSwappedAndWinning = matches.filter(e => e.beingSwapped).length;
+                    if (blockSwappedAndWinning === 1) {
+                     tweenTarget = this.gridContainer.children[this.selectedBlock.row].children[this.selectedBlock.col];
+                    }
+                    TweenMax.to(tweenTarget, .4, {
+                        alpha: 0,
+                        delay: .25,
+                        onComplete: () => {
+                            // TweenMax.killAll();
+                            // this.increaseCardsPointsAfterMatch(matches);
+                        }
+                    });
+                }
             }
+        }
+    }
+
+    nullifyMatchesInGridArray(matches) {
+        for (const item of matches) {
+            this.gridArrays[item.row][item.col] = null;
         }
     }
 
@@ -564,14 +557,45 @@ export default class Level {
                 let def_points = matches.filter(e => e.type === defenceColor).length;
                 let atk_points = matches.filter(e => e.type === attackColor).length;
 
+                let initialScaleX = card.children[0].scale.x;
+                let initialScaley = card.children[0].scale.y;
+
                 if (def_points > 0) {
                     card.stats.defense_current += def_points;
-                    card.getChildByName("defenseValuesText").text = `${card.stats.defense_current}/${card.stats.defense_full}`
+                    card.getChildByName("defenseValuesText").text = `${card.stats.defense_current}/${card.stats.defense_full}`;
+                    card.children[0].tint = "0x" + card.stats.defense_color;
+                    TweenMax.to(card.children[0], .15, {
+                        delay: .3,
+                        onComplete: () => {
+                            card.children[0].tint = 16777215
+                        }
+                    });
+
+                    TweenMax.to(card.children[0].scale, .15, {
+                        x: initialScaleX * 1.05,
+                        y: initialScaley * 1.05,
+                        yoyo: true,
+                        repeat: 1
+                    })
+
                 }
 
                 if (atk_points > 0) {
                     card.stats.attack_current += atk_points;
-                    card.getChildByName("attackValuesText").text = `${card.stats.attack_current}/${card.stats.attack_full}`
+                    card.getChildByName("attackValuesText").text = `${card.stats.attack_current}/${card.stats.attack_full}`;
+                    card.children[0].tint = "0x" + card.stats.attack_color;
+                    TweenMax.to(card.children[0], .15, {
+                        delay: .3,
+                        onComplete: () => {
+                            card.children[0].tint = 16777215
+                        }
+                    });
+                    TweenMax.to(card.children[0].scale, .15, {
+                        x: initialScaleX * 1.05,
+                        y: initialScaley * 1.05,
+                        yoyo: true,
+                        repeat: 1
+                    })
                 }
             }
         }
@@ -580,5 +604,6 @@ export default class Level {
         //TODO... => add yellow card, red card ana injury.....
         //TODO... => check for full attack or defence
         //TODO... => add sort of animations to show card gained points...
+        //TODO... => check if card wins with two colors
     }
 }

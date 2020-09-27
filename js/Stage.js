@@ -23,7 +23,7 @@ export default class Stage {
 
 
 
-            this.width = Math.round(window.innerWidth) > 450 ? 450 : Math.round(window.innerWidth);
+            this.width = Math.round(window.innerWidth) > 650 ? 650 : Math.round(window.innerWidth);
 
             // this.stage.width = this.width;
             // this.canvas.width = this.width;
@@ -34,7 +34,7 @@ export default class Stage {
                 this.height = Math.round(this.width * 1.77);
             }
 
-            if (window.innerHeight < 450 * 1.77) {
+            if (window.innerHeight < 650 * 1.77) {
                 this.height = window.innerHeight;
                 this.width = window.innerHeight * 0.562;
             }
@@ -49,7 +49,7 @@ export default class Stage {
 
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height, {
             transparent: true,
-            // resolution: 11,//DPR test
+            // resolution:3,//DPR test
             resolution: window.devicePixelRatio || 1,//2, //7 :) //DPR
             view: this.canvas,
             autoResize: true,
