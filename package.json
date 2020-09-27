@@ -21,7 +21,6 @@
         "@pixi/filter-glow": "^2.7.0",
         "bcryptjs": "^2.4.3",
         "express": "^4.17.1",
-        "firebase": "^7.10.0",
         "pixi-filters": "^2.7.1"
     },
     "devDependencies": {

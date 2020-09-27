@@ -30,8 +30,8 @@ export default class Level {
         this.stage = app.stage;
         this.stage.alpha = 0;
         this.proton = app.proton;
-        this.width = app.width / this.config.rendererResolution;
-        this.height = app.height / this.config.rendererResolution;
+        this.width = app.width; // / this.config.rendererResolution;
+        this.height = app.height;//  / this.config.rendererResolution;
         this.gridContainer = null;
         this.playerCardsContainer = null;
         this.opponentCardsContainer = null;
@@ -462,8 +462,8 @@ export default class Level {
                             matches[m].dir = this.swapDirection;
                         }
                     }
-                    this.proton.Main(matches, this.width, this.height); //works but  lags on too many matches , needs adjustment
-                    // this.gatherMatchingBlocks(matches);
+                    // this.proton.Main(matches, this.width, this.height); //works but  lags on too many matches , needs adjustment
+                    this.gatherMatchingBlocks(matches);
                     TweenMax.delayedCall(1, () => {
                         this.increaseCardsPointsAfterMatch(matches);
                     })
@@ -495,32 +495,32 @@ export default class Level {
                     if (this.matchingSwappedItem === 1) {
                         switch (thisColorMatches[e].dir) { // this hacky weird " * 1.1 "  is to fix wrong caalculations...unknown  bug 
                             case "down":
-                                newY += this.gridContainer.children[0].children[0].height * 1.1;
+                                newY += this.gridContainer.children[0].children[0].height * 1;
                                 break;
                             case "up":
-                                newY -= this.gridContainer.children[0].children[0].height * 1.1;
+                                newY -= this.gridContainer.children[0].children[0].height * 1;
                                 break;
                             case "left":
-                                newX -= this.gridContainer.children[0].children[0].width * 1.1;
+                                newX -= this.gridContainer.children[0].children[0].width * 1;
                                 break;
                             case "right":
-                                newX += this.gridContainer.children[0].children[0].width * 1.1;
+                                newX += this.gridContainer.children[0].children[0].width * 1;
                             default:
                                 break;
                         }
                     } else if (this.matchingSwappedItem === 2) {
                         switch (thisColorMatches[e].dir) { // this hacky weird " * 1.1 "  is to fix wrong caalculations...unknown  bug 
                             case "down":
-                                newY -= this.gridContainer.children[0].children[0].height * 1.1;
+                                newY -= this.gridContainer.children[0].children[0].height * 1;
                                 break;
                             case "up":
-                                newY += this.gridContainer.children[0].children[0].height * 1.1;
+                                newY += this.gridContainer.children[0].children[0].height * 1;
                                 break;
                             case "left":
-                                newX += this.gridContainer.children[0].children[0].width * 1.1;
+                                newX += this.gridContainer.children[0].children[0].width * 1;
                                 break;
                             case "right":
-                                newX -= this.gridContainer.children[0].children[0].width * 1.1;
+                                newX -= this.gridContainer.children[0].children[0].width * 1;
                             default:
                                 break;
                         }
@@ -531,6 +531,7 @@ export default class Level {
                     TweenMax.to(tweenTarget, 0.15, {
                         x: newX,
                         y: newY,
+                        alpha: 0,
                         ease: Linear.easeNone,
                         onComplete: () => {
                             // TweenMax.killAll();
