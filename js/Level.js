@@ -137,7 +137,7 @@ export default class Level {
             let card = new Card({
                 index: i,
                 stats: this.lineUps.player[i],
-                font_size: this.height / 45 + 'px',
+                font_size: this.height / 45 + 'px',  //change this shit!!
 
                 cardTexture: `images/players/player_id_${this.lineUps.player[i].player_img_id}.png`,
                 card_x: (this.width / 6) * i,
@@ -188,7 +188,7 @@ export default class Level {
             let card = new Card({
                 index: i,
                 stats: this.lineUps.opponent[i],
-                font_size: this.height / 45 + 'px',
+                font_size: this.height / 45 + 'px',  //idiotic!!!! TODO...
 
                 cardTexture: `images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}.png`,
                 card_x: (this.width / 6) * i,
@@ -578,53 +578,81 @@ export default class Level {
                 let def_points = matches.filter(e => e.type === defenceColor).length;
                 let atk_points = matches.filter(e => e.type === attackColor).length;
 
-                let initialScaleX = card.children[0].scale.x;
-                let initialScaley = card.children[0].scale.y;
+                let cardImg = card.children[0]
+
+                let initialScaleX = cardImg.scale.x;
+                let initialScaley = cardImg.scale.y;
 
                 if (def_points > 0) {
                     card.stats.defense_current += def_points;
                     card.getChildByName("defenseValuesText").text = `${card.stats.defense_current}/${card.stats.defense_full}`;
                     card.children[0].tint = "0x" + card.stats.defense_color;
-                    TweenMax.to(card.children[0], .15, {
-                        delay: .3,
+                    TweenMax.to(cardImg, .15, {
+                        delay: .7,
                         onComplete: () => {
                             card.children[0].tint = 16777215
                         }
                     });
 
-                    TweenMax.to(card.children[0].scale, .15, {
+                    TweenMax.to(cardImg.scale, .15, {
                         x: initialScaleX * 1.05,
                         y: initialScaley * 1.05,
                         yoyo: true,
                         repeat: 1
                     })
 
+
+
+
+                    //TODO  create separate class for this and add some delay between text tweens
+                    let def_text = new PIXI.Text("+" + def_points, {
+                        fontFamily: this.config.mainFont,
+                        fontSize: cardImg.height / 2,
+                        fill: '#' + card.stats.defense_color,
+                        align: 'center',
+                        stroke: '#000000',
+                        strokeThickness: 3
+                    });
+                    def_text.position.set(cardImg.x + cardImg.width / 2, cardImg.y + cardImg.height / 2);
+                    def_text.anchor.x = 0.5;
+                    def_text.anchor.y = 0.5;
+
+                    this.stage.addChild(def_text);// TODO add picture to +3 for example!!!
+
+                    TweenMax.to(def_text, 2, {
+                        y: this.height / 2,
+                        // alpha: 0.75,
+                        ease: Linear.easeNone,  //TODO... change ease
+                        onComplete: () => {
+                            def_text.alpha = 0;
+                        }
+                    })
+
+                    if (atk_points > 0) {
+                        card.stats.attack_current += atk_points;
+                        card.getChildByName("attackValuesText").text = `${card.stats.attack_current}/${card.stats.attack_full}`;
+                        card.children[0].tint = "0x" + card.stats.attack_color;
+                        TweenMax.to(card.children[0], .15, {
+                            delay: .7,
+                            onComplete: () => {
+                                card.children[0].tint = 16777215
+                            }
+                        });
+                        TweenMax.to(card.children[0].scale, .15, {
+                            x: initialScaleX * 1.05,
+                            y: initialScaley * 1.05,
+                            yoyo: true,
+                            repeat: 1
+                        })
+                    }
                 }
 
-                if (atk_points > 0) {
-                    card.stats.attack_current += atk_points;
-                    card.getChildByName("attackValuesText").text = `${card.stats.attack_current}/${card.stats.attack_full}`;
-                    card.children[0].tint = "0x" + card.stats.attack_color;
-                    TweenMax.to(card.children[0], .15, {
-                        delay: .3,
-                        onComplete: () => {
-                            card.children[0].tint = 16777215
-                        }
-                    });
-                    TweenMax.to(card.children[0].scale, .15, {
-                        x: initialScaleX * 1.05,
-                        y: initialScaley * 1.05,
-                        yoyo: true,
-                        repeat: 1
-                    })
-                }
+                //TODO... => add opponent points same as player in the function above
+                //TODO... => add yellow card, red card ana injury.....
+                //TODO... => check for full attack or defence
+                //TODO... => add sort of animations to show card gained points...
+                //TODO... => check if card wins with two colors
             }
         }
-
-        //TODO... => add opponent points same as player in the function above
-        //TODO... => add yellow card, red card ana injury.....
-        //TODO... => check for full attack or defence
-        //TODO... => add sort of animations to show card gained points...
-        //TODO... => check if card wins with two colors
     }
 }

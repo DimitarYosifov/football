@@ -61,8 +61,6 @@ export default class LevelCards {
         shoe.height = this.shoe_height;
         shoe.tint = '0x' + this.container.stats.attack_color;
 
-
-
         //defense section
         let gloveTexture = PIXI.Texture.fromImage(this.gloveTexture);
         let glove = new PIXI.Sprite(gloveTexture);

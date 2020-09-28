@@ -17,11 +17,7 @@ export default class Stage {
 
         let resolutiion = () => { //16:9
 
-
-
             console.log(window.devicePixelRatio);
-
-
 
             this.width = Math.round(window.innerWidth) > 650 ? 650 : Math.round(window.innerWidth);
 
@@ -74,7 +70,6 @@ export default class Stage {
         this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
 
         this.loader.load(this.setup);
-
         window.onresize = resolutiion;
     }
 }
