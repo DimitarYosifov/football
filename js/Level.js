@@ -425,21 +425,26 @@ export default class Level {
 
     swapBlocks(block1_x, block1_y, dir) {
         this.swapDirection = dir;
-        this.selectedBlock = { row: block1_x, col: block1_y };
+        this.blockBeingSwappedWith = null;
         let item1 = this.gridContainer.children[block1_x].children[block1_y];
+        this.selectedBlock = { row: block1_x, col: block1_y, type: item1.type };
         let item2;
         switch (dir) {
             case "down":
                 item2 = this.gridContainer.children[block1_x + 1].children[block1_y];
+                this.blockBeingSwappedWith = { row: block1_x + 1, col: block1_y, type: item2.type };
                 break;
             case "up":
                 item2 = this.gridContainer.children[block1_x - 1].children[block1_y];
+                this.blockBeingSwappedWith = { row: block1_x - 1, col: block1_y, type: item2.type };
                 break;
             case "left":
                 item2 = this.gridContainer.children[block1_x].children[block1_y - 1];
+                this.blockBeingSwappedWith = { row: block1_x, col: block1_y - 1, type: item2.type };
                 break;
             case "right":
                 item2 = this.gridContainer.children[block1_x].children[block1_y + 1];
+                this.blockBeingSwappedWith = { row: block1_x, col: block1_y + 1, type: item2.type };
             default:
                 break;
         }
@@ -450,6 +455,14 @@ export default class Level {
             ease: Linear.easeNone,
             onComplete: () => {
 
+            }
+        });
+        //        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
+        TweenMax.to(item2, 0.2, {
+            y: item1.y,
+            x: item1.x,
+            ease: Linear.easeNone,
+            onComplete: () => {
                 let type1 = item1.type;
                 let gridPosition1 = item1.gridPosition;
                 item1.type = item2.type;
@@ -472,7 +485,21 @@ export default class Level {
                             matches[m].dir = this.swapDirection;
                         }
                     }
-                    // this.proton.Main(matches, this.width, this.height); //works but  lags on too many matches , needs adjustment
+
+                    let item_2_Old_X = this.globalBlocksPositions[this.selectedBlock.row][this.selectedBlock.col].x;
+                    let item_2_Old_Y = this.globalBlocksPositions[this.selectedBlock.row][this.selectedBlock.col].y;
+                    let item_2_OldType = this.gridContainer.children[this.selectedBlock.row].children[this.selectedBlock.col].type;
+
+                    item2.x = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].x;
+                    item2.y = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].y;
+                    item2.type = this.gridContainer.children[this.blockBeingSwappedWith.row].children[this.blockBeingSwappedWith.col].type;
+                    item2.texture = PIXI.Texture.fromImage(`images/${item2.type}.png`);
+
+                    item1.x = item_2_Old_X;
+                    item1.y = item_2_Old_Y;
+                    item1.type = item_2_OldType;
+                    item1.texture = PIXI.Texture.fromImage(`images/${item1.type}.png`);
+
                     this.gatherMatchingBlocks(matches);
                     TweenMax.delayedCall(1, () => {
                         this.increaseCardsPointsAfterMatch(matches);
@@ -480,13 +507,10 @@ export default class Level {
                 }
             }
         });
-        //        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
-        TweenMax.to(item2, 0.2, { y: item1.y, x: item1.x, repeat: 0, yoyo: true, ease: Linear.easeNone });
     }
 
     //animate matching blocks to currently moved block position
     gatherMatchingBlocks(matches) {
-
 
         this.nullifyMatchesInGridArray(matches);
         let beingSwapped = matches.filter(e => e.beingSwapped);
@@ -513,10 +537,6 @@ export default class Level {
                     });
                 }
                 else {
-                    let blockSwappedAndWinning = matches.filter(e => e.beingSwapped).length;
-                    if (blockSwappedAndWinning === 1) {
-                     tweenTarget = this.gridContainer.children[this.selectedBlock.row].children[this.selectedBlock.col];
-                    }
                     TweenMax.to(tweenTarget, .4, {
                         alpha: 0,
                         delay: .25,
@@ -534,6 +554,7 @@ export default class Level {
         for (const item of matches) {
             this.gridArrays[item.row][item.col] = null;
         }
+        console.log(this.gridArrays)
     }
 
     increaseCardsPointsAfterMatch(matches) {
