@@ -1,7 +1,9 @@
-import config from "./Config.js";
+import config from "../Config.js";
 
-export default class LevelCards {
+export default class Card extends PIXI.Container{
     constructor(data) {
+
+        super();
 
         this.config = config;
         this.font_size = data.font_size;
@@ -38,11 +40,11 @@ export default class LevelCards {
 
     createCard() {
 
-        this.container = new PIXI.Container();
-        this.container.index = this.index;
+        // this = new PIXI();
+        this.index = this.index;
 
         //stats            
-        this.container.stats = this.stats;
+        this.stats = this.stats;
 
         //card background
         let cardTexture = PIXI.Texture.fromImage(this.cardTexture);
@@ -59,7 +61,7 @@ export default class LevelCards {
         shoe.y = this.shoe_y;
         shoe.width = this.shoe_width;
         shoe.height = this.shoe_height;
-        shoe.tint = '0x' + this.container.stats.attack_color;
+        shoe.tint = '0x' + this.stats.attack_color;
 
         //defense section
         let gloveTexture = PIXI.Texture.fromImage(this.gloveTexture);
@@ -68,7 +70,7 @@ export default class LevelCards {
         glove.y = this.glove_y;
         glove.width = this.glove_width;
         glove.height = this.glove_height
-        glove.tint = '0x' + this.container.stats.defense_color;
+        glove.tint = '0x' + this.stats.defense_color;
 
         //border
         let border = new PIXI.Graphics();
@@ -76,22 +78,22 @@ export default class LevelCards {
         border.drawRect(this.border_x, this.border_y, this.border_width, this.border_height);
 
         //add children
-        this.container.addChild(card);
+        this.addChild(card);
 
-        let attackValuesText = new PIXI.Text(this.container.stats.attack_current + '/' + this.container.stats.attack_full, {
+        let attackValuesText = new PIXI.Text(this.stats.attack_current + '/' + this.stats.attack_full, {
             fontFamily: this.config.mainFont,
             fontSize: this.font_size,
-            fill: '#' + this.container.stats.attack_color, align: 'center',
+            fill: '#' + this.stats.attack_color, align: 'center',
             stroke: '#000000',
             strokeThickness: 4
         });
         attackValuesText.position.set(this.attack_text.x, this.attack_text.y);
         attackValuesText.anchor.x = 1;
 
-        let defenseValuesText = new PIXI.Text(this.container.stats.defense_current + '/' + this.container.stats.defense_full, {
+        let defenseValuesText = new PIXI.Text(this.stats.defense_current + '/' + this.stats.defense_full, {
             fontFamily: this.config.mainFont,
             fontSize: this.font_size,
-            fill: '#' + this.container.stats.defense_color, align: 'center',
+            fill: '#' + this.stats.defense_color, align: 'center',
             stroke: '#000000',
             strokeThickness: 4
         });
@@ -101,15 +103,15 @@ export default class LevelCards {
         attackValuesText.name = "attackValuesText";
         defenseValuesText.name = "defenseValuesText";
         
-        this.container.addChild(attackValuesText);
-        this.container.addChild(defenseValuesText);
+        this.addChild(attackValuesText);
+        this.addChild(defenseValuesText);
 
-        this.container.addChild(shoe);
-        this.container.addChild(glove);
-        this.container.addChild(border);
+        this.addChild(shoe);
+        this.addChild(glove);
+        this.addChild(border);
         //        TweenMax.delayedCall(1, () => {
-        //            TweenMax.to(this.container, 0.5, {alpha: 1});
+        //            TweenMax.to(this, 0.5, {alpha: 1});
         //        })
-        //        console.log(this.container);
+        //        console.log(this);
     }
 }

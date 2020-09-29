@@ -1,33 +1,19 @@
 import LineUps from "./LineUps.js";
-import Card from "./LevelCards.js";
-import SetBackground from "./SetBackground.js";
+import Card from "./gameLevel/Card.js";
+import Background from "./Background.js";
 import Config from "./Config.js";
+import LevelCardsSet from "./gameLevel/LevelCardsSet.js";
 
-export default class Level {
+export default class Level extends PIXI.Container {
 
     constructor(app) {
+
+        super();
 
         this.app = app;
         this.config = Config;
         this.gridArrays = [];
         this.globalBlocksPositions = [[], [], [], [], [], [], [], []]
-        this.onPlayerCardsData = () => {
-
-            if (!this.lineUps.player || !this.lineUps.opponent) {
-                return;
-            }
-
-            this.createLevelGrid();
-            this.createPlayerCards();
-            this.createOpponentCards();
-            this.checkGridForMatches();
-
-            TweenMax.delayedCall(1, () => {
-                TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, { alpha: 1 });
-            })
-        }
-
-        this.lineUps = new LineUps("testClub1", "testClub2", this.onPlayerCardsData);
 
         this.stage = app.stage;
         this.stage.alpha = 0;
@@ -42,14 +28,29 @@ export default class Level {
 
         this.moveCoordinates = { startX: 0, startY: 0, lastX: 0, lastY: 0 }
 
-        this.bg = new SetBackground(this.app, {
+        this.bg = new Background(this.app, {
             gamePhase: "level",
             bgTexture: 'images/pitch.png',
-            bg_x: -this.width * 0.005,
-            bg_y: -this.height * 0.005,
-            bg_width: this.width * 1.005,
-            bg_height: this.height * 1.005
+            bg_x: -this.app.width * 0.005,
+            bg_y: -this.app.height * 0.005,
+            bg_width: this.app.width * 1.005,
+            bg_height: this.app.height * 1.005
         });
+        this.stage.addChild(this.bg);
+
+        this.dataRecieved = () => {
+            this.createLevelGrid();
+            this.checkGridForMatches();
+            TweenMax.delayedCall(1, () => {
+                TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, { alpha: 1 });
+            })
+        }
+
+        this.playerCards = new LevelCardsSet(this.dataRecieved, this.app.width, this.app.height, "player");
+        this.stage.addChild(this.playerCards);
+
+        this.opponentCards = new LevelCardsSet(() => { }, this.app.width, this.app.height, "opponent");
+        this.stage.addChild(this.opponentCards);
     }
 
     generateRandomBlock() {
@@ -127,109 +128,6 @@ export default class Level {
         return checkUp() || checkLeft();
     }
 
-    createPlayerCards() {
-        this.playerCardsContainer = new PIXI.Container();
-        this.playerCardsContainer.name = "playerCardsContainer";
-        this.playerCardsContainer.interactive = false;
-
-        for (let i = 0; i < 6; i++) {
-
-            let card = new Card({
-                index: i,
-                stats: this.lineUps.player[i],
-                font_size: this.height / 45 + 'px',  //change this shit!!
-
-                cardTexture: `images/players/player_id_${this.lineUps.player[i].player_img_id}.png`,
-                card_x: (this.width / 6) * i,
-                card_y: this.height * 0.88,
-                card_width: this.width / 6,
-                card_height: this.height * 0.12,
-
-                shoeTexture: `images/shoe.png`,
-                shoe_x: (this.width / 5.95) * i,
-                shoe_y: this.height * 0.882,
-                shoe_width: this.width / 21,
-                shoe_height: this.width / 21,
-
-                attack_text: {
-                    x: (this.width / 6) * i + this.width / 6,
-                    y: this.height * 0.88
-                },
-
-                gloveTexture: `images/glove2.png`,
-                glove_x: (this.width / 5.95) * i,
-                glove_y: this.height * 0.968,
-                glove_width: this.width / 21,
-                glove_height: this.width / 21,
-
-                defense_text: {
-                    x: (this.width / 6) * i + this.width / 6,
-                    y: this.height * 0.97
-                },
-
-                border_x: (this.width / 6) * i,
-                border_y: this.height * 0.879,
-                border_width: this.width / 6,
-                border_height: this.height * 0.12
-            })
-            this.playerCardsContainer.addChild(card.container);
-        }
-
-        this.stage.addChild(this.playerCardsContainer)
-    }
-
-    createOpponentCards() {
-        this.opponentCardsContainer = new PIXI.Container();
-        this.opponentCardsContainer.name = "opponentCardsContainer";
-        this.opponentCardsContainer.interactive = false;
-
-        for (let i = 0; i < 6; i++) {
-
-            let card = new Card({
-                index: i,
-                stats: this.lineUps.opponent[i],
-                font_size: this.height / 45 + 'px',  //idiotic!!!! TODO...
-
-                cardTexture: `images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}.png`,
-                card_x: (this.width / 6) * i,
-                card_y: 0,
-                card_width: this.width / 6,
-                card_height: this.height * 0.12,
-
-                shoeTexture: `images/shoe.png`,
-                shoe_x: (this.width / 5.95) * i,
-                shoe_y: this.height * 0.005,
-                shoe_width: this.width / 21,
-                shoe_height: this.width / 21,
-
-                attack_text: {
-                    x: (this.width / 6) * i + this.width / 6,
-                    y: this.height * 0.002
-                },
-
-                gloveTexture: `images/glove2.png`,
-                glove_x: (this.width / 5.95) * i,
-                glove_y: this.height * 0.09,
-                glove_width: this.width / 21,
-                glove_height: this.width / 21,
-
-                defense_text: {
-                    x: (this.width / 6) * i + this.width / 6,
-                    y: this.height * 0.092
-                },
-
-                border_x: (this.width / 6) * i,
-                border_y: this.height * 0,
-                border_width: this.width / 6,
-                border_height: this.height * 0.122
-            })
-
-            this.opponentCardsContainer.addChild(card.container);
-        }
-
-        this.stage.addChild(this.opponentCardsContainer)
-    }
-
     checkGridForMatches() {
         let matches = [];
         for (let row = 0; row < 8; row++) {
@@ -305,12 +203,12 @@ export default class Level {
         this.gridContainer.on('pointerup', function (e) {
             //TODO
         });
-        let grid_h = this.height * 0.65;
+        let grid_h = this.app.height * 0.65;
         let grid_w = grid_h * 0.75;
         let block_w = grid_w / 6
         let block_h = grid_h / 8;
-        let grid_y = block_h / 2 + (this.height - grid_h) / 2; // this.height * 0.15// (this.height - this.width * 1.15) / 2 + block_h / 2;
-        let grid_x = block_h / 2 + ((this.width - grid_w) / 2); // this.width * 0.05 + block_w / 2;
+        let grid_y = block_h / 2 + (this.app.height - grid_h) / 2; // this.height * 0.15// (this.height - this.width * 1.15) / 2 + block_h / 2;
+        let grid_x = block_h / 2 + ((this.app.width - grid_w) / 2); // this.width * 0.05 + block_w / 2;
         //---to be deleted---------------------------------------------------------------------------------------//
         // let gridWrapper = new PIXI.Graphics();
         // gridWrapper.lineStyle(1, 0x000000);
@@ -584,13 +482,15 @@ export default class Level {
                 let initialScaley = cardImg.scale.y;
 
                 if (def_points > 0) {
+                    // // let matchPoint = new MatchPoint(card, matches)
+                    // // console.log(matchPoint)
                     card.stats.defense_current += def_points;
                     card.getChildByName("defenseValuesText").text = `${card.stats.defense_current}/${card.stats.defense_full}`;
-                    card.children[0].tint = "0x" + card.stats.defense_color;
+                    cardImg.tint = "0x" + card.stats.defense_color;
                     TweenMax.to(cardImg, .15, {
                         delay: .7,
                         onComplete: () => {
-                            card.children[0].tint = 16777215
+                            cardImg.tint = 16777215
                         }
                     });
 
@@ -619,7 +519,7 @@ export default class Level {
 
                     this.stage.addChild(def_text);// TODO add picture to +3 for example!!!
 
-                    TweenMax.to(def_text, 2, {
+                    TweenMax.to(def_text, 1.5, {
                         y: this.height / 2,
                         // alpha: 0.75,
                         ease: Linear.easeNone,  //TODO... change ease
@@ -627,31 +527,30 @@ export default class Level {
                             def_text.alpha = 0;
                         }
                     })
-
-                    if (atk_points > 0) {
-                        card.stats.attack_current += atk_points;
-                        card.getChildByName("attackValuesText").text = `${card.stats.attack_current}/${card.stats.attack_full}`;
-                        card.children[0].tint = "0x" + card.stats.attack_color;
-                        TweenMax.to(card.children[0], .15, {
-                            delay: .7,
-                            onComplete: () => {
-                                card.children[0].tint = 16777215
-                            }
-                        });
-                        TweenMax.to(card.children[0].scale, .15, {
-                            x: initialScaleX * 1.05,
-                            y: initialScaley * 1.05,
-                            yoyo: true,
-                            repeat: 1
-                        })
-                    }
                 }
 
-                //TODO... => add opponent points same as player in the function above
-                //TODO... => add yellow card, red card ana injury.....
-                //TODO... => check for full attack or defence
-                //TODO... => add sort of animations to show card gained points...
-                //TODO... => check if card wins with two colors
+                // if (atk_points > 0) {
+                //     card.stats.attack_current += atk_points;
+                //     card.getChildByName("attackValuesText").text = `${card.stats.attack_current}/${card.stats.attack_full}`;
+                //     cardImg.tint = "0x" + card.stats.attack_color;
+                //     TweenMax.to(cardImg, .15, {
+                //         delay: .7,
+                //         onComplete: () => {
+                //             cardImg.tint = 16777215
+                //         }
+                //     });
+                //     TweenMax.to(cardImg.scale, .15, {
+                //         x: initialScaleX * 1.05,
+                //         y: initialScaley * 1.05,
+                //         yoyo: true,
+                //         repeat: 1
+                //     })
+                // }
+                // //TODO... => add opponent points same as player in the function above
+                // //TODO... => add yellow card, red card ana injury.....
+                // //TODO... => check for full attack or defence
+                // //TODO... => add sort of animations to show card gained points...
+                // //TODO... => check if card wins with two colors
             }
         }
     }
