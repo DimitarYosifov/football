@@ -31,6 +31,7 @@ export default class App extends Stage {
     startLevel() {
         this.proton = new ProtonEffects(this);
         this.level = new Level(this);
+        this.stage.addChild(this.level);
     }
 
     getLevel() {

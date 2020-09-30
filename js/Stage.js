@@ -21,9 +21,6 @@ export default class Stage {
 
             this.width = Math.round(window.innerWidth) > 650 ? 650 : Math.round(window.innerWidth);
 
-            // this.stage.width = this.width;
-            // this.canvas.width = this.width;
-
             if (this.width * 1.77 > window.innerHeight) {
                 this.height = window.innerHeight;
             } else {
@@ -35,11 +32,15 @@ export default class Stage {
                 this.width = window.innerHeight * 0.562;
             }
 
-            this.stage.width = this.width;
             this.canvas.width = this.width;
-
             this.canvas.height = this.height;
+
             this.stage.height = this.height;
+            this.stage.width = this.width;
+
+            console.log(this.width )
+            console.log(this.height)
+
             this.renderer.resize(this.canvas.width, this.canvas.height);
         }
 
