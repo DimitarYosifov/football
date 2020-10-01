@@ -34,7 +34,7 @@ export default class Block extends PIXI.Container {
         this.blockImg.anchor.y = 0.5; //??????????????????
         this.blockImg.gridPosition_x = this.row;
         this.blockImg.gridPosition_y = this.col;
-        this.blockImg.type = this.img;
+        this.type = this.img;
 
         let grid_h = this.app.height * 0.65;
         let grid_w = grid_h * 0.75;
@@ -47,6 +47,11 @@ export default class Block extends PIXI.Container {
         this.blockImg.y = grid_y + block_h * this.row;
         this.blockImg.width = block_h * 0.9;
         this.blockImg.height = block_h * 0.9;
+
+        this.grid.globalBlocksPositions[this.row].push({
+            x: this.blockImg.x,
+            y: this.blockImg.y
+        })
 
         this.blockImg.alpha = 0;;
         this.addChild(this.blockImg);    ///This not row container!!!!!

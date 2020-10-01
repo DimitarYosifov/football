@@ -29,41 +29,42 @@ export default class Grid extends PIXI.Container {
     swapBlocks(block1_x, block1_y, dir) {
         this.swapDirection = dir;
         this.blockBeingSwappedWith = null;
-        let item1 = this.children[block1_x].children[block1_y];
-        this.selectedBlock = { row: block1_x, col: block1_y, type: item1.type };
+        let item1 = this.children[block1_y].children[block1_x];
+        this.selectedBlock = { row: block1_y, col: block1_x, type: item1.type };
         let item2;
         switch (dir) {
             case "down":
-                item2 = this.children[block1_x + 1].children[block1_y];
-                this.blockBeingSwappedWith = { row: block1_x + 1, col: block1_y, type: item2.type };
+                item2 = this.children[block1_y + 1].children[block1_x];
+                this.blockBeingSwappedWith = { row: block1_y + 1, col: block1_x, type: item2.type };
                 break;
             case "up":
-                item2 = this.children[block1_x - 1].children[block1_y];
-                this.blockBeingSwappedWith = { row: block1_x - 1, col: block1_y, type: item2.type };
+                item2 = this.children[block1_y - 1].children[block1_x];
+                this.blockBeingSwappedWith = { row: block1_y - 1, col: block1_x, type: item2.type };
                 break;
             case "left":
-                item2 = this.children[block1_x].children[block1_y - 1];
-                this.blockBeingSwappedWith = { row: block1_x, col: block1_y - 1, type: item2.type };
+                item2 = this.children[block1_y].children[block1_x - 1];
+                this.blockBeingSwappedWith = { row: block1_y, col: block1_x - 1, type: item2.type };
                 break;
             case "right":
-                item2 = this.children[block1_x].children[block1_y + 1];
-                this.blockBeingSwappedWith = { row: block1_x, col: block1_y + 1, type: item2.type };
+                item2 = this.children[block1_y].children[block1_x + 1];
+                this.blockBeingSwappedWith = { row: block1_y, col: block1_x + 1, type: item2.type };
             default:
                 break;
         }
 
-        TweenMax.to(item1, 0.2, {
-            y: item2.y,
-            x: item2.x,
+        TweenMax.to(item1.children[0], 0.2, {
+            y: item2.children[0].y,
+            x: item2.children[0].x,
             ease: Linear.easeNone,
             onComplete: () => {
 
             }
         });
         //        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
-        TweenMax.to(item2, 0.2, {
-            y: item1.y,
-            x: item1.x,
+
+        TweenMax.to(item2.children[0], 0.2, {
+            y: item1.children[0].y,
+            x: item1.children[0].x,
             ease: Linear.easeNone,
             onComplete: () => {
                 let type1 = item1.type;
@@ -77,10 +78,10 @@ export default class Grid extends PIXI.Container {
 
                 if (matches.length !== 0) {
                     for (let m = 0; m < matches.length; m++) {
-                        if (matches[m].row === item2.gridPosition_x && matches[m].col === item2.gridPosition_y) {
+                        if (matches[m].row === item2.row && matches[m].col === item2.col) {
                             matches[m].beingSwapped = true;
                             this.matchingSwappedItem = 1;
-                        } else if (((matches[m].row === item1.gridPosition_x) && (matches[m].col === item1.gridPosition_y))) {
+                        } else if (((matches[m].row === item1.row) && (matches[m].col === item1.col))) {
                             matches[m].beingSwapped = true;
                             this.matchingSwappedItem = 2;
                         }
@@ -93,15 +94,15 @@ export default class Grid extends PIXI.Container {
                     let item_2_Old_Y = this.globalBlocksPositions[this.selectedBlock.row][this.selectedBlock.col].y;
                     let item_2_OldType = this.children[this.selectedBlock.row].children[this.selectedBlock.col].type;
 
-                    item2.x = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].x;
-                    item2.y = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].y;
+                    item2.children[0].x = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].x;
+                    item2.children[0].y = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].y;
                     item2.type = this.children[this.blockBeingSwappedWith.row].children[this.blockBeingSwappedWith.col].type;
-                    item2.texture = PIXI.Texture.fromImage(`images/${item2.type}.png`);
+                    item2.children[0].texture = PIXI.Texture.fromImage(`images/${item2.type}.png`);
 
-                    item1.x = item_2_Old_X;
-                    item1.y = item_2_Old_Y;
+                    item1.children[0].x = item_2_Old_X;
+                    item1.children[0].y = item_2_Old_Y;
                     item1.type = item_2_OldType;
-                    item1.texture = PIXI.Texture.fromImage(`images/${item1.type}.png`);
+                    item1.children[0].texture = PIXI.Texture.fromImage(`images/${item1.type}.png`);
 
                     this.gatherMatchingBlocks(matches);
                     TweenMax.delayedCall(1, () => {
@@ -187,7 +188,7 @@ export default class Grid extends PIXI.Container {
                 if (!thisColorMatches[e].beingSwapped) {
                     let newX = this.globalBlocksPositions[targetBlock.row][targetBlock.col].x;
                     let newY = this.globalBlocksPositions[targetBlock.row][targetBlock.col].y;
-                    TweenMax.to(tweenTarget, .25, {
+                    TweenMax.to(tweenTarget.blockImg, .25, {
                         x: newX,
                         y: newY,
                         alpha: 0,
@@ -199,7 +200,7 @@ export default class Grid extends PIXI.Container {
                     });
                 }
                 else {
-                    TweenMax.to(tweenTarget, .4, {
+                    TweenMax.to(tweenTarget.blockImg, .4, {
                         alpha: 0,
                         delay: .25,
                         onComplete: () => {
@@ -227,10 +228,96 @@ export default class Grid extends PIXI.Container {
                     card.increasePoints(matches);
                 }, 75 * cardIdx);
             }
+            TweenMax.delayedCall(1.75, () => {
+                this.tweenDownMatchingBlocks();
+            })
         }
         else {
             // TODO... same for opponent
         }
+    }
+
+
+    tweenDownMatchingBlocks() {
+        // make remaining blocks fall first!
+        this.holesInColumns = [
+            { holes: 0, onRow: [] },
+            { holes: 0, onRow: [] },
+            { holes: 0, onRow: [] },
+            { holes: 0, onRow: [] },
+            { holes: 0, onRow: [] },
+            { holes: 0, onRow: [] }
+        ];
+
+        /*
+            loop thru grid array to find number
+            of holes and their row positions
+        */
+        this.gridArrays.forEach((row, rowIndex) => {
+            row.forEach((col, colIndex) => {
+                if (this.gridArrays[rowIndex][colIndex] === null) {
+                    this.holesInColumns[colIndex].holes++;
+                    this.holesInColumns[colIndex].onRow.push(rowIndex);
+                }
+            });
+        });
+
+        /*
+            loop thru blocks to determine
+            how many rows each block should fall
+        */
+        this.blocks.forEach((row, rowIndex) => {
+            row.forEach((el, colIndex) => {
+                this.blocks[rowIndex][colIndex].shouldFall = 0;
+                if (this.gridArrays[rowIndex][colIndex] !== null) {
+                    this.blocks[rowIndex][colIndex].shouldFall = this.holesInColumns[colIndex].onRow.filter(h => h >= el.row).length;
+                }
+                let shouldFall = this.blocks[rowIndex][colIndex].shouldFall;
+                if (shouldFall > 0) {
+                    let newY = this.globalBlocksPositions[rowIndex + shouldFall][colIndex].y;
+                    let tweenTarget = this.blocks[rowIndex][colIndex].blockImg;
+                    // this.gridArrays[rowIndex + shouldFall][colIndex] = tweenTarget.parent.img;
+                    TweenMax.to(tweenTarget, .3 * shouldFall, {
+                        y: newY,
+                        // delay: fallDelay,
+                        onComplete: () => {
+                            // TweenMax.killAll();
+                            this.gridArrays[rowIndex + shouldFall][colIndex] = tweenTarget.parent.img;
+
+                        }
+                    });
+                }
+            });
+        });
+            this.createNewBlocks();
+    }
+
+    createNewBlocks() {
+        let blockHeight = this.globalBlocksPositions[1][0].y - this.globalBlocksPositions[0][0].y;
+        let gridY = this.globalBlocksPositions[0][0].y;
+        this.holesInColumns.forEach((el, colIndex) => {
+            if (el.holes > 0) {
+                for (let hole = 0; hole < el.holes; hole++) {
+                    let row = el.onRow[hole];
+                    let block = this.blocks[row][colIndex].blockImg;
+                    let img = block.parent.generateRandomColorBlock();
+                    block.texture = PIXI.Texture.fromImage(`images/${img}.png`);
+                    this.gridArrays[el.holes - hole - 1][colIndex] = block.parent.img = img;
+                    let startY = this.globalBlocksPositions[el.holes - hole - 1][colIndex].y;
+                    block.y = gridY - (blockHeight * (hole + 1));
+                    block.x = this.globalBlocksPositions[row][colIndex].x;
+                    block.alpha = 1;
+                    TweenMax.to(block, .3 * el.holes, {
+                        y: startY,
+                        onComplete: () => {
+                            // TweenMax.killAll();
+                            this.gridArrays[el.holes - hole - 1][colIndex] = block.parent.img = img;
+                        }
+                    });
+                }
+            }
+        });
+            console.table(this.gridArrays)
     }
 
     onDragStart = (e) => {
@@ -272,10 +359,10 @@ export default class Grid extends PIXI.Container {
             let dir = Object.keys(directions).find(key => directions[key] === max);
             if (
                 (this.moveCoordinates.startY === this.moveCoordinates.lastY && this.moveCoordinates.startX === this.moveCoordinates.lastX) ||
-                (dir === "down" && this.gridPosition_x === 7) ||
-                (dir === "up" && this.gridPosition_x === 0) ||
-                (dir === "right" && this.gridPosition_y === 5) ||
-                (dir === "left" && this.gridPosition_y === 0) ||
+                (dir === "down" && this.gridPosition_y === 7) ||
+                (dir === "up" && this.gridPosition_y === 0) ||
+                (dir === "right" && this.gridPosition_x === 5) ||
+                (dir === "left" && this.gridPosition_x === 0) ||
                 max < dist) {
                 return;
             }
