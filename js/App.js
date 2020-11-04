@@ -11,7 +11,7 @@ export default class App extends Stage {
     constructor() {
         super();
 
-        $(window).bind("load", () => {
+        window.onload = () => {
 
             this.config = config;
             this.storageData = localStorage.getItem('match3football');
@@ -25,7 +25,7 @@ export default class App extends Stage {
                     this.login = new LogIn(this);
                 }
             }
-        });
+        };
     }
 
     startLevel() {

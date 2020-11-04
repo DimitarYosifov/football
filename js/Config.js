@@ -7,14 +7,13 @@ export default {
     gridHasMask: true,
     isGridInDebug: true,         // predetermened grid for debug
     debugGrid: [
-        ["ball_purple", "ball_red", "ball_purple", "ball_green", "ball_blue", "ball_green"],
+        ["ball_purple", "ball_red", "ball_purple", "ball_green", "ball_blue", "ball_red"],
         ["ball_red", "ball_purple", "ball_purple", "ball_blue", "ball_green", "ball_blue"],
         ["ball_green", "ball_purple", "ball_blue", "ball_yellow", "ball_green", "ball_green"],
         ["ball_orange", "ball_blue", "ball_purple", "ball_purple", "ball_red", "ball_green"],
-        ["ball_red", "ball_green", "ball_green", "ball_red", "ball_green", "ball_red"],
-        ["ball_green", "ball_red", "ball_red", "ball_green", "ball_red", "ball_orange"],
+        ["ball_red", "ball_red", "ball_green", "ball_red", "ball_green", "ball_red"],
+        ["ball_green", "ball_red", "ball_green", "ball_green", "ball_red", "ball_orange"],
         ["ball_red", "ball_orange", "ball_red", "ball_red", "ball_purple", "ball_red"],
-        ["ball_blue", "ball_red", "ball_blue", "ball_yellow", "ball_blue", "ball_red"]
+        ["ball_blue", "ball_red", "ball_red", "ball_yellow", "ball_blue", "ball_red"]
     ]
-
 }
