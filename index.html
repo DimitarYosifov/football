@@ -31,14 +31,42 @@
 
 
 
+
 </head>
 
 <body>
-    <div id="rr" style="font-size:25px">T</div>
-    <div style="font-size:25px">T</div>
+
+
+
+
+    <!-- <div id="rr" style="font-size:25px">T3</div>
+    <div style="font-size:25px; color:white;">T</div> -->
     <canvas id='stage' style="  margin: 0 auto;"></canvas>
 
+
+
+
     <script>
+
+        window.addEventListener("error", handleError, true);
+
+        function handleError(evt) {
+            if (evt.message) { // Chrome sometimes provides this
+                // alert("error: " + evt.message + " at linenumber: " + evt.lineno + " of file: " + evt.filename);
+            } else {
+
+
+                // alert("error: " + evt.type + " from element: " + (evt.srcElement || evt.target));
+                console.log(evt);
+                console.log(evt.srcElement.outerHTML);
+                console.log(evt.target.outerHTML);
+                // alert(evt);
+                // alert(evt.srcElement.outerHTML);
+                // alert(evt.target.outerHTML);
+                //  alert(evt)
+            }
+        }
+
         // let elem = document.getElementById("stage").requestFullscreen()
     </script>
     <!-- <canvas id="proton_canvas"></canvas> -->
@@ -55,7 +83,7 @@
 
 
 
-    <form id="wrapper" 
+    <!-- <form id="wrapper" 
         style="display: block; position: absolute; top: 35%; left: 50%; transform: translate(-50%,-55%);">
         <input id="username" class="form-control form-control-lg" type="text" placeholder="Username" autocomplete="on">
         <input id="password" class="form-control form-control-lg" type="password" placeholder="Password"
@@ -63,21 +91,43 @@
         <button type="button" id="go">Go</button>
         <button type="button" id="login">Login</button>
         <button type="button" id="register">Register</button>
-    </form>
+    </form> -->
     <!-- <script src="js/app.js" type="module" crossorigin="use-credentials"></script> -->
 
 
-    <script>
-        // let a = document.getElementById("rr")
-        // a.style.color = "blue"
-        // alert("ios")
-        // import App from "./App.mjs";
+    <!-- <script async type="module" >
 
+        let a = document.getElementById("rr")
+        a.style.color = "blue"
+        // alert("ios")
+
+
+        // setInterval(() => {
+            import App from "./js/App.mjs"; 
+             //also works, same as adding src=""....
+
+        // }, 1111);
+
+        let a3 = 44
+        alert(a3)
+    </script> -->
+
+
+    <script id="test" src="./js/App.mjs" type="module" crossorigin="crossorigin"></script>
+    <!-- <script  id="test" src="./js/App2.mjs" ></script> -->
+
+    <script>
+        var script = document.querySelector('#test');
+        script.addEventListener('load', function () {
+            // alert("loaded")
+        });
+
+
+        console.log(document.scripts[7])
+        // alert(document.scripts.length)
     </script>
 
-   
-    <script src="./js/App.mjs" type="module" crossorigin="use-credentials"></script>
-    <!-- <script nomodule src="js/App2.js" defer crossorigin="use-credentials"></script> -->
+    <!-- <script nomodule src="./js/App2.mjs" crossorigin="anonymous"></script> -->
 
 </body>
 
