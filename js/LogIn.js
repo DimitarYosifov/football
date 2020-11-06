@@ -13,7 +13,7 @@ export default class LogIn {
         this.wrapper.style.width = this.app.width * 0.8 + "px";
         this.wrapper.style.height = this.app.height / 5 + "px";
         this.wrapper.style.opacity = 0;
-        // this.wrapper.style.pointerEvents = "none";
+        this.wrapper.style.pointerEvents = "none";
 
         this.username = document.querySelector("#username");
         this.username.style.marginBottom = app.height * 0.05 + "px";
@@ -31,9 +31,9 @@ export default class LogIn {
         this.go.style.pointerEvents = "none";
         this.go.addEventListener("click", this.goPressed);
 
-        // document.querySelector("#wrapper").addEventListener("submit", (() => {
-        //     this.goPressed();
-        // }));
+        document.querySelector("#wrapper").addEventListener("submit", (() => {
+            this.goPressed();
+        }));
 
         this.login = document.querySelector("#login");
         this.login.addEventListener("click", this.loginPressed);

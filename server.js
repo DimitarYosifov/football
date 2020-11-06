@@ -31,7 +31,6 @@ app.listen(port, function() {});
 
 firebase.initializeApp(config_firebase);
 
-
 app.post('/login', async(req, res) => {
 
     let user = req.body.user;
@@ -118,7 +117,7 @@ app.post('/register', async(req, res) => {
                 }
             });
         } catch (e) {
-            res.status(500).send("error22");
+            res.status(500).send("error_");
         }
     };
 });
