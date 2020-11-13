@@ -19,7 +19,6 @@ export default class Stage {
 
             console.log(window.devicePixelRatio);
             // КУРРРРРРРРРРРРРР
-            // this.width = Math.round(window.innerWidth) > 650 ? 650 : Math.round(window.innerWidth);
 
 
             this.width = 1080;
@@ -84,7 +83,7 @@ export default class Stage {
 
         this.loader = PIXI.loader;
         this.loader.add('spriteSheet', "images/pitch.png");
-        this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
+        // this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
 
         this.loader.load(this.setup);
         window.onresize = resolutiion;

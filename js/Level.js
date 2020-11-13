@@ -8,7 +8,7 @@ export default class Level extends PIXI.Container {
     constructor(app) {
 
         super();
-
+        alert("level")
         this.app = app;
         this.config = Config;
         this.stage = app.stage;

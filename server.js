@@ -1,42 +1,70 @@
 const express = require('express');
+
+
+const Bundler = require('parcel-bundler');
+const options = {
+    // watch: false,
+    // cache: false,
+    // // publicUrl: '/',
+    // logLevel: 4,
+    // hmr: false,
+    // detailedReport: true,
+    // production: process.env.NODE_ENV === 'production'
+
+}; // See options section of api docs, for the possibilities
+
+const app = express();
+
+const file = 'index.html'; // Pass an absolute path to the entrypoint here
+const bundler = new Bundler(file, options);
+
+
+
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const router = express.Router();
-const app = express();
 const bcrypt = require('bcryptjs');
 const firebase = require("firebase/app");
 require('firebase/auth');
 require('firebase/database');
 let port = process.env.PORT || 3000;
-app.set('views', path.join(__dirname, ''));
-app.set('view engine', 'ejs');
-app.engine('html', require('ejs').renderFile);
-app.disable('x-powered-by');
-app.use(express.static(__dirname + '/'));
+// app.set('views', path.join(__dirname, ''));
+// app.set('view engine', 'ejs');
+// app.engine('html', require('ejs').renderFile);
+// app.disable('x-powered-by');
+app.use(express.static(__dirname + '/dist/'));
 app.use(bodyParser.json());
-app.use(router);
+// app.use("/", router);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-router.get('*', function(req, res, next) {
-    res.render('index.html', {});
-});
+
+// Let express use the bundler middleware, this will let Parcel handle every request over your express server
+
+// app.use(bundler.middleware());
+
+
+
+app.options('*', cors());
+// router.get('*', function(req, res, next) {
+//     res.render('index.html', {});
+// });
 const config_firebase = {
     apiKey: 'AIzaSyB6CoLU9BDQyk998IlqyIY7cVwSR-fvsSw',
     authDomain: 'football-d4256.firebaseapp.com',
     databaseURL: 'football-d4256.firebaseio.com',
     storageBucket: 'football-d4256.appspot.com'
 };
-app.listen(port, function() {});
+app.listen(port, function () { });
 
 firebase.initializeApp(config_firebase);
 
-app.post('/login', async(req, res) => {
+app.post('/login', async (req, res) => {
 
     let user = req.body.user;
     let pass = req.body.pass;
 
-    firebase.database().ref("/users/").orderByChild("name").equalTo(user).once('value').then(function(snapshot) {
+    firebase.database().ref("/users/").orderByChild("name").equalTo(user).once('value').then(function (snapshot) {
 
         let db_pass;
         res.set('Content-Type', 'application/json');
@@ -53,7 +81,7 @@ app.post('/login', async(req, res) => {
             return;
         }
 
-        bcrypt.compare(pass, db_pass, function(err, result) {
+        bcrypt.compare(pass, db_pass, function (err, result) {
             if (err) {
                 res.status(500);
                 res.json({
@@ -75,11 +103,11 @@ app.post('/login', async(req, res) => {
     });
 });
 
-app.post('/register', async(req, res) => {
+app.post('/register', async (req, res) => {
     let user = req.body.user;
     let pass = req.body.pass;
     //    is name already taken
-    firebase.database().ref("/users/").orderByChild("name").equalTo(user).once('value').then(function(snapshot) {
+    firebase.database().ref("/users/").orderByChild("name").equalTo(user).once('value').then(function (snapshot) {
         let name;
         try {
             name = Object.values(snapshot.val())[0].name;
@@ -94,7 +122,7 @@ app.post('/register', async(req, res) => {
             tryRegistration();
         }
     });
-    let tryRegistration = async() => {
+    let tryRegistration = async () => {
         try {
             const salt = await bcrypt.genSalt();
             const hashedPassword = await bcrypt.hash(pass, salt);
@@ -102,7 +130,7 @@ app.post('/register', async(req, res) => {
             firebase.database().ref('/users/' + user).set({
                 name: user,
                 password: hashedPassword
-            }, function(error) {
+            }, function (error) {
                 if (error) {
                     res.status(200);
                     res.json({
@@ -122,9 +150,9 @@ app.post('/register', async(req, res) => {
     };
 });
 
-app.post('/storageData', async(req, res) => {
+app.post('/storageData', async (req, res) => {
     let data = req.body.data;
-    firebase.database().ref("/users/").orderByChild("password").equalTo(data).once('value').then(function(snapshot) {
+    firebase.database().ref("/users/").orderByChild("password").equalTo(data).once('value').then(function (snapshot) {
         res.set('Content-Type', 'application/json');
         res.status(200);
         res.json({
@@ -133,14 +161,14 @@ app.post('/storageData', async(req, res) => {
     });
 });
 
-app.post('/addClub', async(req, res) => {
+app.post('/addClub', async (req, res) => {
     let name = req.body.name;
     let players = req.body.players;
 
     firebase.database().ref('/clubs/' + name).set({
         name: name,
         players: players
-    }, function(error) {
+    }, function (error) {
         if (error) {
             res.set('Content-Type', 'application/json');
             res.status(500);
@@ -158,17 +186,29 @@ app.post('/addClub', async(req, res) => {
     });
 });
 
-app.post('/getClubsPlayers', async(req, res) => {
-    let name = req.body.name;
-    firebase.database().ref("/clubs/").orderByChild("name").equalTo(name).once('value').then(function(snapshot) {
-        res.status(200);
-        res.json({
-            clubData: Object.values(snapshot.val())[0]
+// app.post('/getClubsPlayers', (req, res) => {
+//     let name = req.body.name;
+//     firebase.database().ref("/clubs/").orderByChild("name").equalTo(name).once('value').then(function (snapshot) {
+//         res.status(200);
+//         res.json({
+//             clubData: Object.values(snapshot.val())[0]
+//         });
+//     });
+// });
+app.use('/:test', (req, res) => {
+    if (req.params.test === 'getClubsPlayers') {
+        let name = req.body.name;
+        firebase.database().ref("/clubs/").orderByChild("name").equalTo(name).once('value').then(function (snapshot) {
+            res.status(200);
+            res.json({
+                clubData: Object.values(snapshot.val())[0]
+            });
         });
-    });
+    }
+
 });
 
-signOutUser = function() {
+signOutUser = function () {
     //    firebase.auth().signOut().then(function () {
     //        $scope.user = '';
     //        $scope.username = '';
@@ -179,8 +219,8 @@ signOutUser = function() {
     //    });
 };
 //authStateChange
-user = function(callback) {
-    firebase.auth().onAuthStateChanged(function(firebaseUser) {
+user = function (callback) {
+    firebase.auth().onAuthStateChanged(function (firebaseUser) {
         if (firebaseUser) {
             console.log(firebaseUser);
             let user = firebaseUser.uid;
