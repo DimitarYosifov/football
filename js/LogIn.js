@@ -6,13 +6,14 @@ export default class LogIn {
         this.stage = app.stage;
         this.stage.alpha = 0;
         this.app = app;
+        this.config = this.app.config;
 
         //apply inputs style
         this.wrapper = document.querySelector("#wrapper");
         this.wrapper.style.width = this.app.width * 0.8 + "px";
         this.wrapper.style.height = this.app.height / 5 + "px";
         this.wrapper.style.opacity = 0;
-        // this.wrapper.style.pointerEvents = "none";
+        this.wrapper.style.pointerEvents = "none";
 
         this.username = document.querySelector("#username");
         this.username.style.marginBottom = app.height * 0.05 + "px";
@@ -30,9 +31,9 @@ export default class LogIn {
         this.go.style.pointerEvents = "none";
         this.go.addEventListener("click", this.goPressed);
 
-        // document.querySelector("#wrapper").addEventListener("submit", (() => {
-        //     this.goPressed();
-        // }));
+        document.querySelector("#wrapper").addEventListener("submit", (() => {
+            this.goPressed();
+        }));
 
         this.login = document.querySelector("#login");
         this.login.addEventListener("click", this.loginPressed);
@@ -105,8 +106,8 @@ export default class LogIn {
                 }
                 if (res.authorized) {
                     localStorage.setItem("match3football", res.storageItem);
-                    TweenMax.to(this.wrapper, 0.7, { opacity: 0 });
-                    TweenMax.to(this.stage, 0.7, {
+                    TweenMax.to(this.wrapper, this.config.fadeTimeBetweenPhases, { opacity: 0 });
+                    TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
                         alpha: 0, onComplete: () => {
                             this.stage.removeChildren();
                             this.app.startLevel();

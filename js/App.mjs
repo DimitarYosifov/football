@@ -1,18 +1,21 @@
 "use strict";
-import Level from "./level.js";
-import Stage from "./stage.js";
-import ProtonEffects from "./protonEffects.js";
+import Level from "./Level.js";
+import Stage from "./Stage.js";
+// import ProtonEffects from "./ProtonEffects.js";
 import LogIn from "./LogIn.js";
 import config from "./Config.js";
 
-// $(window).on('load', function() {alert() });
 export default class App extends Stage {
 
     constructor() {
+
         super();
 
-        $(window).bind("load", () => {
-
+        window.onload = () => {
+            //test!!!!!!!
+            let a = document.getElementById("rr")
+            a.style.color = "green"
+            alert(345)
             this.config = config;
             this.storageData = localStorage.getItem('match3football');
 
@@ -25,25 +28,17 @@ export default class App extends Stage {
                     this.login = new LogIn(this);
                 }
             }
-        });
-
-
-        // setTimeout(() => {
-        //     // this.startLevel();
-        //     this.config = config;
-        //     this.storageData = localStorage.getItem('match3football');
-        //     if (this.storageData) {
-        //         this.checkUserData();
-        //     } else {
-        //         this.login = new LogIn(this);
-        //     }
-        // }, 3000)
-
+        };
     }
 
     startLevel() {
-        this.proton = new ProtonEffects();
+        // this.proton = new ProtonEffects(this);
         this.level = new Level(this);
+        this.stage.addChild(this.level);
+    }
+
+    getLevel() {
+        return this.level;
     }
 
     checkUserData() {

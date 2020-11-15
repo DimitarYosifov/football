@@ -159,7 +159,6 @@ export default class LineUps {
                 }
             });
         } else {
-            console.log(clubName);
             $.ajax({
                 url: "getClubsPlayers",
                 type: 'POST',
