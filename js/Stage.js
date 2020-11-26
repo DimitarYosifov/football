@@ -1,4 +1,3 @@
-"use strict";
 
 export default class Stage {
 
@@ -16,12 +15,7 @@ export default class Stage {
         this.stage = new PIXI.Container();
 
         let resolutiion = () => { //16:9
-
             console.log(window.devicePixelRatio);
-            // КУРРРРРРРРРРРРРР
-            // this.width = Math.round(window.innerWidth) > 650 ? 650 : Math.round(window.innerWidth);
-
-
             this.width = 1080;
             this.height = 1920;
 
@@ -33,19 +27,6 @@ export default class Stage {
                 this.width = window.innerWidth;
                 this.height = this.width * 1.77;
             }
-
-
-
-            // if (this.width * 1.77 > window.innerHeight) {
-            //     this.height = window.innerHeight;
-            // } else {
-            //     this.height = Math.round(this.width * 1.77);
-            // }
-
-            // if (window.innerHeight < 650 * 1.77) {
-            //     this.height = window.innerHeight;
-            //     this.width = window.innerHeight * 0.562;
-            // }
 
             this.canvas.width = this.width;
             this.canvas.height = this.height;
@@ -71,8 +52,6 @@ export default class Stage {
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
 
         resolutiion();
-        // alert(window.devicePixelRatio)
-        // document.documentElement.webkitRequestFullScreen();
         this.animationLoop = () => {
             this.renderer.render(this.stage);
             requestAnimationFrame(this.animationLoop);
@@ -83,8 +62,15 @@ export default class Stage {
         };
 
         this.loader = PIXI.loader;
-        this.loader.add('levelBg', "images/pitch.png");
+        this.loader.add('assets', "assets/assets.json");
         this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
+
+        //this is needed to handle weird texture not loaded issue 
+        let handleLoadComplete = () => {
+            this.loaderLoaded = true;
+            this.checkLoaded();
+        }
+        this.loader.onComplete.add(handleLoadComplete)
 
         this.loader.load(this.setup);
         window.onresize = resolutiion;

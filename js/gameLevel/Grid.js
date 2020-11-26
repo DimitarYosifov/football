@@ -108,12 +108,11 @@ export default class Grid extends PIXI.Container {
                     item2.children[0].x = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].x;
                     item2.children[0].y = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].y;
                     item2.type = this.children[this.blockBeingSwappedWith.row].children[this.blockBeingSwappedWith.col].type;
-                    item2.children[0].texture = PIXI.Texture.fromImage(`images/${item2.type}.png`);
-
+                    item2.children[0].texture = this.app.loader.resources.assets.textures[`images/${item2.type}`];
                     item1.children[0].x = item_2_Old_X;
                     item1.children[0].y = item_2_Old_Y;
                     item1.type = item_2_OldType;
-                    item1.children[0].texture = PIXI.Texture.fromImage(`images/${item1.type}.png`);
+                    item1.children[0].texture = this.app.loader.resources.assets.textures[`images/${item1.type}`];
 
                     this.gatherMatchingBlocks(matches);
                     TweenMax.delayedCall(0, () => {
@@ -383,7 +382,7 @@ export default class Grid extends PIXI.Container {
                     let img = block.parent.generateRandomColorBlock();
                     // let img = "ball_green";    //for test only
 
-                    block.texture = PIXI.Texture.fromImage(`images/${img}.png`);
+                    block.texture =this.app.loader.resources.assets.textures[`images/${img}`];
                     let startY = this.globalBlocksPositions[el.holes - hole - 1][colIndex].y;
                     block.y = gridY - (blockHeight * (hole + 1));
                     block.x = this.globalBlocksPositions[row][colIndex].x;
@@ -411,7 +410,7 @@ export default class Grid extends PIXI.Container {
             row.forEach((el, colIndex) => {
                 let img = this.gridArrays[rowIndex][colIndex];
                 let type = img;
-                let texture = PIXI.Texture.fromImage(`images/${img}.png`);
+                let texture =this.app.loader.resources.assets.textures[`images/${img}`];
                 let x = this.globalBlocksPositions[rowIndex][colIndex].x;
                 let y = this.globalBlocksPositions[rowIndex][colIndex].y;
 

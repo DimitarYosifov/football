@@ -12,23 +12,29 @@ export default class App extends Stage {
         super();
 
         window.onload = () => {
-            // //test!!!!!!!
-            // let a = document.getElementById("rr")
-            // a.style.color = "green"
-            // alert(345)
-            this.config = config;
-            this.storageData = localStorage.getItem('match3football');
-
-            if (!config.hasLogin) {                   // REMOVES LOGIN PHASE..FOR TESTS ONLY
-                this.startLevel();
-            } else {
-                if (this.storageData) {
-                    this.checkUserData();
-                } else {
-                    this.login = new LogIn(this);
-                }
-            }
+            this.windowLoaded = true;
+            this.checkLoaded();
         };
+    }
+
+    loadComplete() {
+        this.config = config;
+        this.storageData = localStorage.getItem('match3football');
+        if (!config.hasLogin) {                   // REMOVES LOGIN PHASE..FOR TESTS ONLY
+            this.startLevel();
+        } else {
+            if (this.storageData) {
+                this.checkUserData();
+            } else {
+                this.login = new LogIn(this);
+            }
+        }
+    }
+
+    checkLoaded() {
+        if (this.loaderLoaded && this.windowLoaded) {
+            this.loadComplete();
+        }
     }
 
     startLevel() {

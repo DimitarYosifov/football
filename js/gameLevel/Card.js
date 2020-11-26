@@ -1,10 +1,11 @@
 import config from "../Config.js";
 
 export default class Card extends PIXI.Container {
-    constructor(data) {
+    constructor(data, app) {
 
         super();
 
+        this.app = app;
         this.config = config;
         this.font_size = data.font_size;
         this.index = data.index;
@@ -56,7 +57,7 @@ export default class Card extends PIXI.Container {
         this.stats = this.stats;
 
         //card background
-        let cardTexture = PIXI.Texture.fromImage(this.cardTexture);
+        let cardTexture = this.app.loader.resources.assets.textures[this.cardTexture];
         this.cardImg = new PIXI.Sprite(cardTexture);
         this.cardImg.x = this.card_x;
         this.cardImg.y = this.card_y;
@@ -64,7 +65,7 @@ export default class Card extends PIXI.Container {
         this.cardImg.height = this.card_height;
 
         //attack section
-        let shoeTexture = PIXI.Texture.fromImage(this.shoeTexture);
+        let shoeTexture = this.app.loader.resources.assets.textures[this.shoeTexture];
         this.shoe = new PIXI.Sprite(shoeTexture);
         this.shoe.x = this.shoe_x;
         this.shoe.y = this.shoe_y;

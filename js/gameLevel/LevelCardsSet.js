@@ -20,13 +20,13 @@ export default class LevelCardsSet extends PIXI.Container {
                 stats: this.lineUps.player[i],
                 font_size: this.stageHeight / 45 + 'px',  //change this shit!!
 
-                cardTexture: `images/players/player_id_${this.lineUps.player[i].player_img_id}.png`,
+                cardTexture: `images/players/player_id_${this.lineUps.player[i].player_img_id}`,
                 card_x: (this.stageWidth / 6) * i,
                 card_y: this.stageHeight * 0.88,
                 card_width: this.stageWidth / 6,
                 card_height: this.stageHeight * 0.12,
 
-                shoeTexture: `images/shoe.png`,
+                shoeTexture: `images/shoe`,
                 shoe_x: (this.stageWidth / 5.95) * i,
                 shoe_y: this.stageHeight * 0.882,
                 shoe_width: this.stageWidth / 21,
@@ -37,7 +37,7 @@ export default class LevelCardsSet extends PIXI.Container {
                     y: this.stageHeight * 0.88
                 },
 
-                gloveTexture: `images/glove2.png`,
+                gloveTexture: `images/glove2`,
                 glove_x: (this.stageWidth / 5.95) * i,
                 glove_y: this.stageHeight * 0.968,
                 glove_width: this.stageWidth / 21,
@@ -52,7 +52,7 @@ export default class LevelCardsSet extends PIXI.Container {
                 border_y: this.stageHeight * 0.879,
                 border_width: this.stageWidth / 6,
                 border_height: this.stageHeight * 0.12
-            })
+            }, this.parent.app)
             this.addChild(card);
         }
     }
@@ -65,13 +65,13 @@ export default class LevelCardsSet extends PIXI.Container {
                 stats: this.lineUps.opponent[i],
                 font_size: this.stageHeight / 45 + 'px',  //idiotic!!!! TODO...
 
-                cardTexture: `images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}.png`,
+                cardTexture: `images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}`,
                 card_x: (this.stageWidth / 6) * i,
                 card_y: 0,
                 card_width: this.stageWidth / 6,
                 card_height: this.stageHeight * 0.12,
 
-                shoeTexture: `images/shoe.png`,
+                shoeTexture: `images/shoe`,
                 shoe_x: (this.stageWidth / 5.95) * i,
                 shoe_y: this.stageHeight * 0.005,
                 shoe_width: this.stageWidth / 21,
@@ -82,7 +82,7 @@ export default class LevelCardsSet extends PIXI.Container {
                     y: this.stageHeight * 0.002
                 },
 
-                gloveTexture: `images/glove2.png`,
+                gloveTexture: `images/glove2`,
                 glove_x: (this.stageWidth / 5.95) * i,
                 glove_y: this.stageHeight * 0.09,
                 glove_width: this.stageWidth / 21,
@@ -97,7 +97,7 @@ export default class LevelCardsSet extends PIXI.Container {
                 border_y: this.stageHeight * 0,
                 border_width: this.stageWidth / 6,
                 border_height: this.stageHeight * 0.122
-            })
+            }, this.parent.app)
             this.addChild(card);
         }
     }
