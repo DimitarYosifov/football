@@ -24,7 +24,7 @@ export default class Level extends PIXI.Container {
 
         this.bg = new Background(this.app, {
             gamePhase: "level",
-            bgTexture: 'images/pitch.png',
+            bgTexture: this.app.loader.resources.levelBg.url,
             bg_x: -this.app.width * 0.005,
             bg_y: -this.app.height * 0.005,
             bg_width: this.app.width * 1.005,

@@ -12,10 +12,10 @@ export default class App extends Stage {
         super();
 
         window.onload = () => {
-            //test!!!!!!!
-            let a = document.getElementById("rr")
-            a.style.color = "green"
-            alert(345)
+            // //test!!!!!!!
+            // let a = document.getElementById("rr")
+            // a.style.color = "green"
+            // alert(345)
             this.config = config;
             this.storageData = localStorage.getItem('match3football');
 

@@ -82,6 +82,9 @@ export default class Grid extends PIXI.Container {
                 let matches = this.checkGridForMatches();
 
                 if (matches.length !== 0) {
+
+
+                    
                     for (let m = 0; m < matches.length; m++) {
                         if (matches[m].row === item2.row && matches[m].col === item2.col) {
                             matches[m].beingSwapped = true;
@@ -118,6 +121,9 @@ export default class Grid extends PIXI.Container {
                     })
                 }
                 else {
+                    let type1 = item1.type;
+                    item1.type = item2.type;
+                    item2.type = type1;
                     TweenMax.to(item1.children[0], 0.2, {
                         y: this.selectedBlock.oldY,
                         x: this.selectedBlock.oldX,

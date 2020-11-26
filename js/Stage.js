@@ -83,7 +83,7 @@ export default class Stage {
         };
 
         this.loader = PIXI.loader;
-        this.loader.add('spriteSheet', "images/pitch.png");
+        this.loader.add('levelBg', "images/pitch.png");
         this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
 
         this.loader.load(this.setup);
