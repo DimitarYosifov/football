@@ -20,7 +20,7 @@ export default class Grid extends PIXI.Container {
 
     createGrid() {
         for (let row = 0; row < 8; row++) {
-            let rowContainer = new Row(this.app, row, this);
+            let rowContainer = new Row(this.app, row, this); 
             this.addChild(rowContainer);
             this.gridArrays.push(rowContainer.children.map(c => c.type));
         }
