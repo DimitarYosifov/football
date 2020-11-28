@@ -28,7 +28,7 @@ export default class Grid extends PIXI.Container {
 
 
         //test...
-        this.checkPossibleOpponentMove();
+        // this.checkPossibleOpponentMove();
 
     }
 
@@ -203,6 +203,7 @@ export default class Grid extends PIXI.Container {
                 }
             }
         }
+        // console.log(matches);
         return matches;
     }
 
@@ -274,7 +275,7 @@ export default class Grid extends PIXI.Container {
     }
 
     increaseCardsPointsAfterMatch(matches) {
-        if (this.parent.playerTurn) {
+        if (this.app.playerTurn) {
             for (let cardIdx = 0; cardIdx < this.parent.playerCards.children.length; cardIdx++) {
                 let card = this.parent.playerCards.children[cardIdx];
                 setTimeout(() => {
@@ -298,12 +299,23 @@ export default class Grid extends PIXI.Container {
             if (matches.length > 0) {
                 this.gatherMatchingBlocks(matches);
                 TweenMax.delayedCall(0, () => {
+                    //TODO... add opponent increasePointsAfterMatch!!!!
                     this.increaseCardsPointsAfterMatch(matches);
                 })
             } else {
-                // TweenMax.delayedCall(1, () => {
-                this.animationInProgress = false;
-                // })
+
+
+                this.app.playerTurn = !this.app.playerTurn;
+                this.animationInProgress = !this.app.playerTurn;
+
+
+                if (!this.app.playerTurn) {
+                    TweenMax.delayedCall(2, () => {
+                        this.checkPossibleOpponentMove();
+                    })
+                }else{
+
+                }
             }
         })
     }
@@ -311,66 +323,65 @@ export default class Grid extends PIXI.Container {
 
     // try to find possible match for opponenmt move..TODO.. if non are found reshuffle!
     checkPossibleOpponentMove() {
+        let possibleMoves = [];
 
-        // let possibleMoves = [];
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 6; col++) {
+                //         check right
+                if (col < 5) {
+                    let tempType = this.blocks[row][col].type;
+                    this.blocks[row][col].type = this.blocks[row][col + 1].type;
+                    this.blocks[row][col + 1].type = tempType;
+                    let matches = this.checkGridForMatches();
+                    if (matches.length > 0) {
+                        possibleMoves.push(
+                            {
+                                col: col,
+                                row: row,
+                                dir: "right",
+                                matches: matches.length
+                            }
+                        );
+                    }
+                    this.blocks[row][col + 1].type = this.blocks[row][col].type;
+                    this.blocks[row][col].type = tempType;
+                }
 
-        // for (let row = 0; row < 8; row++) {
-        //     for (let col = 0; col < 6; col++) {
-        //         // console.log(row, col)
-        //         console.log(this.blocks[row][col].type)
+                //         //check down
+                if (row < 7) {
+                    let tempType = this.blocks[row][col].type;
+                    this.blocks[row][col].type = this.blocks[row + 1][col].type;
+                    this.blocks[row + 1][col].type = tempType;
+                    let matches = this.checkGridForMatches();
+                    if (matches.length > 0) {
+                        possibleMoves.push(
+                            {
+                                col: col,
+                                row: row,
+                                dir: "down",
+                                matches: matches.length
+                            }
+                        );
+                    }
+                    this.blocks[row + 1][col].type = this.blocks[row][col].type;
+                    this.blocks[row][col].type = tempType;
+                }
+            }
+        }
 
-        //         //check right
-        //         let blockType = this.blocks[row][col].type;
-
-        //         //next block is the same or it is 5th => continue
-        //         if (col === 4 || !this.blocks[row][col + 1] || blockType === this.blocks[row][col + 1].type) {
-        //             continue;
-        //         }
-
-        //         console.log(row, col)
-
-        //         let stepRightwards = col + 2;
-        //         let keepChecking = true;
-        //         let currentMove = {
-        //             row: row,
-        //             col: col,
-        //             type: blockType,
-        //             dir: "right",
-        //             matchingBlockAfterMove: 1
-        //         }
-
-        //         while (stepRightwards <= 5 && keepChecking) {
-        //             if (blockType === this.blocks[row][stepRightwards].type) {
-        //                 currentMove.matchingBlockAfterMove += 1;
-        //                 stepRightwards += 1;
-        //             } else {
-        //                 keepChecking = false;
-        //             }
-        //         }
-
-        //         if (currentMove.matchingBlockAfterMove >= 3) {
-        //             possibleMoves.push(currentMove);
-        //         }
+        let bestMatches = possibleMoves.filter(f => f.matches === Math.max(...possibleMoves.map(m => m.matches)));
+        let bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
 
 
+        console.log(bestMatches);
+        console.log(bestMatchAtRandom);
+        //TODO handle no moves possible!!!!!
+        if (possibleMoves.length === 0) {
+            alert("no moves...TODO");
+        }
 
-        //     }
-        // }
-
-
-
-        // console.log(possibleMoves)
-        // this.swapBlocks(this.gridPosition_x, this.gridPosition_y, dir);
+        this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
     }
-
-
-
-
-
-
-
-
-
 
     tweenDownMatchingBlocks(matches) {
 

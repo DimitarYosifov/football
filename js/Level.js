@@ -20,7 +20,7 @@ export default class Level extends PIXI.Container {
         this.playerCardsContainer = null;
         this.opponentCardsContainer = null;
         this.animationInProgress = false;
-        this.playerTurn = true; //should be rondom or host's
+        this.app.playerTurn = true; //should be rondom or host's
 
         this.bg = new Background(this.app, {
             gamePhase: "level",
