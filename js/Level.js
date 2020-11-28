@@ -34,7 +34,7 @@ export default class Level extends PIXI.Container {
         this.grid = new Grid(this.app);
         this.addChild(this.grid);
         this.dataRecieved = () => {
-            this.grid.checkGridForMatches();
+            // this.grid.checkGridForMatches();   //??? this seems unnecessery...
             TweenMax.delayedCall(1, () => {
                 TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, { alpha: 1 });
             })
