@@ -1,5 +1,6 @@
 
 import Config from "../Config.js";
+import Popup from "../Popup.js";
 import Block from "./Block.js";
 import Row from "./Row.js";
 
@@ -20,16 +21,11 @@ export default class Grid extends PIXI.Container {
 
     createGrid() {
         for (let row = 0; row < 8; row++) {
-            let rowContainer = new Row(this.app, row, this); 
+            let rowContainer = new Row(this.app, row, this);
             this.addChild(rowContainer);
             this.gridArrays.push(rowContainer.children.map(c => c.type));
         }
-
-
-
-        //test...
-        // this.checkPossibleOpponentMove();
-
+        this.checkPossibleMove(2);
     }
 
     swapBlocks(block1_x, block1_y, dir) {
@@ -120,8 +116,8 @@ export default class Grid extends PIXI.Container {
                     item1.type = item_2_OldType;
                     item1.children[0].texture = this.app.loader.resources.assets.textures[`images/${item1.type}`];
 
-                    this.gatherMatchingBlocks(matches);
-                    TweenMax.delayedCall(0, () => {
+                    TweenMax.delayedCall(0.5, () => {
+                        this.gatherMatchingBlocks(matches);
                         this.increaseCardsPointsAfterMatch(matches);
                     })
                 }
@@ -282,13 +278,22 @@ export default class Grid extends PIXI.Container {
                     card.increasePoints(matches);
                 }, 75 * cardIdx);
             }
-            TweenMax.delayedCall(0.75, () => {
-                this.tweenDownMatchingBlocks(matches);
-            })
+            // TweenMax.delayedCall(0.75, () => {
+            //     this.tweenDownMatchingBlocks(matches);
+            // })
         }
         else {
-            // TODO... same for opponent
+            for (let cardIdx = 0; cardIdx < this.parent.opponentCards.children.length; cardIdx++) {
+                let card = this.parent.opponentCards.children[cardIdx];
+                setTimeout(() => {
+                    card.increasePoints(matches);
+                }, 75 * cardIdx);
+            }
         }
+
+        TweenMax.delayedCall(0.75, () => {
+            this.tweenDownMatchingBlocks(matches);
+        })
     }
 
     // check for automatic matches on the grid after manual match - after random blocks arrived
@@ -309,20 +314,23 @@ export default class Grid extends PIXI.Container {
                 this.animationInProgress = !this.app.playerTurn;
 
 
-                if (!this.app.playerTurn) {
-                    TweenMax.delayedCall(2, () => {
-                        this.checkPossibleOpponentMove();
-                    })
-                }else{
+                //  TweenMax.delayedCall(1.5, () => {
+                this.checkPossibleMove();
+                // })
 
-                }
+                // if (!this.app.playerTurn) {
+                //     TweenMax.delayedCall(1.5, () => {
+                //         this.checkPossibleMove();
+                //     })
+                // } else {
+
+                // }
             }
         })
     }
 
-
-    // try to find possible match for opponenmt move..TODO.. if non are found reshuffle!
-    checkPossibleOpponentMove() {
+    // try to find possible match for move..TODO.. if non are found reshuffle!
+    checkPossibleMove(delay = 0) {
         let possibleMoves = [];
 
         for (let row = 0; row < 8; row++) {
@@ -372,15 +380,73 @@ export default class Grid extends PIXI.Container {
         let bestMatches = possibleMoves.filter(f => f.matches === Math.max(...possibleMoves.map(m => m.matches)));
         let bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
 
-
         console.log(bestMatches);
         console.log(bestMatchAtRandom);
-        //TODO handle no moves possible!!!!!
         if (possibleMoves.length === 0) {
-            alert("no moves...TODO");
-        }
 
-        this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
+            this.popup = new Popup(this.app);
+            setTimeout(() => {
+                this.parent.addChild(this.popup);
+            }, 1);
+
+
+            this.reShuffleGrid();
+            return;
+        } else {
+
+            TweenMax.delayedCall(2, () => {
+                this.parent.removeChild(this.popup);
+            })
+
+            if (this.app.playerTurn) {
+                this.animationInProgress = false;
+            }
+            else {
+                // alert("Opponent turn");
+
+                //test
+                // this.reShuffleGrid();
+                TweenMax.delayedCall(2 + delay, () => {
+                    this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
+                })
+                // this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
+            }
+        }
+    }
+
+    reShuffleGrid() {
+
+
+
+
+
+
+
+        this.removeChildren();
+        this.blocks = [[], [], [], [], [], [], [], []];
+        this.gridArrays = [];
+
+
+
+        // this.popup = new Popup(this.app);
+        // setTimeout(() => {
+        //     this.parent.addChild(this.popup);
+        // }, 1);
+
+        // alert("no moves...TODO");
+
+
+
+        //test!!!!
+        this.config.isGridInDebug = false;
+
+        TweenMax.delayedCall(1.5, () => {
+            // this.parent.removeChild(this.popup);
+            this.createGrid();
+        })
+        // TweenMax.delayedCall(3.5, () => {
+        //     this.parent.removeChild(this.popup);
+        // })
     }
 
     tweenDownMatchingBlocks(matches) {
@@ -422,20 +488,9 @@ export default class Grid extends PIXI.Container {
                 let shouldFall = this.blocks[rowIndex][colIndex].shouldFall;
                 if (shouldFall > 0) {
 
-                    // this is temp lame solution for single vertical match bug... TODO... fix it!!!
-                    //this will definitely brak when matching automaticaly
-                    //another solution required here!!!!!!!!!!!!!!!!!!!!!!!!
-                    // let singlevVerticalMatch = matches.filter(m => m.beingSwapped).length === 1 &&
-                    //     (this.swapDirection === "down" || this.swapDirection === "up" &&
-                    //         (matches.filter(m => m.beingSwapped)[0].row === rowIndex &&
-                    //             matches.filter(m => m.beingSwapped)[0].col === colIndex)
-                    //     ) ? -1 : 0;
-
-
                     let newY = this.globalBlocksPositions[rowIndex + shouldFall][colIndex].y;
                     let tweenTarget = this.blocks[rowIndex][colIndex].blockImg;
 
-                    // this.gridArrays[rowIndex + shouldFall][colIndex] = tweenTarget.parent.img;
                     TweenMax.to(tweenTarget, .3 * shouldFall, {
                         y: newY,
                         // delay: fallDelay,

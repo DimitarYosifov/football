@@ -100,6 +100,21 @@ export default class Card extends PIXI.Container {
         this.attackValuesText.position.set(this.attack_text.x, this.attack_text.y);
         this.attackValuesText.anchor.x = 1;
 
+
+        // //yellow card section
+        // let yellowCardTexture = this.app.loader.resources.assets.textures["images/yellow_card"];
+        // this.yellowCardImg = new PIXI.Sprite(yellowCardTexture);
+        // this.yellowCardImg.x = this.card_x + this.card_width / 2;
+        // this.yellowCardImg.y = this.height / 2;
+        // this.yellowCardImg.width = this.cardImg.width;
+        // this.yellowCardImg.scale.y = this.yellowCardImg.scale.x;
+        // // this.yellowCardImg.height = this.attackValuesText.height;
+        // this.yellowCardImg.visible = true;
+        // this.yellowCardImg.alpha = 0.55;
+        // this.yellowCardImg.anchor.x = 0.5;
+        // this.yellowCardImg.anchor.y = 0.5;
+        // this.yellowCard = false;
+
         this.defenseValuesText = new PIXI.Text(this.stats.defense_current + '/' + this.stats.defense_full, {
             fontFamily: this.config.mainFont,
             fontSize: this.font_size,
@@ -114,11 +129,14 @@ export default class Card extends PIXI.Container {
         this.defenseValuesText.name = "defenseValuesText";
 
         this.addChild(this.attackValuesText);
+        // this.addChild(this.yellowCardImg);
         this.addChild(this.defenseValuesText);
 
         this.addChild(this.shoe);
         this.addChild(this.glove);
         this.addChild(this.border);
+
+
         //        TweenMax.delayedCall(1, () => {
         //            TweenMax.to(this, 0.5, {alpha: 1});
         //        })

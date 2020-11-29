@@ -1,0 +1,14 @@
+for 20 moves:
+
+----------           test #
+                       1
+block type        
+red          14%       0
+blue         14%       0
+purple       14%       0
+orange       14%       0 
+green        14%       0
+yellow       14%       0
+red card     14%       0
+yellow card  14%       0
+red cross    14%       0
