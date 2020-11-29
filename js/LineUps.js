@@ -5,13 +5,15 @@ export default class LineUps {
 
         this.onPlayerCardsData = onPlayerCardsData;
         this.clubName2 = clubName2;
+
+        //this shoulb be requested from DB
         this.testClub1 = [
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
                 defense_full: 20,
                 attack_current: 0,
-                attack_color: "B200FF",
+                attack_color: "FF1D00",
                 attack_full: 20,
                 special: null,
                 position: "GK",
@@ -41,10 +43,10 @@ export default class LineUps {
             },
             {
                 defense_current: 0,
-                defense_color: "FF9702",
+                defense_color: "3052FF",
                 defense_full: 20,
                 attack_current: 0,
-                attack_color: "FF9702",
+                attack_color: "3052FF",
                 attack_full: 20,
                 special: null,
                 position: "MD1",
@@ -66,7 +68,7 @@ export default class LineUps {
                 defense_color: "E2D841",
                 defense_full: 20,
                 attack_current: 0,
-                attack_color: "FF9702",
+                attack_color: "B200FF",
                 attack_full: 20,
                 special: null,
                 position: "F",
@@ -113,7 +115,7 @@ export default class LineUps {
                 defense_color: "E2D841",
                 defense_full: 20,
                 attack_current: 0,
-                attack_color: "FF9702",
+                attack_color: "E2D841",
                 attack_full: 20,
                 special: null,
                 position: "MD1",
@@ -148,6 +150,7 @@ export default class LineUps {
 
     }
     clubData = (clubName, secondTeam) => {
+        // alert(clubName)
         if (config.addTeam) {//for tests only for now...add club to DB
             $.ajax({
                 url: "addClub",
@@ -159,6 +162,8 @@ export default class LineUps {
                 }
             });
         } else {
+            alert(clubName)
+
             $.ajax({
                 url: "getClubsPlayers",
                 type: 'POST',

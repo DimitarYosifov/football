@@ -9,7 +9,13 @@ export default class LevelCardsSet extends PIXI.Container {
         this.stageWidth = width;
         this.stageHeight = height;
         this.dataRecieved = dataRecieved;
+
+
+
+        // this is called twice!!!!! TODO - fix it!
         this.lineUps = new LineUps("testClub1", "testClub2", this.onPlayerCardsData);
+
+
         this.interactive = false;
     }
 
