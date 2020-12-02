@@ -67,7 +67,6 @@ export default class Grid extends PIXI.Container {
 
             }
         });
-        //        TweenMax.to(item1.scale, 0.2, {x: 1.01, y: 1.01, repeat: 1, yoyo: true});    //works
 
         TweenMax.to(item2.children[0], 0.2, {
             y: item1.children[0].y,
@@ -271,29 +270,89 @@ export default class Grid extends PIXI.Container {
     }
 
     increaseCardsPointsAfterMatch(matches) {
-        if (this.app.playerTurn) {
-            for (let cardIdx = 0; cardIdx < this.parent.playerCards.children.length; cardIdx++) {
-                let card = this.parent.playerCards.children[cardIdx];
-                setTimeout(() => {
-                    card.increasePoints(matches);
-                }, 75 * cardIdx);
-            }
-            // TweenMax.delayedCall(0.75, () => {
-            //     this.tweenDownMatchingBlocks(matches);
-            // })
-        }
-        else {
-            for (let cardIdx = 0; cardIdx < this.parent.opponentCards.children.length; cardIdx++) {
-                let card = this.parent.opponentCards.children[cardIdx];
-                setTimeout(() => {
-                    card.increasePoints(matches);
-                }, 75 * cardIdx);
-            }
-        }
 
+        let deck = this.app.playerTurn ? "playerCards" : "opponentCards";
+        this.checkForRedCard(matches, deck);
+        this.checkForYellowCard(matches, deck);
+        this.checkForInjury(matches, deck);
+
+        for (let cardIdx = 0; cardIdx < this.parent[deck].children.length; cardIdx++) {
+            let card = this.parent[deck].children[cardIdx];
+            setTimeout(() => {
+                card.increasePoints(matches);
+            }, 75 * cardIdx);
+        }
         TweenMax.delayedCall(0.75, () => {
             this.tweenDownMatchingBlocks(matches);
         })
+    }
+
+    checkForRedCard(matches, deck) {
+        let redCards = Math.floor(matches.map(m => m.type).filter(m => m === "red_card").length / 3);
+        if (!redCards) { return };
+        let redCardTargets = this.parent[deck].children.filter(player => !player.hasRedCard);
+        for (let redCard = 0; redCard < redCards; redCard++) {
+
+            //random target
+            let redCardTarget = redCardTargets[Math.floor(Math.random() * redCardTargets.length)];
+            redCardTarget.hasRedCard = true;
+            redCardTarget.yellowCard.texture = this.app.loader.resources.assets.textures[`images/red_card`];
+            redCardTarget.yellowCard.visible = true;
+            this.bounceTarget(redCardTarget.yellowCard);
+        }
+    }
+
+    checkForYellowCard(matches, deck) {
+        let yellowCards = Math.floor(matches.map(m => m.type).filter(m => m === "yellow_card").length / 3);
+        if (!yellowCards) { return };
+        //array of all players who do not have red cards and are not injured
+        let yellowCardTargets = this.parent[deck].children.filter(player => !player.hasRedCard && !player.hasInjury);
+        for (let yellowCard = 0; yellowCard < yellowCards; yellowCard++) {
+
+            //random target
+            let yellowCardTarget = yellowCardTargets[Math.floor(Math.random() * yellowCardTargets.length)];
+            if (yellowCardTarget.hasYellowCard) {
+                yellowCardTarget.hasRedCard = true;
+                yellowCardTarget.yellowCard.texture = this.app.loader.resources.assets.textures[`images/red_card`];
+            }
+            yellowCardTarget.hasYellowCard = true;
+            yellowCardTarget.yellowCard.visible = true;
+            this.bounceTarget(yellowCardTarget.yellowCard);
+        }
+    }
+
+    checkForInjury(matches, deck) {
+        let injuries = Math.floor(matches.map(m => m.type).filter(m => m === "red_cross").length / 3);
+        if (!injuries) { return };
+        //array of all players who do not have red cards and are not injured
+        let injuryTargets = this.parent[deck].children.filter(player => !player.hasInjury);
+        for (let injury = 0; injury < injuries; injury++) {
+            //random target
+            let injuryTarget = injuryTargets[Math.floor(Math.random() * injuryTargets.length)];
+            injuryTarget.hasInjury = true;
+            injuryTarget.injury.visible = true;
+            this.bounceTarget(injuryTarget.injury);
+        }
+
+    }
+
+    bounceTarget(target) {
+        let scaleValue = target.scale.x;
+        target.alpha = 1;
+        TweenMax.to(target.scale, .3, {
+            x: scaleValue * 1.25,
+            y: scaleValue * 1.25
+        });
+        TweenMax.to(target.scale, .3, {
+            delay: 0.3,
+            x: scaleValue,
+            y: scaleValue,
+            alpha: 0.75
+        });
+        TweenMax.to(target, .3, {
+            delay: 0.3,
+            alpha: 0.85
+        });
     }
 
     // check for automatic matches on the grid after manual match - after random blocks arrived
@@ -347,7 +406,8 @@ export default class Grid extends PIXI.Container {
                                 col: col,
                                 row: row,
                                 dir: "right",
-                                matches: matches.length
+                                matches: matches.length,
+                                types: Array.from(new Set(matches.map(m => m.type)))
                             }
                         );
                     }
@@ -367,7 +427,8 @@ export default class Grid extends PIXI.Container {
                                 col: col,
                                 row: row,
                                 dir: "down",
-                                matches: matches.length
+                                matches: matches.length,
+                                types: Array.from(new Set(matches.map(m => m.type)))
                             }
                         );
                     }
@@ -377,8 +438,25 @@ export default class Grid extends PIXI.Container {
             }
         }
 
+
+
+        // if (possibleMoves.length !== 1) {
+        //     possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_card"));
+        // }
+        // if (possibleMoves.length !== 1) {
+        //     possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_cross"));
+        // }
+        // if (possibleMoves.length !== 1) {
+        //     possibleMoves = possibleMoves.filter(ps => !ps.types.includes("yellow_card"));
+        // }
+
+
         let bestMatches = possibleMoves.filter(f => f.matches === Math.max(...possibleMoves.map(m => m.matches)));
         let bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
+
+
+
+
 
         console.log(bestMatches);
         console.log(bestMatchAtRandom);

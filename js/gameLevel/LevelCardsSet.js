@@ -48,6 +48,16 @@ export default class LevelCardsSet extends PIXI.Container {
                     y: this.stageHeight * 0.97
                 },
 
+                yellowCardTexture: `images/yellow_card`,
+                yellowCard_x: (this.stageWidth / 6 * i) + (this.stageWidth / 12),
+                yellowCard_y: this.stageHeight * 0.942,
+                yellowCard_width: this.stageWidth / 8,
+
+                injuryTexture: `images/red_cross`,
+                injury_x: (this.stageWidth / 6 * i) + (this.stageWidth / 12),
+                injury_y: this.stageHeight * 0.942,
+                injury_width: this.stageWidth / 8,
+
                 border_x: (this.stageWidth / 6) * i,
                 border_y: this.stageHeight * 0.879,
                 border_width: this.stageWidth / 6,
@@ -92,6 +102,16 @@ export default class LevelCardsSet extends PIXI.Container {
                     x: (this.stageWidth / 6) * i + this.stageWidth / 6,
                     y: this.stageHeight * 0.092
                 },
+
+                yellowCardTexture: `images/yellow_card`,
+                yellowCard_x: (this.stageWidth / 6 * i) + (this.stageWidth / 12),
+                yellowCard_y: this.stageHeight * 0.063,
+                yellowCard_width: this.stageWidth / 8,
+
+                injuryTexture: `images/red_cross`,
+                injury_x: (this.stageWidth / 6 * i) + (this.stageWidth / 12),
+                injury_y: this.stageHeight * 0.063,
+                injury_width: this.stageWidth / 8,
 
                 border_x: (this.stageWidth / 6) * i,
                 border_y: this.stageHeight * 0,

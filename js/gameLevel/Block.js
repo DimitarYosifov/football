@@ -71,32 +71,32 @@ export default class Block extends PIXI.Container {
     generateRandomColorBlock() {
         let x = Math.floor(Math.random() * 100) + 1;
         let a;
-        switch (true) {
-            case x <= 15:
+        switch (true) {  //blocks - 17%       yellow card - 7%     red card- 4%      injury - 4%
+            case x <= 17:
                 a = "ball_blue";
                 break;
-            case (x > 15 && x <= 30):
+            case (x > 17 && x <= 34):
                 a = "ball_green";
                 break;
             // case x > 28 && x <= 42:
             //     a = "ball_orange";
             //     break;
-            case x > 30 && x <= 45:
+            case x > 34 && x <= 51:
                 a = "ball_purple";
                 break;
-            case x > 45 && x <= 60:
+            case x > 51 && x <= 68:
                 a = "ball_red";
                 break;
-            case x > 60 && x <= 75:
+            case x > 68 && x <= 85:
                 a = "ball_yellow";
                 break;
-            case x > 75 && x <= 88:
+            case x > 85 && x <= 92:
                 a = "yellow_card";
                 break;
-            case x > 88 && x <= 95:
+            case x > 92 && x <= 96:
                 a = "red_card";
                 break;
-            case x > 95 && x <= 100:
+            case x > 96 && x <= 100:
                 a = "red_cross";
                 break;
             default:

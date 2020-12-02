@@ -31,6 +31,16 @@ export default class Card extends PIXI.Container {
         this.glove_x = data.glove_x;
         this.glove_y = data.glove_y;
 
+        this.yellowCardTexture = data.yellowCardTexture;
+        this.yellowCard_width = data.yellowCard_width;
+        this.yellowCard_x = data.yellowCard_x;
+        this.yellowCard_y = data.yellowCard_y;
+
+        this.injuryTexture = data.injuryTexture;
+        this.injury_width = data.injury_width;
+        this.injury_x = data.injury_x;
+        this.injury_y = data.injury_y;
+
         this.border_height = data.border_height;
         this.border_width = data.border_width;
         this.border_x = data.border_x;
@@ -82,12 +92,34 @@ export default class Card extends PIXI.Container {
         this.glove.height = this.glove_height
         this.glove.tint = '0x' + this.stats.defense_color;
 
+        let yellowCardTexture = PIXI.Texture.fromImage(this.yellowCardTexture);
+        this.yellowCard = new PIXI.Sprite(yellowCardTexture);
+        this.yellowCard.x = this.yellowCard_x;
+        this.yellowCard.y = this.yellowCard_y;
+        this.yellowCard.width = this.yellowCard_width;
+        this.yellowCard.scale.y = this.yellowCard.scale.x;
+        this.yellowCard.alpha = 0.75;
+        this.yellowCard.anchor.set(0.5, 0.5);
+        this.yellowCard.visible = false;
+        this.hasYellowCard = false;
+        this.hasRedCard = false;
+
+        let injuryTexture = PIXI.Texture.fromImage(this.injuryTexture);
+        this.injury = new PIXI.Sprite(injuryTexture);
+        this.injury.x = this.injury_x;
+        this.injury.y = this.injury_y;
+        this.injury.width = this.injury_width;
+        this.injury.scale.y = this.injury.scale.x;
+        this.injury.alpha = 0.75;
+        this.injury.anchor.set(0.5, 0.5);
+        this.injury.visible = false;
+        this.hasInjury = false;
+
         //border
         this.border = new PIXI.Graphics();
         this.border.lineStyle(1, 0xd0c639, 1);
         this.border.drawRect(this.border_x, this.border_y, this.border_width, this.border_height);
 
-        //add children
         this.addChild(this.cardImg);
 
         this.attackValuesText = new PIXI.Text(this.stats.attack_current + '/' + this.stats.attack_full, {
@@ -99,21 +131,6 @@ export default class Card extends PIXI.Container {
         });
         this.attackValuesText.position.set(this.attack_text.x, this.attack_text.y);
         this.attackValuesText.anchor.x = 1;
-
-
-        // //yellow card section
-        // let yellowCardTexture = this.app.loader.resources.assets.textures["images/yellow_card"];
-        // this.yellowCardImg = new PIXI.Sprite(yellowCardTexture);
-        // this.yellowCardImg.x = this.card_x + this.card_width / 2;
-        // this.yellowCardImg.y = this.height / 2;
-        // this.yellowCardImg.width = this.cardImg.width;
-        // this.yellowCardImg.scale.y = this.yellowCardImg.scale.x;
-        // // this.yellowCardImg.height = this.attackValuesText.height;
-        // this.yellowCardImg.visible = true;
-        // this.yellowCardImg.alpha = 0.55;
-        // this.yellowCardImg.anchor.x = 0.5;
-        // this.yellowCardImg.anchor.y = 0.5;
-        // this.yellowCard = false;
 
         this.defenseValuesText = new PIXI.Text(this.stats.defense_current + '/' + this.stats.defense_full, {
             fontFamily: this.config.mainFont,
@@ -129,11 +146,12 @@ export default class Card extends PIXI.Container {
         this.defenseValuesText.name = "defenseValuesText";
 
         this.addChild(this.attackValuesText);
-        // this.addChild(this.yellowCardImg);
         this.addChild(this.defenseValuesText);
 
         this.addChild(this.shoe);
         this.addChild(this.glove);
+        this.addChild(this.yellowCard);
+        this.addChild(this.injury);
         this.addChild(this.border);
 
 
@@ -153,7 +171,10 @@ export default class Card extends PIXI.Container {
         let initialScaleX = this.cardImg.scale.x;
         let initialScaley = this.cardImg.scale.y;
 
-        if (def_points > 0) {
+        if (def_points > 0 && !this.hasRedCard) {
+            if (this.hasInjury) {
+                def_points = Math.floor(def_points / 2)
+            }
             this.stats.defense_current += def_points;
             this.defenseValuesText.text = `${this.stats.defense_current}/${this.stats.defense_full}`;
             this.cardImg.tint = "0x" + this.stats.defense_color;
@@ -197,7 +218,10 @@ export default class Card extends PIXI.Container {
             })
         }
 
-        if (atk_points > 0) {
+        if (atk_points > 0 && !this.hasRedCard) {
+            if (this.hasInjury) {
+                atk_points = Math.floor(atk_points / 2)
+            }
             this.stats.attack_current += atk_points;
             this.attackValuesText.text = `${this.stats.attack_current}/${this.stats.attack_full}`;
             this.cardImg.tint = "0x" + this.stats.attack_color;
