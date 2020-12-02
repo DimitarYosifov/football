@@ -9,6 +9,8 @@ export default class Level extends PIXI.Container {
 
         super();
 
+        this.clubNames = ["testClub1", "testClub2"]
+
         this.app = app;
         this.config = Config;
         this.stage = app.stage;
@@ -34,16 +36,25 @@ export default class Level extends PIXI.Container {
         this.grid = new Grid(this.app);
         this.addChild(this.grid);
         this.dataRecieved = () => {
-            // this.grid.checkGridForMatches();   //??? this seems unnecessery...
             TweenMax.delayedCall(1, () => {
                 TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, { alpha: 1 });
             })
         }
 
-        this.playerCards = new LevelCardsSet(this.dataRecieved, this.app.width, this.app.height, "player");
-        this.addChild(this.playerCards);
-
-        this.opponentCards = new LevelCardsSet(() => { }, this.app.width, this.app.height, "opponent");
-        this.addChild(this.opponentCards);
+        const createCards = async () => {
+            let [player, opponent] = await
+                Promise.all(
+                    [
+                        new LevelCardsSet(this.app.width, this.app.height, "player", this.clubNames[0]),
+                        new LevelCardsSet(this.app.width, this.app.height, "opponent", this.clubNames[1]),
+                    ]
+                );
+            this.playerCards = player;
+            this.addChild(this.playerCards);
+            this.opponentCards = opponent;
+            this.addChild(this.opponentCards);
+            this.dataRecieved();
+        };
+        createCards().catch(err => { console.log('Run failed (does not matter which task)!'); });
     }
 }

@@ -1,10 +1,10 @@
 import config from "./Config.js";
 
 export default class LineUps {
-    constructor(clubName1, clubName2, onPlayerCardsData) {
-
-        this.onPlayerCardsData = onPlayerCardsData;
-        this.clubName2 = clubName2;
+    constructor(clubName, onCardsData, targetDeck) {
+        this.clubName = clubName;
+        this.onCardsData = onCardsData;
+        this.targetDeck = targetDeck;
 
         //this shoulb be requested from DB
         this.testClub1 = [
@@ -144,39 +144,29 @@ export default class LineUps {
                 opponent_img_id: '007'
             }
         ]
-
-        this.clubData(clubName1);
-        // this.clubData(clubName2, true);
-
+        this.clubData();
     }
-    clubData = (clubName, secondTeam) => {
+    clubData = () => {
         // alert(clubName)
         if (config.addTeam) {//for tests only for now...add club to DB
             $.ajax({
                 url: "addClub",
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ name: clubName, players: this[clubName] }),
+                data: JSON.stringify({ name: this.clubName, players: this[clubName] }),
                 success: (res) => {
-                    console.log(res);
+                    this.onCardsData();
                 }
             });
         } else {
-            alert(clubName)
-
             $.ajax({
                 url: "getClubsPlayers",
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ name: clubName }),
+                data: JSON.stringify({ name: this.clubName }),
                 success: (res) => {
-                    if (!secondTeam) {
-                        this.player = res.clubData.players;
-                        this.clubData(this.clubName2, true);
-                    } else {
-                        this.opponent = res.clubData.players;
-                        this.onPlayerCardsData();
-                    }
+                    this[this.targetDeck] = res.clubData.players;
+                    this.onCardsData();
                 }, error: () => {
                     alert("err")
                 }

@@ -409,44 +409,21 @@ export default class Grid extends PIXI.Container {
                 TweenMax.delayedCall(2 + delay, () => {
                     this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
                 })
-                // this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
             }
         }
     }
 
     reShuffleGrid() {
-
-
-
-
-
-
-
         this.removeChildren();
         this.blocks = [[], [], [], [], [], [], [], []];
         this.gridArrays = [];
 
-
-
-        // this.popup = new Popup(this.app);
-        // setTimeout(() => {
-        //     this.parent.addChild(this.popup);
-        // }, 1);
-
-        // alert("no moves...TODO");
-
-
-
         //test!!!!
-        this.config.isGridInDebug = false;
+        // this.config.isGridInDebug = false;
 
         TweenMax.delayedCall(1.5, () => {
-            // this.parent.removeChild(this.popup);
             this.createGrid();
         })
-        // TweenMax.delayedCall(3.5, () => {
-        //     this.parent.removeChild(this.popup);
-        // })
     }
 
     tweenDownMatchingBlocks(matches) {
@@ -537,7 +514,6 @@ export default class Grid extends PIXI.Container {
         TweenMax.delayedCall(Math.max(...this.holesInColumns.map(h => h.holes)) * .33, () => {
             this.setAccurateBlocksPositions();
         })
-        // this.checkAutomaticMatch();
     }
 
     setAccurateBlocksPositions() {
@@ -618,5 +594,4 @@ export default class Grid extends PIXI.Container {
     onDragEnd(e) {
         this.dragging = false;
     }
-
 }

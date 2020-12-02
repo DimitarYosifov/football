@@ -3,19 +3,13 @@ import LineUps from "../LineUps.js";
 
 export default class LevelCardsSet extends PIXI.Container {
 
-    constructor(dataRecieved, width, height, targetDeck) {
+    constructor(width, height, targetDeck, clubName) {
         super();
         this.targetDeck = targetDeck;
+        this.clubName = clubName;
         this.stageWidth = width;
         this.stageHeight = height;
-        this.dataRecieved = dataRecieved;
-
-
-
-        // this is called twice!!!!! TODO - fix it!
-        this.lineUps = new LineUps("testClub1", "testClub2", this.onPlayerCardsData);
-
-
+        this.lineUps = new LineUps(this.clubName, this.onCardsData, this.targetDeck);
         this.interactive = false;
     }
 
@@ -108,13 +102,7 @@ export default class LevelCardsSet extends PIXI.Container {
         }
     }
 
-    onPlayerCardsData = () => {
-        if (!this.lineUps.player || !this.lineUps.opponent) {
-            return;
-        }
-
+    onCardsData = () => {
         this.targetDeck === "player" ? this.createPlayerDeck() : this.createOpponentDeck();
-
-        this.dataRecieved();
     }
 }
