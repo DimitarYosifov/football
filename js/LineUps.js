@@ -153,9 +153,10 @@ export default class LineUps {
                 url: "addClub",
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ name: this.clubName, players: this[clubName] }),
+                data: JSON.stringify({ name: this.clubName, players: this[this.clubName] }),
                 success: (res) => {
-                    this.onCardsData();
+                    // this[this.targetDeck] = res.clubData.players;
+                    // this.onCardsData();
                 }
             });
         } else {
