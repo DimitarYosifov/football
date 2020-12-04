@@ -1,6 +1,7 @@
 {
     "name": "football_match_3",
     "version": "1.0.0",
+    "main" : "server.js",
     "keywords": [
         "util",
         "functional",

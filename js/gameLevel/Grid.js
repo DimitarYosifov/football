@@ -438,40 +438,28 @@ export default class Grid extends PIXI.Container {
             }
         }
 
-
-
-        // if (possibleMoves.length !== 1) {
-        //     possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_card"));
-        // }
-        // if (possibleMoves.length !== 1) {
-        //     possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_cross"));
-        // }
-        // if (possibleMoves.length !== 1) {
-        //     possibleMoves = possibleMoves.filter(ps => !ps.types.includes("yellow_card"));
-        // }
-
+        // these 3 ifs aim remove potentioal opponent dummy moves like matching red/yellow cards and injuries
+        if (possibleMoves.length !== 1) {
+            possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_card"));
+        }
+        if (possibleMoves.length !== 1) {
+            possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_cross"));
+        }
+        if (possibleMoves.length !== 1) {
+            possibleMoves = possibleMoves.filter(ps => !ps.types.includes("yellow_card"));
+        }
 
         let bestMatches = possibleMoves.filter(f => f.matches === Math.max(...possibleMoves.map(m => m.matches)));
         let bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
 
-
-
-
-
-        console.log(bestMatches);
-        console.log(bestMatchAtRandom);
         if (possibleMoves.length === 0) {
-
             this.popup = new Popup(this.app);
             setTimeout(() => {
                 this.parent.addChild(this.popup);
             }, 1);
-
-
             this.reShuffleGrid();
             return;
         } else {
-
             TweenMax.delayedCall(2, () => {
                 this.parent.removeChild(this.popup);
             })
@@ -610,10 +598,6 @@ export default class Grid extends PIXI.Container {
                 this.blocks[rowIndex][colIndex].blockImg.y = y;
             })
         })
-
-        console.table(this.gridArrays);
-        console.log(this.blocks);
-
         this.checkAutomaticMatch();
     }
 

@@ -1,4 +1,5 @@
 import config from "../Config.js";
+import activeDefense from "./ActiveDefense.js";
 
 export default class Card extends PIXI.Container {
     constructor(data, app) {
@@ -79,8 +80,8 @@ export default class Card extends PIXI.Container {
         this.shoe = new PIXI.Sprite(shoeTexture);
         this.shoe.x = this.shoe_x;
         this.shoe.y = this.shoe_y;
-        this.shoe.width = this.shoe_width;
         this.shoe.height = this.shoe_height;
+        this.shoe.scale.x = this.shoe.scale.y;
         this.shoe.tint = '0x' + this.stats.attack_color;
 
         //defense section
@@ -88,8 +89,8 @@ export default class Card extends PIXI.Container {
         this.glove = new PIXI.Sprite(gloveTexture);
         this.glove.x = this.glove_x;
         this.glove.y = this.glove_y;
-        this.glove.width = this.glove_width;
-        this.glove.height = this.glove_height
+        this.glove.height = this.glove_height;
+        this.glove.scale.x = this.glove.scale.y;
         this.glove.tint = '0x' + this.stats.defense_color;
 
         let yellowCardTexture = PIXI.Texture.fromImage(this.yellowCardTexture);
@@ -170,27 +171,38 @@ export default class Card extends PIXI.Container {
 
         let initialScaleX = this.cardImg.scale.x;
         let initialScaley = this.cardImg.scale.y;
+        // let activateDefense = false;
+        // let activateAttack = false;
 
         if (def_points > 0 && !this.hasRedCard) {
             if (this.hasInjury) {
                 def_points = Math.floor(def_points / 2)
             }
             this.stats.defense_current += def_points;
-            this.defenseValuesText.text = `${this.stats.defense_current}/${this.stats.defense_full}`;
-            this.cardImg.tint = "0x" + this.stats.defense_color;
-            TweenMax.to(this.cardImg, .15, {
-                delay: .7,
-                onComplete: () => {
-                    this.cardImg.tint = 16777215
-                }
-            });
+            if (this.stats.defense_current >= this.stats.defense_full) {
+                this.stats.defense_current = this.stats.defense_full;
+                // activateDefense = true;
+                TweenMax.to(this.cardImg, .15, {
+                    delay: .7,
+                    onComplete: () => {
+                        // alert("defense activated")
+                        this.cardImg.tint = 16777215;
+                        this.defenseValuesText.text = `0/${this.stats.defense_full}`;
+                        this.stats.defense_current = 0;
+                    }
 
-            TweenMax.to(this.cardImg.scale, .15, {
-                x: initialScaleX * 1.05,
-                y: initialScaley * 1.05,
-                yoyo: true,
-                repeat: 1
-            })
+                });
+                TweenMax.to(this.cardImg.scale, .15, {
+                    x: initialScaleX * 1.05,
+                    y: initialScaley * 1.05,
+                    yoyo: true,
+                    repeat: 1
+                })
+                this.cardImg.tint = "0x" + this.stats.defense_color;
+                let glove = new activeDefense(this.app, this.stats.defense_color, this.card_x + this.card_width / 2, this.card_y + this.card_height / 2);
+                this.app.level.addChild(glove);
+            }
+            this.defenseValuesText.text = `${this.stats.defense_current}/${this.stats.defense_full}`;
 
             //TODO  create separate class for this and add some delay between text tweens
             let def_text = new PIXI.Text("+" + def_points, {
@@ -214,29 +226,41 @@ export default class Card extends PIXI.Container {
                 onComplete: () => {
                     def_text.alpha = 0;
                     this.parent.parent.removeChild(def_text);
+                    this.stats.attack_current = 0;
                 }
             })
+
+
+
         }
+
+
 
         if (atk_points > 0 && !this.hasRedCard) {
             if (this.hasInjury) {
                 atk_points = Math.floor(atk_points / 2)
             }
             this.stats.attack_current += atk_points;
+            if (this.stats.attack_current >= this.stats.attack_full) {
+                this.stats.attack_current = this.stats.attack_full;
+                activateAttack = true;
+                TweenMax.to(this.cardImg.scale, .15, {
+                    x: initialScaleX * 1.05,
+                    y: initialScaley * 1.05,
+                    yoyo: true,
+                    repeat: 1
+                })
+                TweenMax.to(this.cardImg, .15, {
+                    delay: .7,
+                    onComplete: () => {
+                        // alert("attack activated")
+                        this.cardImg.tint = 16777215;
+                        this.attackValuesText.text = `0/${this.stats.attack_full}`;
+                    }
+                });
+                this.cardImg.tint = "0x" + this.stats.attack_color;
+            }
             this.attackValuesText.text = `${this.stats.attack_current}/${this.stats.attack_full}`;
-            this.cardImg.tint = "0x" + this.stats.attack_color;
-            TweenMax.to(this.cardImg, .15, {
-                delay: .7,
-                onComplete: () => {
-                    this.cardImg.tint = 16777215
-                }
-            });
-            TweenMax.to(this.cardImg.scale, .15, {
-                x: initialScaleX * 1.05,
-                y: initialScaley * 1.05,
-                yoyo: true,
-                repeat: 1
-            })
 
             //TODO  create separate class for this and add some delay between text tweens
             let atk_text = new PIXI.Text("+" + atk_points, {

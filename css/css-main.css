@@ -13,6 +13,19 @@
 
 body {
     background: black;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+#rotate{
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    z-index: 2;
+    position: absolute;
+    color: white;
+    font-size: 5em;
 }
 
 #wrapper input:not(#go) {

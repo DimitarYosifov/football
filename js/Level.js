@@ -23,6 +23,8 @@ export default class Level extends PIXI.Container {
         this.opponentCardsContainer = null;
         this.animationInProgress = true;
         this.app.playerTurn = true; //should be rondom or host's
+        this.playerActiveDefenses = Array(13).fill(null);     // 13 is max that fits within screen width
+        this.opponentActiveDefenses = Array(13).fill(null);   // 13 is max that fits within screen width
 
         this.bg = new Background(this.app, {
             gamePhase: "level",

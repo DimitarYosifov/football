@@ -8,7 +8,7 @@ export default class Popup extends PIXI.Container {
 
     create() {
 
-
+        alert('No Moves');
         this.text = new PIXI.Text('No Moves', {
             fontFamily: this.app.config.mainFont,
             fontSize: this.app.height / 8,

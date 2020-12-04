@@ -1,4 +1,3 @@
-"use strict";
 import Level from "./Level.js";
 import Stage from "./Stage.js";
 // import ProtonEffects from "./ProtonEffects.js";

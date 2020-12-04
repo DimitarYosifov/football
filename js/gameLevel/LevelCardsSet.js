@@ -29,7 +29,6 @@ export default class LevelCardsSet extends PIXI.Container {
                 shoeTexture: `images/shoe`,
                 shoe_x: (this.stageWidth / 5.95) * i,
                 shoe_y: this.stageHeight * 0.882,
-                shoe_width: this.stageWidth / 21,
                 shoe_height: this.stageWidth / 21,
 
                 attack_text: {
@@ -39,9 +38,8 @@ export default class LevelCardsSet extends PIXI.Container {
 
                 gloveTexture: `images/glove2`,
                 glove_x: (this.stageWidth / 5.95) * i,
-                glove_y: this.stageHeight * 0.968,
-                glove_width: this.stageWidth / 21,
-                glove_height: this.stageWidth / 21,
+                glove_y: this.stageHeight * 0.963,
+                glove_height: this.stageWidth / 17,
 
                 defense_text: {
                     x: (this.stageWidth / 6) * i + this.stageWidth / 6,
@@ -84,7 +82,6 @@ export default class LevelCardsSet extends PIXI.Container {
                 shoeTexture: `images/shoe`,
                 shoe_x: (this.stageWidth / 5.95) * i,
                 shoe_y: this.stageHeight * 0.005,
-                shoe_width: this.stageWidth / 21,
                 shoe_height: this.stageWidth / 21,
 
                 attack_text: {
@@ -94,9 +91,8 @@ export default class LevelCardsSet extends PIXI.Container {
 
                 gloveTexture: `images/glove2`,
                 glove_x: (this.stageWidth / 5.95) * i,
-                glove_y: this.stageHeight * 0.09,
-                glove_width: this.stageWidth / 21,
-                glove_height: this.stageWidth / 21,
+                glove_y: this.stageHeight * 0.085,
+                glove_height: this.stageWidth / 17,
 
                 defense_text: {
                     x: (this.stageWidth / 6) * i + this.stageWidth / 6,
