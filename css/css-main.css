@@ -23,9 +23,24 @@ body {
     height: 100vh;
     background: black;
     z-index: 2;
-    position: absolute;
+    position: relative;
     color: white;
-    font-size: 5em;
+    font-size: 3em;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+#play{
+    /* width: 100vw;
+    height: 100vh;
+    background: black; */
+    z-index: 2;
+    position: relative;
+    color: white;
+    font-size: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #wrapper input:not(#go) {

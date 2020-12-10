@@ -9,7 +9,7 @@ export default class App extends Stage {
     constructor() {
 
         super();
-
+        // alert()
         window.onload = () => {
             this.windowLoaded = true;
             this.checkLoaded();
@@ -31,7 +31,7 @@ export default class App extends Stage {
     }
 
     checkLoaded() {
-        if (this.loaderLoaded && this.windowLoaded) {
+        if (this.loaderLoaded && this.windowLoaded && this.isAppStarted) {
             this.loadComplete();
         }
     }

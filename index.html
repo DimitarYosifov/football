@@ -23,6 +23,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineLite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TimelineMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.0.2/screenfull.min.js"></script>
     <!--<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>-->
 
     <!-- <script src="proton.js" type="text/javascript"></script> -->
@@ -33,17 +34,29 @@
 
 </head>
 
-<body>
+<body id="body">
     <!-- <div id="rr" style="font-size:25px">T</div>
     -->
-    <!-- <div id="rotate">Rotate your device...</div> -->
-
-
+    <div id="rotate">
+        <p>
+            Rotate your device...
+        </p>
+    </div>
+    <div id="play">
+        <button>
+            PLay
+        </button>
+    </div>
+    <script>
+        if (!screenfull.isEnabled) {
+            // return false;
+        } //TODO...use full screen icon here
+        $('#play').click(function () {
+            screenfull.request(document.getElementById('stage'));
+        });
+    </script>
     <canvas id='stage'></canvas>
-
-
     <!-- <canvas id="proton_canvas"></canvas> -->
-
     <form id="wrapper"
         style="display: block; position: absolute; top: 35%; left: 50%; transform: translate(-50%,-55%);">
         <input id="username" class="form-control form-control-lg" type="text" placeholder="Username" autocomplete="on">
