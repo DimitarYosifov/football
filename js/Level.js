@@ -5,12 +5,9 @@ import Grid from "./gameLevel/Grid.js";
 
 export default class Level extends PIXI.Container {
 
-    constructor(app) {
+    constructor(app, testClub1, testClub2, homeTeam) {
 
         super();
-
-        this.clubNames = ["testClub1", "testClub2"]
-
         this.app = app;
         this.config = Config;
         this.stage = app.stage;
@@ -19,13 +16,16 @@ export default class Level extends PIXI.Container {
         this.width = app.width; // / this.config.rendererResolution;
         this.height = app.height;//  / this.config.rendererResolution;
         this.grid = null;
+        this.clubNames = ["testClub1", "testClub2"]; //first is players club
+        this.homeTeam = "testClub2"; //should be homeTeam
+        this.app.playerTurn = false; //should be rondom or host's
+        this.currentRound = 0;
+
         this.playerCardsContainer = null;
         this.opponentCardsContainer = null;
         this.animationInProgress = true;
-        this.app.playerTurn = true; //should be rondom or host's
         this.playerActiveDefenses = Array(13).fill(null);     // 13 is max that fits within screen width
         this.opponentActiveDefenses = Array(13).fill(null);   // 13 is max that fits within screen width
-
         this.bg = new Background(this.app, {
             gamePhase: "level",
             bgTexture: this.app.loader.resources.assets.textures["images/pitch"],
@@ -35,6 +35,8 @@ export default class Level extends PIXI.Container {
             bg_height: this.app.height * 1.005
         });
         this.addChild(this.bg);
+        this.opponentActiveDefensesY = this.height * 0.155;
+        this.playerActiveDefensesY = this.height * 0.84;
         this.grid = new Grid(this.app);
         this.addChild(this.grid);
         this.dataRecieved = () => {

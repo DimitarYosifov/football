@@ -11,19 +11,25 @@
     /*font-family: 'Risque', cursive;*/
 }
 
+html{
+    overflow: hidden;
+}
+
 body {
     background: black;
-    overflow: hidden;
+    height: 100%;
     margin: 0;
     padding: 0;
 }
 
+
 #rotate{
     width: 100vw;
-    height: 100vh;
+    height: 50vh;
     background: black;
     z-index: 2;
-    position: relative;
+    top: 25vh;
+    position: fixed;
     color: white;
     font-size: 3em;
     display: none;

@@ -28,7 +28,7 @@ export default class ActiveDefense extends PIXI.Sprite {
             let firstEmpty = this.app.level.playerActiveDefenses.findIndex(i => i === null);
             this.height = this.stageHeight * 0.05;
             this.width =    this.height;
-            this.newY = this.stageHeight * 0.84;
+            this.newY = this.app.level.playerActiveDefensesY;
             this.newX = this.width / 2 + firstEmpty * this.stageWidth / this.app.level.playerActiveDefenses.length;
             console.log( this.newX);
             console.log( this.newY);
@@ -37,7 +37,7 @@ export default class ActiveDefense extends PIXI.Sprite {
             let firstEmpty = this.app.level.opponentActiveDefenses.findIndex(i => i === null);
             this.height = this.stageHeight * 0.05;
             this.scale.x = this.scale.y;
-            this.newY = this.stageHeight * 0.155;
+            this.newY = this.app.level.opponentActiveDefensesY;
             this.newX = this.width / 2 + firstEmpty * this.stageWidth / this.app.level.opponentActiveDefenses.length;
             console.log( this.newX);
             console.log( this.newY);

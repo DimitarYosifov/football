@@ -42,17 +42,26 @@
             Rotate your device...
         </p>
     </div>
-    <div id="play">
+
+    <!-- <div id="play">
         <button>
             PLay
         </button>
-    </div>
+    </div> -->
     <script>
-        if (!screenfull.isEnabled) {
-            // return false;
-        } //TODO...use full screen icon here
+
+        // make game full screen on mobile. disabled for now...
+        // if (!screenfull.isEnabled) {
+        //     // return false;
+        // } //TODO...use full screen icon here
         $('#play').click(function () {
-            screenfull.request(document.getElementById('stage'));
+            if (document.webkitFullscreenElement) {
+                // document.webkitCancelFullScreen();
+            }
+            else {
+                // document.getElementById('stage').webkitRequestFullScreen();
+            };
+            // screenfull.request(document.getElementById('stage'));
         });
     </script>
     <canvas id='stage'></canvas>

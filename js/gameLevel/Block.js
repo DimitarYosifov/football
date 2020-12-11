@@ -56,8 +56,17 @@ export default class Block extends PIXI.Container {
         this.blockImg.alpha = 0;;
         this.addChild(this.blockImg);    ///This not row container!!!!!
 
-        setTimeout(() => {
+        let delay = this.row * 90 + this.col * 15 + this.config.fadeTimeBetweenPhases * 1000 + 1750;
+        TweenMax.delayedCall(delay / 1000, () => {
             this.blockImg.alpha = 1;
+            if (this.row === 7 && this.col === 5) {
+                this.grid.newRound();
+            }
+        })
+
+
+        setTimeout(() => {
+
         }, this.row * 90 + this.col * 15 + this.config.fadeTimeBetweenPhases * 1000 + 1750);
 
         this.on('pointerdown', this.onDragStart);

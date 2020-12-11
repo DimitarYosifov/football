@@ -1,6 +1,7 @@
 
 import Config from "../Config.js";
-import Popup from "../Popup.js";
+import NoMovesPopup from "./NoMovesPopup.js";
+import NewRoundPopup from "./NewRoundPopup.js";
 import Block from "./Block.js";
 import Row from "./Row.js";
 
@@ -25,7 +26,18 @@ export default class Grid extends PIXI.Container {
             this.addChild(rowContainer);
             this.gridArrays.push(rowContainer.children.map(c => c.type));
         }
-        this.checkPossibleMove(2);
+        const mask = new PIXI.Graphics();
+        mask.beginFill(0xffffff, 1);
+        mask.drawRect(
+            this.globalBlocksPositions[0][0].x - this.blocks[0][0].width / 2,
+            this.globalBlocksPositions[0][0].y - this.blocks[0][0].height / 2,
+            this.width,
+            this.height
+        );
+        mask.endFill();
+        // this.parent.addChildAt(mask, 0);
+        this.mask = mask;
+        this.checkPossibleMove(2, true);
     }
 
     swapBlocks(block1_x, block1_y, dir) {
@@ -129,7 +141,7 @@ export default class Grid extends PIXI.Container {
                         x: this.selectedBlock.oldX,
                         ease: Linear.easeNone,
                         onComplete: () => {
-                            this.animationInProgress = false;
+                            this.app.level.animationInProgress = false;
                         }
                     });
                     TweenMax.to(item2.children[0], 0.2, {
@@ -137,7 +149,7 @@ export default class Grid extends PIXI.Container {
                         x: this.blockBeingSwappedWith.oldX,
                         ease: Linear.easeNone,
                         onComplete: () => {
-                            this.animationInProgress = false;
+                            this.app.level.animationInProgress = false;
                         }
                     });
                 }
@@ -370,7 +382,7 @@ export default class Grid extends PIXI.Container {
 
 
                 this.app.playerTurn = !this.app.playerTurn;
-                this.animationInProgress = !this.app.playerTurn;
+                this.app.level.animationInProgress = !this.app.playerTurn;
 
 
                 //  TweenMax.delayedCall(1.5, () => {
@@ -388,8 +400,8 @@ export default class Grid extends PIXI.Container {
         })
     }
 
-    // try to find possible match for move..TODO.. if non are found reshuffle!
-    checkPossibleMove(delay = 0) {
+    // try to find possible match for move..TODO.. if non are found reshufle!
+    checkPossibleMove(delay = 0, newlyCreatedGrid = false) {
         let possibleMoves = [];
 
         for (let row = 0; row < 8; row++) {
@@ -453,33 +465,45 @@ export default class Grid extends PIXI.Container {
         let bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
 
         if (possibleMoves.length === 0) {
-            this.popup = new Popup(this.app);
+            this.popup = new NoMovesPopup(this.app);
             setTimeout(() => {
                 this.parent.addChild(this.popup);
+                TweenMax.delayedCall(2, () => {
+                    this.parent.removeChild(this.popup);
+                })
             }, 1);
-            this.reShuffleGrid();
+            this.reShufleGrid();
             return;
         } else {
-            TweenMax.delayedCall(2, () => {
+            if (!newlyCreatedGrid) {
+                setTimeout(() => {
+                    this.newRound();
+                }, 1);
+            }
+            TweenMax.delayedCall(2 + delay, () => {
                 this.parent.removeChild(this.popup);
+                if (this.app.playerTurn) {
+                    this.app.level.animationInProgress = false;
+                }
+                else {
+                    // TweenMax.delayedCall(2, () => {
+                        this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
+                    // })
+                }
             })
-
-            if (this.app.playerTurn) {
-                this.animationInProgress = false;
-            }
-            else {
-                // alert("Opponent turn");
-
-                //test
-                // this.reShuffleGrid();
-                TweenMax.delayedCall(2 + delay, () => {
-                    this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
-                })
-            }
         }
     }
 
-    reShuffleGrid() {
+    newRound() {
+        if (this.app.playerTurn && this.app.level.homeTeam === this.app.level.clubNames[0] ||
+            !this.app.playerTurn && this.app.level.homeTeam === this.app.level.clubNames[1]) {
+            this.app.level.currentRound++;
+            this.popup = new NewRoundPopup(this.app);
+            this.parent.addChild(this.popup);
+        }
+    }
+
+    reShufleGrid() {
         this.removeChildren();
         this.blocks = [[], [], [], [], [], [], [], []];
         this.gridArrays = [];
@@ -614,7 +638,7 @@ export default class Grid extends PIXI.Container {
     }
 
     onDragMove = (e) => {
-        if (this.dragging && !this.animationInProgress) {
+        if (this.dragging && !this.app.level.animationInProgress) {
             /*   
              gets block height and divides it by 3,
              the least drag/swipe distance
@@ -648,7 +672,7 @@ export default class Grid extends PIXI.Container {
                 return;
             }
 
-            this.animationInProgress = true;
+            this.app.level.animationInProgress = true;
             this.swapBlocks(this.gridPosition_x, this.gridPosition_y, dir);
         }
     }

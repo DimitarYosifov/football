@@ -128,7 +128,7 @@ export default class Card extends PIXI.Container {
             fontSize: this.font_size,
             fill: '#' + this.stats.attack_color, align: 'center',
             stroke: '#000000',
-            strokeThickness: 4
+            strokeThickness: 2
         });
         this.attackValuesText.position.set(this.attack_text.x, this.attack_text.y);
         this.attackValuesText.anchor.x = 1;
@@ -138,7 +138,7 @@ export default class Card extends PIXI.Container {
             fontSize: this.font_size,
             fill: '#' + this.stats.defense_color, align: 'center',
             stroke: '#000000',
-            strokeThickness: 4
+            strokeThickness: 2
         });
         this.defenseValuesText.position.set(this.defense_text.x, this.defense_text.y);
         this.defenseValuesText.anchor.x = 1;
@@ -211,7 +211,7 @@ export default class Card extends PIXI.Container {
                 fill: '#' + this.stats.defense_color,
                 align: 'center',
                 stroke: '#000000',
-                strokeThickness: 3
+                strokeThickness: 2
             });
             def_text.position.set(this.cardImg.x + this.cardImg.width / 2, this.cardImg.y + this.cardImg.height / 2);
             def_text.anchor.x = 0.5;
@@ -229,12 +229,7 @@ export default class Card extends PIXI.Container {
                     this.stats.attack_current = 0;
                 }
             })
-
-
-
         }
-
-
 
         if (atk_points > 0 && !this.hasRedCard) {
             if (this.hasInjury) {
@@ -243,7 +238,7 @@ export default class Card extends PIXI.Container {
             this.stats.attack_current += atk_points;
             if (this.stats.attack_current >= this.stats.attack_full) {
                 this.stats.attack_current = this.stats.attack_full;
-                activateAttack = true;
+                // activateAttack = true;
                 TweenMax.to(this.cardImg.scale, .15, {
                     x: initialScaleX * 1.05,
                     y: initialScaley * 1.05,
@@ -269,7 +264,7 @@ export default class Card extends PIXI.Container {
                 fill: '#' + this.stats.attack_color,
                 align: 'center',
                 stroke: '#000000',
-                strokeThickness: 3
+                strokeThickness: 2
             });
             atk_text.position.set(this.cardImg.x + this.cardImg.width / 2, this.cardImg.y + this.cardImg.height / 2);
             atk_text.anchor.x = 0.5;

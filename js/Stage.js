@@ -44,7 +44,8 @@ export default class Stage {
             ///////////////////////////////////////////////
 
             if (this.landscape) {
-                document.getElementById("rotate").style.background = "red";
+                document.getElementById("stage").style.height = "0px";
+                this.body.style.height = screen.height - window.innerHeight + "px";
                 return;
             }
 
