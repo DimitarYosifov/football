@@ -17,8 +17,14 @@ export default class Level extends PIXI.Container {
         this.height = app.height;//  / this.config.rendererResolution;
         this.grid = null;
         this.clubNames = ["testClub1", "testClub2"]; //first is players club
-        this.homeTeam = "testClub2"; //should be homeTeam
-        this.app.playerTurn = false; //should be rondom or host's
+        this.playerClubData = {   //should be taken from DB
+            name: "testClub1",
+            colors: null,
+            power: 4,
+            logo: null
+        }
+        this.homeTeam = "testClub1"; //should be homeTeam
+        this.app.playerTurn = true; //should be rondom or host's
         this.currentRound = 0;
 
         this.playerCardsContainer = null;

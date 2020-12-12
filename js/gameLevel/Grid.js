@@ -480,7 +480,7 @@ export default class Grid extends PIXI.Container {
                     this.newRound();
                 }, 1);
             }
-            TweenMax.delayedCall(2 + delay, () => {
+            TweenMax.delayedCall(3 + delay, () => {
                 this.parent.removeChild(this.popup);
                 if (this.app.playerTurn) {
                     this.app.level.animationInProgress = false;
