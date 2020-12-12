@@ -21,10 +21,10 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.bg);
 
         // CURRENT ROUND TEXT
-        this.currentRound = new PIXI.Text(`Round ${this.app.level.currentRound}`, {
+        this.currentRound = new PIXI.Text(`Round ${this.app.level.currentRound}/20`, {
             fontFamily: this.app.config.mainFont,
             // fontFamily: this.app.loader.resources["Garissol"],
-            fontSize: this.app.height / 7.5,
+            fontSize: this.app.height / 10,
             fill: '#000000',
             align: 'center',
             stroke: '#dbb7b7',
