@@ -1,5 +1,6 @@
 import config from "../Config.js";
 import activeDefense from "./ActiveDefense.js";
+import fullAttack from "./FullAttack.js";
 
 export default class Card extends PIXI.Container {
     constructor(data, app) {
@@ -254,6 +255,10 @@ export default class Card extends PIXI.Container {
                     }
                 });
                 this.cardImg.tint = "0x" + this.stats.attack_color;
+                let fullAttackShoe = new fullAttack(this.app, this.stats.attack_color, this.card_x + this.card_width / 2, this.card_y + this.card_height / 2);
+                this.app.level.goalAttempts.push(fullAttackShoe);
+                this.app.level.addChild(fullAttackShoe);
+
             }
             this.attackValuesText.text = `${this.stats.attack_current}/${this.stats.attack_full}`;
 

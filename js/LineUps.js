@@ -14,7 +14,7 @@ export default class LineUps {
                 defense_full: 1,
                 attack_current: 0,
                 attack_color: "FF1D00",
-                attack_full: 19,
+                attack_full: 1,
                 special: null,
                 position: "GK",
                 player_img_id: '011'
@@ -25,7 +25,7 @@ export default class LineUps {
                 defense_full: 1,
                 attack_current: 0,
                 attack_color: "2F7F07",
-                attack_full: 17,
+                attack_full: 1,
                 special: null,
                 position: "DF1",
                 player_img_id: '001'

@@ -10,7 +10,7 @@ export default class NewRoundPopup extends PIXI.Container {
 
         //BG
         this.bg = new PIXI.Graphics();
-        this.bg.beginFill(0x000000, 0.6);
+        this.bg.beginFill(0x000000, 0.75);
         this.bg.drawRect(
             0,
             0,
@@ -132,7 +132,11 @@ export default class NewRoundPopup extends PIXI.Container {
         })
     }
 
+
+    // this is stupid and hacky!!
     remove() {
-        this.parent.removeChild(this);
+        // if (this.parent) {
+            this.parent.removeChild(this);
+        // }
     }
 }

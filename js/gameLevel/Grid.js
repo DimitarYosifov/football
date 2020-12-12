@@ -403,7 +403,7 @@ export default class Grid extends PIXI.Container {
     // try to find possible match for move..TODO.. if non are found reshufle!
     checkPossibleMove(delay = 0, newlyCreatedGrid = false) {
         let possibleMoves = [];
-
+        this.nextRoundDelay = delay;
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 6; col++) {
                 //         check right
@@ -462,7 +462,7 @@ export default class Grid extends PIXI.Container {
         }
 
         let bestMatches = possibleMoves.filter(f => f.matches === Math.max(...possibleMoves.map(m => m.matches)));
-        let bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
+        this.bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
 
         if (possibleMoves.length === 0) {
             this.popup = new NoMovesPopup(this.app);
@@ -480,17 +480,29 @@ export default class Grid extends PIXI.Container {
                     this.newRound();
                 }, 1);
             }
-            TweenMax.delayedCall(3 + delay, () => {
-                this.parent.removeChild(this.popup);
-                if (this.app.playerTurn) {
-                    this.app.level.animationInProgress = false;
-                }
-                else {
-                    // TweenMax.delayedCall(2, () => {
-                        this.swapBlocks(bestMatchAtRandom.col, bestMatchAtRandom.row, bestMatchAtRandom.dir);
-                    // })
-                }
+            setTimeout(() => {
+                this.checkGoalAttemps();
+            }, 1);
+        }
+    }
+
+    checkGoalAttemps() {
+        if (this.app.level.goalAttempts.length > 0) {
+            alert("GOAL")
+        } else {
+            // this.parent.removeChild(this.popup);
+            TweenMax.delayedCall(3 + this.nextRoundDelay, () => {
+                this.proceedToNextRound();
             })
+        }
+    }
+
+    proceedToNextRound() {
+        if (this.app.playerTurn) {
+            this.app.level.animationInProgress = false;
+        }
+        else {
+            this.swapBlocks(this.bestMatchAtRandom.col, this.bestMatchAtRandom.row, this.bestMatchAtRandom.dir);
         }
     }
 
