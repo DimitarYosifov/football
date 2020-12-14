@@ -1,18 +1,18 @@
 export default class FullAttack extends PIXI.Sprite {
 
-    constructor(app, color, initialX, initialY) {
+    constructor(app, tintValue, initialX, initialY, color) {
         super();
         this.app = app;
         this.stageWidth = this.app.stage.width;
         this.stageHeight = this.app.stage.height;
         this.texture = this.app.loader.resources.assets.textures[`images/shoe`];
         this.height = this.stageHeight * 0.05;
+        this.color = color;
         this.scale.x = this.scale.y;
         this.anchor.set(0.5, 0.5);
         this.y = initialY;
         this.x = initialX
-        this.tint = "0x" + color;
-
+        this.tint = "0x" + tintValue;
         let scaleValue = this.scale.x;
         TweenMax.to(this.scale, .5, {
             x: scaleValue * 2,

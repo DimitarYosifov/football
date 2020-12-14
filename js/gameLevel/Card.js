@@ -200,7 +200,12 @@ export default class Card extends PIXI.Container {
                     repeat: 1
                 })
                 this.cardImg.tint = "0x" + this.stats.defense_color;
-                let glove = new activeDefense(this.app, this.stats.defense_color, this.card_x + this.card_width / 2, this.card_y + this.card_height / 2);
+                let glove = new activeDefense(
+                    this.app, this.stats.defense_color,
+                    this.card_x + this.card_width / 2,
+                    this.card_y + this.card_height / 2,
+                    this.colors[this.stats.defense_color]
+                );
                 this.app.level.addChild(glove);
             }
             this.defenseValuesText.text = `${this.stats.defense_current}/${this.stats.defense_full}`;
@@ -255,7 +260,12 @@ export default class Card extends PIXI.Container {
                     }
                 });
                 this.cardImg.tint = "0x" + this.stats.attack_color;
-                let fullAttackShoe = new fullAttack(this.app, this.stats.attack_color, this.card_x + this.card_width / 2, this.card_y + this.card_height / 2);
+                let fullAttackShoe = new fullAttack(
+                    this.app, this.stats.attack_color,
+                    this.card_x + this.card_width / 2,
+                    this.card_y + this.card_height / 2,
+                    this.colors[this.stats.attack_color]
+                );
                 this.app.level.goalAttempts.push(fullAttackShoe);
                 this.app.level.addChild(fullAttackShoe);
 

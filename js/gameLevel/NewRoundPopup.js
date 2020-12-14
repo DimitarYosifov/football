@@ -136,7 +136,9 @@ export default class NewRoundPopup extends PIXI.Container {
     // this is stupid and hacky!!
     remove() {
         // if (this.parent) {
-            this.parent.removeChild(this);
+        this.parent.removeChild(this);
+        // this.app.playerTurn = !this.app.playerTurn;
+        this.app.level.animationInProgress = !this.app.playerTurn;
         // }
     }
 }

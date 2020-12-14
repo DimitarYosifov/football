@@ -867,7 +867,7 @@
   },
   "meta": {
     "app": "http://free-tex-packer.com",
-    "version": "0.6.4",
+    "version": "0.6.0",
     "image": "assets.png",
     "format": "RGBA8888",
     "size": {

@@ -381,8 +381,8 @@ export default class Grid extends PIXI.Container {
             } else {
 
 
-                this.app.playerTurn = !this.app.playerTurn;
-                this.app.level.animationInProgress = !this.app.playerTurn;
+                // this.app.playerTurn = !this.app.playerTurn;
+                // this.app.level.animationInProgress = !this.app.playerTurn;
 
 
                 //  TweenMax.delayedCall(1.5, () => {
@@ -464,42 +464,167 @@ export default class Grid extends PIXI.Container {
         let bestMatches = possibleMoves.filter(f => f.matches === Math.max(...possibleMoves.map(m => m.matches)));
         this.bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
 
-        if (possibleMoves.length === 0) {
-            this.popup = new NoMovesPopup(this.app);
-            setTimeout(() => {
-                this.parent.addChild(this.popup);
-                TweenMax.delayedCall(2, () => {
-                    this.parent.removeChild(this.popup);
-                })
-            }, 1);
-            this.reShufleGrid();
-            return;
-        } else {
-            if (!newlyCreatedGrid) {
-                setTimeout(() => {
-                    this.newRound();
-                }, 1);
-            }
+        // if (possibleMoves.length === 0) {
+        // this.popup = new NoMovesPopup(this.app);
+        // setTimeout(() => {
+        //     this.parent.addChild(this.popup);
+        //     TweenMax.delayedCall(2, () => {
+        //         this.parent.removeChild(this.popup);
+        //     })
+        // }, 1);
+        // this.reShufleGrid();
+        // return;
+        this.noMoves = possibleMoves.length === 0;
+
+        // } else {
+        // this.noMoves = false;
+        if (!newlyCreatedGrid) {
+            // setTimeout(() => {
+            //     this.newRound();
+            // }, 1);
             setTimeout(() => {
                 this.checkGoalAttemps();
             }, 1);
+        } else {
+            setTimeout(() => {
+                console.log( this.app.level.animationInProgress)
+                // this.app.level.animationInProgress = !this.app.playerTurn;
+            }, 1);
         }
+        // }
+    }
+    createNoMovesPopup() {
+        this.popup = new NoMovesPopup(this.app);
+        setTimeout(() => {
+            this.parent.addChild(this.popup);
+            TweenMax.delayedCall(2, () => {
+                this.parent.removeChild(this.popup);
+            })
+        }, 1);
+        this.reShufleGrid();
     }
 
     checkGoalAttemps() {
         if (this.app.level.goalAttempts.length > 0) {
-            alert("GOAL")
-        } else {
+            this.goalAttempt();
+        }
+        else if (this.noMoves) {
+            this.createNoMovesPopup();
+        }
+        else {
             // this.parent.removeChild(this.popup);
+            this.app.playerTurn = !this.app.playerTurn;
+
+            setTimeout(() => {
+                this.newRound();
+            }, 1);
+
             TweenMax.delayedCall(3 + this.nextRoundDelay, () => {
                 this.proceedToNextRound();
             })
         }
     }
 
-    proceedToNextRound() {
+    goalAttempt() {
+
+        //repeat this for all goal attempts !!!!!!!
+        let tweenTarget = this.app.level.goalAttempts[0];
+        let attackColor = tweenTarget.color;
+
+        let newX = this.app.width / 2;
+        let newY = this.app.playerTurn ? this.app.height * 0.7 : this.app.height * 0.3;
+        let scaleValue = tweenTarget.scale.x;
+
+        TweenMax.to(tweenTarget, 1, {
+            x: newX,
+            y: newY,
+            onComplete: () => { }
+        });
+        TweenMax.to(tweenTarget.scale, 1, {
+            x: scaleValue * 5,
+            y: scaleValue * 5,
+            onComplete: () => { }
+        });
+
+        let firstActiveDefenseFound = null;
         if (this.app.playerTurn) {
-            this.app.level.animationInProgress = false;
+            firstActiveDefenseFound = this.app.level.opponentActiveDefenses
+                .filter(activeDefense => activeDefense !== null && activeDefense.color === attackColor)[0];
+
+            console.log(firstActiveDefenseFound)
+        } else {
+            //TODO repeat for opponent....
+        }
+
+        if (!firstActiveDefenseFound) {
+            //GOAL SCORED!!!
+            let finalY = this.app.playerTurn ? this.app.height * 0.12 : this.app.height * 0.88
+            TweenMax.to(tweenTarget, .5, {
+                delay: 1,
+                y: finalY,
+                alpha: 0,
+                onComplete: () => {
+                    //TODO GOAL POPUP...
+                    //for now 
+                    alert("GOAL POPUP")
+                    tweenTarget.parent.removeChild(tweenTarget);
+                    this.app.level.goalAttempts.shift();
+                    this.checkGoalAttemps();
+                }
+            });
+            TweenMax.to(tweenTarget.scale, .5, {
+                delay: 1,
+                x: scaleValue,
+                y: scaleValue,
+                onComplete: () => { }
+            });
+        } else {
+            let newX = this.app.width / 2;
+            let newY = this.app.playerTurn ? this.app.height * 0.3 : this.app.height * 0.7;
+            let scaleValue = firstActiveDefenseFound.scale.x;
+            TweenMax.to(firstActiveDefenseFound, 1, {
+                x: newX,
+                y: newY,
+                onComplete: () => { }
+            });
+            TweenMax.to(firstActiveDefenseFound.scale, 1, {
+                x: scaleValue * 5,
+                y: scaleValue * 5,
+                onComplete: () => { }
+            });
+            TweenMax.to(tweenTarget, .25, {
+                delay: 1,
+                y: this.app.height / 2,
+                alpha: 0,
+                onComplete: () => {
+                    tweenTarget.parent.removeChild(tweenTarget);
+                }
+            });
+            TweenMax.to(firstActiveDefenseFound, .25, {
+                delay: 1,
+                y: this.app.height / 2,
+                alpha: 0,
+                onComplete: () => {
+                    if (this.app.playerTurn) {
+                        this.app.level.opponentActiveDefenses[firstActiveDefenseFound.index] = null;
+                    } else {
+                        this.app.level.playerActiveDefenses[firstActiveDefenseFound.index] = null;
+                    }
+                    firstActiveDefenseFound.parent.removeChild(firstActiveDefenseFound);
+                    this.app.level.goalAttempts.shift();
+                    this.checkGoalAttemps();
+                }
+            });
+        }
+
+    }
+
+    proceedToNextRound() {
+        // this.app.playerTurn = !this.app.playerTurn;
+        // this.app.level.animationInProgress = !this.app.playerTurn;
+        this.app.level.goalAttempts = [];
+        if (this.app.playerTurn) {
+            // this.app.level.animationInProgress = false;
         }
         else {
             this.swapBlocks(this.bestMatchAtRandom.col, this.bestMatchAtRandom.row, this.bestMatchAtRandom.dir);
@@ -512,6 +637,9 @@ export default class Grid extends PIXI.Container {
             this.app.level.currentRound++;
             this.popup = new NewRoundPopup(this.app);
             this.parent.addChild(this.popup);
+        } else {
+            // this.app.playerTurn = !this.app.playerTurn;
+            this.app.level.animationInProgress = !this.app.playerTurn;
         }
     }
 
