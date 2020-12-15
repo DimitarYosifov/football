@@ -65,7 +65,7 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.playerTeamName);
 
         //PLAYER CLUB LOGO
-        const playerLogoTexture = this.app.loader.resources.assets.textures[`images/testlogo1`];
+        const playerLogoTexture = this.app.loader.resources.assets.textures[`images/${this.app.playerClubData.logo}`];
         this.playerClubLogo = new PIXI.Sprite(playerLogoTexture);
         this.playerClubLogo.x = this.playerTeamName.x;
         this.playerClubLogo.y = this.playerTeamName.y - this.playerTeamName.height / 2;
@@ -75,7 +75,7 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.playerClubLogo);
 
         //PLAYER CLUB STARS
-        this.playerClubPower = 4; // should be taken from level!!  TODO............
+        this.playerClubPower = this.app.playerClubData.power; // should be taken from level!!  TODO............
         for (let s = 0; s < this.playerClubPower; s++) {
             const starTexture = this.app.loader.resources.assets.textures[`images/star`];
             const star = new PIXI.Sprite(starTexture);
@@ -105,7 +105,7 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.opponentTeamName);
 
         //OPPONENT CLUB LOGO
-        const opponentLogoTexture = this.app.loader.resources.assets.textures[`images/testlogo2`];
+        const opponentLogoTexture = this.app.loader.resources.assets.textures[`images/${this.app.opponentClubData.logo}`];
         this.opponentClubLogo = new PIXI.Sprite(opponentLogoTexture);
         this.opponentClubLogo.x = this.opponentTeamName.x;
         this.opponentClubLogo.y = this.opponentTeamName.y - this.opponentTeamName.height / 2;
@@ -115,7 +115,7 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.opponentClubLogo);
 
         //OPPONENT CLUB STARS
-        this.opponentClubPower = 6; // should be taken from level!!  TODO............
+        this.opponentClubPower = this.app.opponentClubData.power; // should be taken from level!!  TODO............
         for (let s = 0; s < this.opponentClubPower; s++) {
             const starTexture = this.app.loader.resources.assets.textures[`images/star`];
             const star = new PIXI.Sprite(starTexture);

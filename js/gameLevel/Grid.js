@@ -487,7 +487,21 @@ export default class Grid extends PIXI.Container {
             }, 1);
         } else {
             setTimeout(() => {
-                console.log( this.app.level.animationInProgress)
+                console.log(this.app.level.animationInProgress)
+                console.log(this.app.playerTurn)
+
+                if (!this.app.playerTurn && this.app.level.currentRound === 0) {
+                    // setTimeout(() => {
+                    //     this.newRound();
+                    // }, 3000);
+
+                    TweenMax.delayedCall(3 + this.nextRoundDelay, () => {
+                        this.proceedToNextRound();
+                    })
+                }
+
+                // this.checkGoalAttemps();
+                // this.proceedToNextRound();
                 // this.app.level.animationInProgress = !this.app.playerTurn;
             }, 1);
         }
@@ -499,6 +513,11 @@ export default class Grid extends PIXI.Container {
             this.parent.addChild(this.popup);
             TweenMax.delayedCall(2, () => {
                 this.parent.removeChild(this.popup);
+                TweenMax.delayedCall(5, () => {
+                    if (!this.noMoves && !this.app.playerTurn) {
+                        this.proceedToNextRound();
+                    }
+                })
             })
         }, 1);
         this.reShufleGrid();
@@ -509,7 +528,11 @@ export default class Grid extends PIXI.Container {
             this.goalAttempt();
         }
         else if (this.noMoves) {
+            this.app.playerTurn = !this.app.playerTurn;
             this.createNoMovesPopup();
+
+            console.log(this.app.level.animationInProgress)
+            console.log(this.app.playerTurn)
         }
         else {
             // this.parent.removeChild(this.popup);
@@ -553,7 +576,8 @@ export default class Grid extends PIXI.Container {
 
             console.log(firstActiveDefenseFound)
         } else {
-            //TODO repeat for opponent....
+            firstActiveDefenseFound = this.app.level.playerActiveDefenses
+                .filter(activeDefense => activeDefense !== null && activeDefense.color === attackColor)[0];
         }
 
         if (!firstActiveDefenseFound) {

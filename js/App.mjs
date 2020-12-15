@@ -3,16 +3,21 @@ import Stage from "./Stage.js";
 // import ProtonEffects from "./ProtonEffects.js";
 import LogIn from "./LogIn.js";
 import config from "./Config.js";
+import { createNewClub, getClubData } from "./newClub.js";
 
 export default class App extends Stage {
 
     constructor() {
 
         super();
-        // alert()
         window.onload = () => {
             this.windowLoaded = true;
-            this.checkLoaded();
+            if (config.addTeam) {
+                createNewClub();
+            }
+            else {
+                this.checkLoaded();
+            }
         };
     }
 
@@ -38,8 +43,19 @@ export default class App extends Stage {
 
     startLevel() {
         // this.proton = new ProtonEffects(this);
-        this.level = new Level(this);
-        this.stage.addChild(this.level);
+        console.log(getClubData("Levski"))
+        let getData = async () => {
+
+
+          
+
+            // setTimeout(() => {
+            //     this.level = new Level(this, "Levski");
+            //     this.stage.addChild(this.level);
+            // }, 2222);
+
+        };
+        getData().catch(err => { console.log('Run failed (does not matter which task)!'); });
     }
 
     getLevel() {

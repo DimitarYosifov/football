@@ -5,7 +5,7 @@ import Grid from "./gameLevel/Grid.js";
 
 export default class Level extends PIXI.Container {
 
-    constructor(app, testClub1, testClub2, homeTeam) {
+    constructor(app, homeTeam) {   //should be homeTeam
 
         super();
         this.app = app;
@@ -16,15 +16,12 @@ export default class Level extends PIXI.Container {
         this.width = app.width; // / this.config.rendererResolution;
         this.height = app.height;//  / this.config.rendererResolution;
         this.grid = null;
-        this.clubNames = ["testClub1", "testClub2"]; //first is players club
+        // this.playerClubData = playerClubData;
+        // this.opponentClubData = opponentClubData;
+        this.clubNames = [this.app.playerClubData.name, this.app.opponentClubData.name]; //first is players club
         this.goalAttempts = [];
-        this.playerClubData = {   //should be taken from DB
-            name: "testClub1",
-            colors: null,
-            power: 4,
-            logo: null
-        }
-        this.homeTeam = "testClub1"; //should be homeTeam
+
+        this.homeTeam = homeTeam; //should be homeTeam
         this.app.playerTurn = true; //should be rondom or host's
         this.currentRound = 0;
 
