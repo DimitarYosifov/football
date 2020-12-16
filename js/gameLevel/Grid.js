@@ -256,6 +256,7 @@ export default class Grid extends PIXI.Container {
                         alpha: 0,
                         ease: Linear.easeNone,
                         onComplete: () => {
+                            console.log(11);
                             // TweenMax.killAll();
                             // this.increaseCardsPointsAfterMatch(matches);
                         }
@@ -374,10 +375,9 @@ export default class Grid extends PIXI.Container {
             console.log(matches);
             if (matches.length > 0) {
                 this.gatherMatchingBlocks(matches);
-                TweenMax.delayedCall(0, () => {
-                    //TODO... add opponent increasePointsAfterMatch!!!!
+                // TweenMax.delayedCall(0, () => {
                     this.increaseCardsPointsAfterMatch(matches);
-                })
+                // })
             } else {
 
 
@@ -588,6 +588,7 @@ export default class Grid extends PIXI.Container {
                 y: finalY,
                 alpha: 0,
                 onComplete: () => {
+                    this.app.playerTurn ? this.app.level.playerScore++ : this.app.level.opponentScore++;
                     //TODO GOAL POPUP...
                     //for now 
                     alert("GOAL POPUP")
@@ -656,8 +657,8 @@ export default class Grid extends PIXI.Container {
     }
 
     newRound() {
-        if (this.app.playerTurn && this.app.level.homeTeam === this.app.level.clubNames[0] ||
-            !this.app.playerTurn && this.app.level.homeTeam === this.app.level.clubNames[1]) {
+        if (this.app.playerTurn && this.app.level.isPlayerHome ||
+            !this.app.playerTurn && !this.app.level.isPlayerHome) {
             this.app.level.currentRound++;
             this.popup = new NewRoundPopup(this.app);
             this.parent.addChild(this.popup);

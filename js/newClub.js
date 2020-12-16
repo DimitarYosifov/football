@@ -20,27 +20,6 @@ export function createNewClub() {
         }
     });
 }
-export function getClubData(clubName) {
-    $.ajax({
-        url: "getClubData",
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(
-            {
-                name: clubName
-            }
-        ),
-        success: (res) => {
-            console.log(res);
-            return res;
-            // alert("successfully received")
-        }, error: (err) => {
-            // alert("err");
-        }
-    });
-}
-
-
 
 const teams = {
     Levski: {
@@ -195,4 +174,23 @@ const teams = {
             }
         ]
     }
+}
+
+export function getClubData(clubName) {
+    return $.ajax({
+        url: "getClubData",
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(
+            {
+                name: clubName
+            }
+        ),
+        success: (res) => {
+            console.log(res);
+            // alert("successfully received")
+        }, error: (err) => {
+            // alert("err");
+        }
+    });
 }

@@ -175,7 +175,7 @@ app.post('/getClubData', async (req, res) => {
     firebase.database().ref("/clubs/").orderByChild("name").equalTo(name).once('value').then(function (snapshot) {
         res.status(200);
         res.json({
-            clubData: Object.values(snapshot.val())[0]
+            clubData: Object.values(snapshot.val())[0].clubData
         });
     });
 });
