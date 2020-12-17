@@ -232,7 +232,6 @@ export default class Card extends PIXI.Container {
                 onComplete: () => {
                     def_text.alpha = 0;
                     this.parent.parent.removeChild(def_text);
-                    this.stats.attack_current = 0;
                 }
             })
         }
@@ -257,6 +256,7 @@ export default class Card extends PIXI.Container {
                         // alert("attack activated")
                         this.cardImg.tint = 16777215;
                         this.attackValuesText.text = `0/${this.stats.attack_full}`;
+                        this.stats.attack_current = 0;
                     }
                 });
                 this.cardImg.tint = "0x" + this.stats.attack_color;
