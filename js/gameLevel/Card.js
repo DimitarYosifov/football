@@ -288,6 +288,7 @@ export default class Card extends PIXI.Container {
             this.parent.parent.addChild(atk_text);// TODO add picture to +3 for example!!!
 
             TweenMax.to(atk_text, 1.5, {
+                delay: def_points > 0 ? 0.25 : 0,
                 y: this.parent.parent.height / 2,
                 // alpha: 0.75,
                 ease: Linear.easeNone,  //TODO... change ease
