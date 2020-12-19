@@ -1,11 +1,12 @@
 import Background from "./Background.js";
 import Config from "./Config.js";
 import LevelCardsSet from "./gameLevel/LevelCardsSet.js";
+import MatchStartPopup from "./gameLevel/MatchStartPopup.js";
 import Grid from "./gameLevel/Grid.js";
 
 export default class Level extends PIXI.Container {
 
-    constructor(app, isPlayerHome) {  
+    constructor(app, isPlayerHome) {
 
         super();
         this.app = app;
@@ -39,11 +40,17 @@ export default class Level extends PIXI.Container {
         this.addChild(this.bg);
         this.opponentActiveDefensesY = this.height * 0.155;
         this.playerActiveDefensesY = this.height * 0.84;
-        this.grid = new Grid(this.app);
-        this.addChild(this.grid);
         this.dataRecieved = () => {
             TweenMax.delayedCall(1, () => {
-                TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, { alpha: 1 });
+                TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
+                    alpha: 1,
+                    onComplete: () => {
+                        this.matchStartPopup = new MatchStartPopup(this.app);
+                        this.addChild(this.matchStartPopup);
+                        // this.grid = new Grid(this.app);
+                        // this.addChild(this.grid);
+                    }
+                });
             })
         }
 
