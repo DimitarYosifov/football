@@ -42,16 +42,22 @@ export default class Level extends PIXI.Container {
         this.playerActiveDefensesY = this.height * 0.84;
         this.dataRecieved = () => {
             TweenMax.delayedCall(1, () => {
+
                 TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
                     alpha: 1,
                     onComplete: () => {
                         this.matchStartPopup = new MatchStartPopup(this.app);
                         this.addChild(this.matchStartPopup);
-                        // this.grid = new Grid(this.app);
-                        // this.addChild(this.grid);
                     }
                 });
+
+
             })
+        }
+
+        this.onIntroFinish = () => {
+            this.grid = new Grid(this.app);
+            this.addChild(this.grid);
         }
 
         const createCards = async () => {
