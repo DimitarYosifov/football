@@ -1,9 +1,9 @@
 export default class NewRoundPopup extends PIXI.Container {
 
-    constructor(app, matchfinished) {
+    constructor(app, matchFinished) {
         super();
         this.app = app;
-        this.matchfinished = this.app.level.currentRound;
+        this.matchFinished = matchFinished;
         this.homeTeamScore = this.app.level.isPlayerHome ? this.app.level.playerScore : this.app.level.opponentScore;
         this.awayTeamScore = this.app.level.isPlayerHome ? this.app.level.opponentScore : this.app.level.playerScore;
         this.create();
@@ -23,11 +23,10 @@ export default class NewRoundPopup extends PIXI.Container {
         this.bg.endFill();
         this.addChild(this.bg);
 
-        if (this.matchfinished) {
+        if (this.matchFinished) {
             // GAME IS OVER
             this.currentRound = new PIXI.Text(`FINAL SCORE`, {
                 fontFamily: this.app.config.mainFont,
-                // fontFamily: this.app.loader.resources["Garissol"],
                 fontSize: this.app.height / 10,
                 fill: '#000000',
                 align: 'center',
@@ -43,7 +42,6 @@ export default class NewRoundPopup extends PIXI.Container {
             // CURRENT ROUND TEXT
             this.currentRound = new PIXI.Text(`Round ${this.app.level.currentRound}/20`, {
                 fontFamily: this.app.config.mainFont,
-                // fontFamily: this.app.loader.resources["Garissol"],
                 fontSize: this.app.height / 10,
                 fill: '#000000',
                 align: 'center',
@@ -91,7 +89,7 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.playerTeamName);
 
         //PLAYER CLUB LOGO
-        const playerLogoTexture = this.app.loader.resources.assets.textures[`images/${this.app.playerClubData.clubData.logo}`];
+        const playerLogoTexture = this.app.loader.resources.logos.textures[`${this.app.playerClubData.clubData.logo}`];
         this.playerClubLogo = new PIXI.Sprite(playerLogoTexture);
         this.playerClubLogo.x = this.playerTeamName.x;
         this.playerClubLogo.y = this.playerTeamName.y - this.playerTeamName.height / 2;
@@ -101,9 +99,9 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.playerClubLogo);
 
         //PLAYER CLUB STARS
-        this.playerClubPower = this.app.playerClubData.clubData.power; // should be taken from level!!  TODO............
+        this.playerClubPower = this.app.playerClubData.clubData.power;
         for (let s = 0; s < this.playerClubPower; s++) {
-            const starTexture = this.app.loader.resources.assets.textures[`images/star`];
+            const starTexture = this.app.loader.resources.main1.textures[`star`];
             const star = new PIXI.Sprite(starTexture);
             star.height = this.app.height * 0.025;
             star.scale.x = star.scale.y;
@@ -134,7 +132,7 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.opponentTeamName);
 
         //OPPONENT CLUB LOGO
-        const opponentLogoTexture = this.app.loader.resources.assets.textures[`images/${this.app.opponentClubData.clubData.logo}`];
+        const opponentLogoTexture = this.app.loader.resources.logos.textures[`${this.app.opponentClubData.clubData.logo}`];
         this.opponentClubLogo = new PIXI.Sprite(opponentLogoTexture);
         this.opponentClubLogo.x = this.opponentTeamName.x;
         this.opponentClubLogo.y = this.opponentTeamName.y - this.opponentTeamName.height / 2;
@@ -146,7 +144,7 @@ export default class NewRoundPopup extends PIXI.Container {
         //OPPONENT CLUB STARS
         this.opponentClubPower = this.app.opponentClubData.clubData.power; // should be taken from level!!  TODO............
         for (let s = 0; s < this.opponentClubPower; s++) {
-            const starTexture = this.app.loader.resources.assets.textures[`images/star`];
+            const starTexture = this.app.loader.resources.main1.textures[`star`];
             const star = new PIXI.Sprite(starTexture);
             star.height = this.app.height * 0.025;
             star.scale.x = star.scale.y;
@@ -156,14 +154,50 @@ export default class NewRoundPopup extends PIXI.Container {
             this.addChild(star);
         }
 
-        // if (this.matchfinished) {
-        //     //continue button
-          
-        // } else {
+        if (this.matchFinished) {
+
+            TweenMax.killAll();
+
+            //continue button
+            this.app.level.grid.interactive = false;
+            const btnTexture = this.app.loader.resources.buttons.textures[`btn1`];
+            this.continueBtn = new PIXI.Sprite(btnTexture);
+            this.continueBtn.height = this.app.height * 0.1;
+            this.continueBtn.scale.x = this.continueBtn.scale.y;
+            this.continueBtn.x = this.app.width / 2;
+            this.continueBtn.y = this.app.height * 0.8;
+            this.continueBtn.anchor.set(0.5);
+            this.continueBtn.interactive = true;
+            this.continueBtn.interactive = true;
+            this.continueBtn.on('pointerdown', () => {
+                location.reload();
+                // TODO...lead to somehwere else...
+            });
+
+            this.addChild(this.continueBtn);
+
+            this.continueBtnLabel = new PIXI.Text(`Continue`, {
+                fontFamily: this.app.config.mainFont,
+                fontSize: this.continueBtn.height / 2.5,
+                fill: '#ffffff',
+                align: 'center',
+                stroke: '#000000',
+                fontWeight: 800,
+                lineJoin: "bevel",
+                strokeThickness: 6
+            });
+            this.continueBtnLabel.position.set(
+                this.continueBtn.x,
+                this.continueBtn.y
+            );
+            this.continueBtnLabel.anchor.set(0.5, 0.5);
+            this.addChild(this.continueBtnLabel);
+
+        } else {
             TweenMax.delayedCall(2, () => {
                 this.remove();
             })
-        // }
+        }
 
     }
 

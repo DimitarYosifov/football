@@ -5,7 +5,7 @@ export default class ActiveDefense extends PIXI.Sprite {
         this.app = app;
         this.stageWidth = this.app.stage.width;
         this.stageHeight = this.app.stage.height;
-        this.texture = this.app.loader.resources.assets.textures[`images/glove2`];
+        this.texture = this.app.loader.resources.main1.textures[`glove2`];
         this.color = color;
         this.height = this.stageHeight * 0.05;
         this.scale.x = this.scale.y;

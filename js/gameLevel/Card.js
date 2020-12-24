@@ -69,7 +69,7 @@ export default class Card extends PIXI.Container {
         this.stats = this.stats;
 
         //card background
-        let cardTexture = this.app.loader.resources.assets.textures[this.cardTexture];
+        let cardTexture = this.app.loader.resources.players.textures[this.cardTexture];
         this.cardImg = new PIXI.Sprite(cardTexture);
         this.cardImg.x = this.card_x;
         this.cardImg.y = this.card_y;
@@ -77,7 +77,7 @@ export default class Card extends PIXI.Container {
         this.cardImg.height = this.card_height;
 
         //attack section
-        let shoeTexture = this.app.loader.resources.assets.textures[this.shoeTexture];
+        let shoeTexture = this.app.loader.resources.main1.textures[this.shoeTexture];
         this.shoe = new PIXI.Sprite(shoeTexture);
         this.shoe.x = this.shoe_x;
         this.shoe.y = this.shoe_y;

@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "version": "0.6.4"
+  },
+  "savePath": "C:\\Users\\User\\Desktop\\football\\assets",
+  "images": [
+    {
+      "name": "player_id_001.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_001.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_002.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_002.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_003.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_003.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_004.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_004.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_005.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_005.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_006.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_006.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_007.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_007.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_008.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_008.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_009.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_009.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_010.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_010.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_011.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_011.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_012.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_012.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_013.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_013.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_014.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_014.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_015.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_015.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_016.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_016.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_017.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_017.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_018.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_018.png",
+      "folder": ""
+    },
+    {
+      "name": "player_id_019.png",
+      "path": "C:/Users/User/Desktop/football/images/players/player_id_019.png",
+      "folder": ""
+    }
+  ],
+  "folders": [],
+  "packOptions": {
+    "textureName": "players",
+    "textureFormat": "png",
+    "removeFileExtension": true,
+    "prependFolderName": true,
+    "base64Export": false,
+    "tinify": false,
+    "tinifyKey": "",
+    "scale": 1,
+    "filter": "none",
+    "exporter": "JSON (hash)",
+    "fileName": "pack-result",
+    "savePath": "C:\\Users\\User\\Desktop\\football\\assets",
+    "width": 2048,
+    "height": 2048,
+    "fixedSize": false,
+    "powerOfTwo": false,
+    "padding": 0,
+    "extrude": 0,
+    "allowRotation": true,
+    "allowTrim": true,
+    "trimMode": "trim",
+    "alphaThreshold": "0",
+    "detectIdentical": true,
+    "packer": "MaxRectsBin",
+    "packerMethod": "BestShortSideFit"
+  }
+}

@@ -26,10 +26,10 @@ export default class Block extends PIXI.Container {
             this.img = this.config.debugGrid[this.row][this.col];
         }
 
-        let blockTexture = this.app.loader.resources.assets.textures[`images/${this.img}`];
+        let blockTexture = this.app.loader.resources.main1.textures[`${this.img}`];
         this.blockImg = new PIXI.Sprite(blockTexture);
         this.interactive = true;
-        this.buttonMode = true;
+        // this.buttonMode = true;
         this.blockImg.anchor.x = 0.5; //??????????????????
         this.blockImg.anchor.y = 0.5; //??????????????????
         this.blockImg.gridPosition_x = this.row;

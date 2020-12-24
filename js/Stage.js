@@ -99,8 +99,12 @@ export default class Stage {
         };
 
         this.loader = PIXI.loader;
-        this.loader.add('assets-0', "assets/assets-0.json");
-        this.loader.add('assets-1', "assets/assets-1.json");
+        this.loader.add('main1', "assets/main-1.json");
+        this.loader.add('players', "assets/players.json");
+        this.loader.add('logos', "assets/logos.json");
+        this.loader.add('backgrounds', "assets/backgrounds.json");
+        this.loader.add('buttons', "assets/buttons.json");
+
         this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
 
         //this is needed to handle weird texture not loaded issue 

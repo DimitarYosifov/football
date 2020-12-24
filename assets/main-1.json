@@ -1,0 +1,351 @@
+{
+  "frames": {
+    "glove1": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 546,
+        "h": 750
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 546,
+        "h": 750
+      },
+      "sourceSize": {
+        "w": 558,
+        "h": 750
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "glove2": {
+      "frame": {
+        "x": 0,
+        "y": 750,
+        "w": 546,
+        "h": 750
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 13,
+        "y": 0,
+        "w": 546,
+        "h": 750
+      },
+      "sourceSize": {
+        "w": 559,
+        "h": 750
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "red_card": {
+      "frame": {
+        "x": 0,
+        "y": 1500,
+        "w": 174,
+        "h": 294
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 63,
+        "y": 3,
+        "w": 174,
+        "h": 294
+      },
+      "sourceSize": {
+        "w": 300,
+        "h": 300
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "star": {
+      "frame": {
+        "x": 0,
+        "y": 1794,
+        "w": 221,
+        "h": 205
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 6,
+        "y": 14,
+        "w": 221,
+        "h": 205
+      },
+      "sourceSize": {
+        "w": 233,
+        "h": 233
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "yellow_card": {
+      "frame": {
+        "x": 174,
+        "y": 1500,
+        "w": 174,
+        "h": 294
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 63,
+        "y": 3,
+        "w": 174,
+        "h": 294
+      },
+      "sourceSize": {
+        "w": 300,
+        "h": 300
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "shoe": {
+      "frame": {
+        "x": 205,
+        "y": 1794,
+        "w": 259,
+        "h": 200
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 259,
+        "h": 200
+      },
+      "sourceSize": {
+        "w": 259,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "red_cross": {
+      "frame": {
+        "x": 348,
+        "y": 1500,
+        "w": 198,
+        "h": 198
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 2,
+        "y": 2,
+        "w": 198,
+        "h": 198
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ball_red": {
+      "frame": {
+        "x": 464,
+        "y": 1698,
+        "w": 197,
+        "h": 190
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 5,
+        "w": 197,
+        "h": 190
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ball_yellow": {
+      "frame": {
+        "x": 654,
+        "y": 1698,
+        "w": 195,
+        "h": 190
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 5,
+        "w": 195,
+        "h": 190
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ball_green": {
+      "frame": {
+        "x": 844,
+        "y": 1698,
+        "w": 194,
+        "h": 190
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 5,
+        "w": 194,
+        "h": 190
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ball_orange": {
+      "frame": {
+        "x": 1034,
+        "y": 1698,
+        "w": 194,
+        "h": 190
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 5,
+        "w": 194,
+        "h": 190
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ball_purple": {
+      "frame": {
+        "x": 1224,
+        "y": 0,
+        "w": 194,
+        "h": 190
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 2,
+        "y": 5,
+        "w": 194,
+        "h": 190
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ball_blue": {
+      "frame": {
+        "x": 1418,
+        "y": 0,
+        "w": 193,
+        "h": 190
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 4,
+        "y": 5,
+        "w": 193,
+        "h": 190
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ball_prototype": {
+      "frame": {
+        "x": 1611,
+        "y": 0,
+        "w": 184,
+        "h": 184
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 38,
+        "y": 5,
+        "w": 184,
+        "h": 184
+      },
+      "sourceSize": {
+        "w": 259,
+        "h": 194
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.4",
+    "image": "main-1.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1795,
+      "h": 2015
+    },
+    "scale": 1
+  }
+}

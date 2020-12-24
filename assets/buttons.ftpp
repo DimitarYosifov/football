@@ -3,12 +3,16 @@
     "version": "0.6.4"
   },
   "savePath": "C:\\Users\\User\\Desktop\\football\\assets",
-  "images": [],
-  "folders": [
-    "C:/Users/User/Desktop/football/images"
+  "images": [
+    {
+      "name": "btn1.png",
+      "path": "C:/Users/User/Desktop/football/images/buttons/btn1.png",
+      "folder": ""
+    }
   ],
+  "folders": [],
   "packOptions": {
-    "textureName": "assets",
+    "textureName": "buttons",
     "textureFormat": "png",
     "removeFileExtension": true,
     "prependFolderName": true,

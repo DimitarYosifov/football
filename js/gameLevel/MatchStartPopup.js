@@ -107,7 +107,7 @@ export default class MatchStartPopup extends PIXI.Container {
 
     showPlayerLogo() {
         //PLAYER CLUB LOGO
-        const playerLogoTexture = this.app.loader.resources.assets.textures[`images/${this.app.playerClubData.clubData.logo}`];
+        const playerLogoTexture = this.app.loader.resources.logos.textures[`${this.app.playerClubData.clubData.logo}`];
         this.playerClubLogo = new PIXI.Sprite(playerLogoTexture);
         this.playerClubLogo.x = this.app.width / 2;
         this.playerClubLogo.y = this.app.height / 2;
@@ -119,7 +119,7 @@ export default class MatchStartPopup extends PIXI.Container {
         //PLAYER CLUB STARS
         this.playerClubPower = this.app.playerClubData.clubData.power;
         for (let s = 0; s < this.playerClubPower; s++) {
-            const starTexture = this.app.loader.resources.assets.textures[`images/star`];
+            const starTexture = this.app.loader.resources.main1.textures[`star`];
             const star = new PIXI.Sprite(starTexture);
             star.height = this.app.height * 0.07;
             star.scale.x = star.scale.y;
@@ -157,7 +157,7 @@ export default class MatchStartPopup extends PIXI.Container {
         this.addChild(this.container2);
 
         //OPPONENT CLUB LOGO
-        const opponentLogoTexture = this.app.loader.resources.assets.textures[`images/${this.app.opponentClubData.clubData.logo}`];
+        const opponentLogoTexture = this.app.loader.resources.logos.textures[`${this.app.opponentClubData.clubData.logo}`];
         this.opponentClubLogo = new PIXI.Sprite(opponentLogoTexture);
         this.opponentClubLogo.x = this.app.width / 2;
         this.opponentClubLogo.y = this.app.height / 2;
@@ -169,7 +169,7 @@ export default class MatchStartPopup extends PIXI.Container {
         //OPPONENT CLUB STARS
         this.opponentClubPower = this.app.opponentClubData.clubData.power;
         for (let s = 0; s < this.opponentClubPower; s++) {
-            const starTexture = this.app.loader.resources.assets.textures[`images/star`];
+            const starTexture = this.app.loader.resources.main1.textures[`star`];
             const star = new PIXI.Sprite(starTexture);
             star.height = this.app.height * 0.07;
             star.scale.x = star.scale.y;

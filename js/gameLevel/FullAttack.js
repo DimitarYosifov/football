@@ -5,7 +5,7 @@ export default class FullAttack extends PIXI.Sprite {
         this.app = app;
         this.stageWidth = this.app.stage.width;
         this.stageHeight = this.app.stage.height;
-        this.texture = this.app.loader.resources.assets.textures[`images/shoe`];
+        this.texture = this.app.loader.resources.main1.textures[`shoe`];
         this.height = this.stageHeight * 0.05;
         this.color = color;
         this.scale.x = this.scale.y;

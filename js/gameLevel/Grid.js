@@ -120,11 +120,11 @@ export default class Grid extends PIXI.Container {
                     item2.children[0].x = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].x;
                     item2.children[0].y = this.globalBlocksPositions[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].y;
                     item2.type = this.blocks[this.blockBeingSwappedWith.row][this.blockBeingSwappedWith.col].type;
-                    item2.children[0].texture = this.app.loader.resources.assets.textures[`images/${item2.type}`];
+                    item2.children[0].texture = this.app.loader.resources.main1.textures[`${item2.type}`];
                     item1.children[0].x = item_2_Old_X;
                     item1.children[0].y = item_2_Old_Y;
                     item1.type = item_2_OldType;
-                    item1.children[0].texture = this.app.loader.resources.assets.textures[`images/${item1.type}`];
+                    item1.children[0].texture = this.app.loader.resources.main1.textures[`${item1.type}`];
 
                     TweenMax.delayedCall(0.5, () => {
                         this.gatherMatchingBlocks(matches);
@@ -308,7 +308,7 @@ export default class Grid extends PIXI.Container {
             //random target
             let redCardTarget = redCardTargets[Math.floor(Math.random() * redCardTargets.length)];
             redCardTarget.hasRedCard = true;
-            redCardTarget.yellowCard.texture = this.app.loader.resources.assets.textures[`images/red_card`];
+            redCardTarget.yellowCard.texture = this.app.loader.resources.main1.textures[`red_card`];
             redCardTarget.yellowCard.visible = true;
             this.bounceTarget(redCardTarget.yellowCard);
         }
@@ -325,7 +325,7 @@ export default class Grid extends PIXI.Container {
             let yellowCardTarget = yellowCardTargets[Math.floor(Math.random() * yellowCardTargets.length)];
             if (yellowCardTarget.hasYellowCard) {
                 yellowCardTarget.hasRedCard = true;
-                yellowCardTarget.yellowCard.texture = this.app.loader.resources.assets.textures[`images/red_card`];
+                yellowCardTarget.yellowCard.texture = this.app.loader.resources.main1.textures[`red_card`];
             }
             yellowCardTarget.hasYellowCard = true;
             yellowCardTarget.yellowCard.visible = true;
@@ -768,7 +768,7 @@ export default class Grid extends PIXI.Container {
                     let img = block.parent.generateRandomColorBlock();
                     // let img = "ball_green";    //for test only
 
-                    block.texture = this.app.loader.resources.assets.textures[`images/${img}`];
+                    block.texture = this.app.loader.resources.main1.textures[`${img}`];
                     let startY = this.globalBlocksPositions[el.holes - hole - 1][colIndex].y;
                     block.y = gridY - (blockHeight * (hole + 1));
                     block.x = this.globalBlocksPositions[row][colIndex].x;
@@ -795,7 +795,7 @@ export default class Grid extends PIXI.Container {
             row.forEach((el, colIndex) => {
                 let img = this.gridArrays[rowIndex][colIndex];
                 let type = img;
-                let texture = this.app.loader.resources.assets.textures[`images/${img}`];
+                let texture = this.app.loader.resources.main1.textures[`${img}`];
                 let x = this.globalBlocksPositions[rowIndex][colIndex].x;
                 let y = this.globalBlocksPositions[rowIndex][colIndex].y;
 

@@ -31,7 +31,7 @@ export default class Level extends PIXI.Container {
         this.opponentActiveDefenses = Array(13).fill(null);   // 13 is max that fits within screen width
         this.bg = new Background(this.app, {
             gamePhase: "level",
-            bgTexture: this.app.loader.resources.assets.textures["images/pitch"],
+            bgTexture: this.app.loader.resources.backgrounds.textures["pitch"],
             bg_x: -this.app.width * 0.005,
             bg_y: -this.app.height * 0.005,
             bg_width: this.app.width * 1.005,
