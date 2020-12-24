@@ -16,5 +16,6 @@ export default {
         ["yellow_card", "ball_yellow", "yellow_card", "red_cross", "ball_green", "red_cross"],
         ["ball_red", "yellow_card", "red_card", "yellow_card", "ball_blue", "yellow_card"],
         ["ball_green", "red_card", "ball_green", "ball_yellow", "ball_green", "red_cross"]
-    ]
+    ],
+    roundsInMatch: 1
 }

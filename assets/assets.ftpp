@@ -1,11 +1,11 @@
 {
   "meta": {
-    "version": "0.6.0"
+    "version": "0.6.4"
   },
-  "savePath": "C:\\projects\\football\\assets",
+  "savePath": "C:\\Users\\User\\Desktop\\football\\assets",
   "images": [],
   "folders": [
-    "C:/projects/football/images"
+    "C:/Users/User/Desktop/football/images"
   ],
   "packOptions": {
     "textureName": "assets",
@@ -19,7 +19,7 @@
     "filter": "none",
     "exporter": "JSON (hash)",
     "fileName": "pack-result",
-    "savePath": "C:\\projects\\football\\assets",
+    "savePath": "C:\\Users\\User\\Desktop\\football\\assets",
     "width": 2048,
     "height": 2048,
     "fixedSize": false,

@@ -50,7 +50,7 @@ export default class App extends Stage {
                     resolve(getClubData("Levski"))
                 }),
                 new Promise((resolve, reject) => {
-                    resolve(getClubData("Barcelona"))
+                    resolve(getClubData("Ludogorets"))
                 })
             ]
         ).then((x) => {

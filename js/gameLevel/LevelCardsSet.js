@@ -73,7 +73,7 @@ export default class LevelCardsSet extends PIXI.Container {
                 stats: this.lineUps.opponent[i],
                 font_size: this.stageHeight / 45 + 'px',  //idiotic!!!! TODO...
 
-                cardTexture: `images/players/player_id_${this.lineUps.opponent[i].opponent_img_id}`,
+                cardTexture: `images/players/player_id_${this.lineUps.opponent[i].player_img_id}`,
                 card_x: (this.stageWidth / 6) * i,
                 card_y: 0,
                 card_width: this.stageWidth / 6,

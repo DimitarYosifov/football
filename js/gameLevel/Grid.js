@@ -16,7 +16,6 @@ export default class Grid extends PIXI.Container {
         this.gridArrays = [];
         this.globalBlocksPositions = [[], [], [], [], [], [], [], []];
         this.blocks = [[], [], [], [], [], [], [], []];
-
         this.createGrid();
     }
 
@@ -376,7 +375,7 @@ export default class Grid extends PIXI.Container {
             if (matches.length > 0) {
                 this.gatherMatchingBlocks(matches);
                 // TweenMax.delayedCall(0, () => {
-                    this.increaseCardsPointsAfterMatch(matches);
+                this.increaseCardsPointsAfterMatch(matches);
                 // })
             } else {
 
@@ -589,12 +588,9 @@ export default class Grid extends PIXI.Container {
                 alpha: 0,
                 onComplete: () => {
                     this.app.playerTurn ? this.app.level.playerScore++ : this.app.level.opponentScore++;
-                    //TODO GOAL POPUP...
-                    //for now 
-                    alert("GOAL POPUP")
                     tweenTarget.parent.removeChild(tweenTarget);
                     this.app.level.goalAttempts.shift();
-                    this.checkGoalAttemps();
+                    this.showText("GOAL!", true);
                 }
             });
             TweenMax.to(tweenTarget.scale, .5, {
@@ -637,21 +633,44 @@ export default class Grid extends PIXI.Container {
                     }
                     firstActiveDefenseFound.parent.removeChild(firstActiveDefenseFound);
                     this.app.level.goalAttempts.shift();
-                    this.checkGoalAttemps();
+                    this.showText("MISS!", false);
                 }
             });
         }
 
     }
 
+    showText(text, shake) {
+        this.goalText = new PIXI.Text(text, {
+            fontFamily: this.app.config.mainFont,
+            fontSize: this.app.height / 5,
+            fill: '#000000',
+            align: 'center',
+            stroke: '#dbb7b7',
+            fontWeight: 800,
+            strokeThickness: 6
+        });
+        this.goalText.position.set(this.app.width / 2, this.app.height / 2);
+        this.goalText.anchor.set(0.5, 0.5);
+        this.addChild(this.goalText);
+
+        TweenMax.to(this.goalText, .05, { x: "+=3", yoyo: true, repeat: 10 });
+        TweenMax.to(this.goalText, .05, {
+            x: "-=3",
+            yoyo: true,
+            repeat: 10,
+            onComplete: () => {
+                TweenMax.delayedCall(1, () => {
+                    this.removeChild(this.goalText);
+                    this.checkGoalAttemps();
+                })
+            }
+        });
+    }
+
     proceedToNextRound() {
-        // this.app.playerTurn = !this.app.playerTurn;
-        // this.app.level.animationInProgress = !this.app.playerTurn;
         this.app.level.goalAttempts = [];
-        if (this.app.playerTurn) {
-            // this.app.level.animationInProgress = false;
-        }
-        else {
+        if (!this.app.playerTurn) {
             this.swapBlocks(this.bestMatchAtRandom.col, this.bestMatchAtRandom.row, this.bestMatchAtRandom.dir);
         }
     }
@@ -660,7 +679,7 @@ export default class Grid extends PIXI.Container {
         if (this.app.playerTurn && this.app.level.isPlayerHome ||
             !this.app.playerTurn && !this.app.level.isPlayerHome) {
             this.app.level.currentRound++;
-            this.popup = new NewRoundPopup(this.app);
+            this.popup = new NewRoundPopup(this.app, this.app.level.currentRound > this.config.roundsInMatch);
             this.parent.addChild(this.popup);
         } else {
             // this.app.playerTurn = !this.app.playerTurn;

@@ -1,8 +1,9 @@
 export default class NewRoundPopup extends PIXI.Container {
 
-    constructor(app) {
+    constructor(app, matchfinished) {
         super();
         this.app = app;
+        this.matchfinished = this.app.level.currentRound;
         this.homeTeamScore = this.app.level.isPlayerHome ? this.app.level.playerScore : this.app.level.opponentScore;
         this.awayTeamScore = this.app.level.isPlayerHome ? this.app.level.opponentScore : this.app.level.playerScore;
         this.create();
@@ -22,21 +23,41 @@ export default class NewRoundPopup extends PIXI.Container {
         this.bg.endFill();
         this.addChild(this.bg);
 
-        // CURRENT ROUND TEXT
-        this.currentRound = new PIXI.Text(`Round ${this.app.level.currentRound}/20`, {
-            fontFamily: this.app.config.mainFont,
-            // fontFamily: this.app.loader.resources["Garissol"],
-            fontSize: this.app.height / 10,
-            fill: '#000000',
-            align: 'center',
-            stroke: '#dbb7b7',
-            fontWeight: 800,
-            lineJoin: "bevel",
-            strokeThickness: 6
-        });
-        this.currentRound.position.set(this.app.width / 2, this.app.height * 0.25);
-        this.currentRound.anchor.set(0.5, 0.5);
-        this.addChild(this.currentRound);
+        if (this.matchfinished) {
+            // GAME IS OVER
+            this.currentRound = new PIXI.Text(`FINAL SCORE`, {
+                fontFamily: this.app.config.mainFont,
+                // fontFamily: this.app.loader.resources["Garissol"],
+                fontSize: this.app.height / 10,
+                fill: '#000000',
+                align: 'center',
+                stroke: '#dbb7b7',
+                fontWeight: 800,
+                lineJoin: "bevel",
+                strokeThickness: 6
+            });
+            this.currentRound.position.set(this.app.width / 2, this.app.height * 0.25);
+            this.currentRound.anchor.set(0.5, 0.5);
+            this.addChild(this.currentRound);
+        } else {
+            // CURRENT ROUND TEXT
+            this.currentRound = new PIXI.Text(`Round ${this.app.level.currentRound}/20`, {
+                fontFamily: this.app.config.mainFont,
+                // fontFamily: this.app.loader.resources["Garissol"],
+                fontSize: this.app.height / 10,
+                fill: '#000000',
+                align: 'center',
+                stroke: '#dbb7b7',
+                fontWeight: 800,
+                lineJoin: "bevel",
+                strokeThickness: 6
+            });
+            this.currentRound.position.set(this.app.width / 2, this.app.height * 0.25);
+            this.currentRound.anchor.set(0.5, 0.5);
+            this.addChild(this.currentRound);
+        }
+
+
 
         //RESULT
         this.result = new PIXI.Text(`${this.homeTeamScore} : ${this.awayTeamScore}`, {
@@ -135,18 +156,20 @@ export default class NewRoundPopup extends PIXI.Container {
             this.addChild(star);
         }
 
-        TweenMax.delayedCall(2, () => {
-            this.remove();
-        })
+        // if (this.matchfinished) {
+        //     //continue button
+          
+        // } else {
+            TweenMax.delayedCall(2, () => {
+                this.remove();
+            })
+        // }
+
     }
 
 
-    // this is stupid and hacky!!
     remove() {
-        // if (this.parent) {
         this.parent.removeChild(this);
-        // this.app.playerTurn = !this.app.playerTurn;
         this.app.level.animationInProgress = !this.app.playerTurn;
-        // }
     }
 }
