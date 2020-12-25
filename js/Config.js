@@ -6,7 +6,7 @@ export default {
     fadeTimeBetweenPhases: 0.5,   //visibility  delay between game phases
     // gridHasMask: true,            // UNUSED!!!
     isGridInDebug: false,         // predetermened grid for debug
-    isPlayerHome: false,         // temporary
+    isPlayerHome: true,         // temporary
     debugGrid: [
         ["ball_purple", "red_cross", "ball_red", "ball_red", "ball_blue", "ball_red"],
         ["ball_green", "ball_yellow", "yellow_card", "red_card", "ball_green", "ball_yellow"],

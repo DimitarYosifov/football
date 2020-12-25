@@ -133,6 +133,16 @@ app.post('/storageData', async (req, res) => {
     });
 });
 
+app.post('/getAllClubsData', async (req, res) => {
+    firebase.database().ref("/clubs/").once('value').then(function (snapshot) {
+        res.set('Content-Type', 'application/json');
+        res.status(200);
+        res.json({
+            clubs: Object.values(snapshot.val())
+        });
+    });
+});
+
 app.post('/addClub', async (req, res) => {
     let name = req.body.name;
     let clubData = req.body.clubData;
