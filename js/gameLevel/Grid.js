@@ -647,32 +647,38 @@ export default class Grid extends PIXI.Container {
 
     addHint() {
         this.hintTimeout = TweenMax.delayedCall(5, () => {
-            this.hintInterval = setInterval(() => {
-                let target1 = this.blocks[this.hintMatch.row][this.hintMatch.col];
-                let target2;
-                if (this.hintMatch.dir === "right") {
-                    target2 = this.blocks[this.hintMatch.row][this.hintMatch.col + 1];
-                } else {
-                    target2 = this.blocks[this.hintMatch.row + 1][this.hintMatch.col];
-                }
-                let width1 = target1.width * 1.1;
-                let height1 = target1.height * 1.1;
-                let width2 = target2.width * 1.1;
-                let height2 = target2.height * 1.1;
+            let start = () => {
+                this.hintInterval = TweenMax.delayedCall(0.6, () => {
+                    let target1 = this.blocks[this.hintMatch.row][this.hintMatch.col];
+                    let target2;
+                    if (this.hintMatch.dir === "right") {
+                        target2 = this.blocks[this.hintMatch.row][this.hintMatch.col + 1];
+                    } else {
+                        target2 = this.blocks[this.hintMatch.row + 1][this.hintMatch.col];
+                    }
+                    let width1 = target1.width * 1.1;
+                    let height1 = target1.height * 1.1;
+                    let width2 = target2.width * 1.1;
+                    let height2 = target2.height * 1.1;
 
-                TweenMax.to(target1.blockImg, 0.5, {
-                    width: width1,
-                    height: height1,
-                    yoyo: true,
-                    repeat: 1
+                    TweenMax.to(target1.blockImg, 0.3, {
+                        width: width1,
+                        height: height1,
+                        yoyo: true,
+                        repeat: 1
+                    });
+                    TweenMax.to(target2.blockImg, 0.3, {
+                        width: width2,
+                        height: height2,
+                        yoyo: true,
+                        repeat: 1
+                    });
+                    if (!this.app.level.animationInProgress) {
+                        start();
+                    }
                 });
-                TweenMax.to(target2.blockImg, 0.5, {
-                    width: width2,
-                    height: height2,
-                    yoyo: true,
-                    repeat: 1
-                });
-            }, 1000);
+            }
+            start();
         })
     }
 
