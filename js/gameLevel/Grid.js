@@ -34,7 +34,6 @@ export default class Grid extends PIXI.Container {
             this.height
         );
         mask.endFill();
-        // this.parent.addChildAt(mask, 0);
         this.mask = mask;
         this.checkPossibleMove(2, true);
     }
@@ -94,9 +93,8 @@ export default class Grid extends PIXI.Container {
                 let matches = this.checkGridForMatches();
 
                 if (matches.length !== 0) {
-
-
-
+                    this.hintTimeout.kill()
+                    clearInterval(this.hintInterval);
                     for (let m = 0; m < matches.length; m++) {
                         if (matches[m].row === item2.row && matches[m].col === item2.col) {
                             matches[m].beingSwapped = true;
@@ -209,7 +207,6 @@ export default class Grid extends PIXI.Container {
                 }
             }
         }
-        // console.log(matches);
         return matches;
     }
 
@@ -254,21 +251,14 @@ export default class Grid extends PIXI.Container {
                         y: newY,
                         alpha: 0,
                         ease: Linear.easeNone,
-                        onComplete: () => {
-                            console.log(11);
-                            // TweenMax.killAll();
-                            // this.increaseCardsPointsAfterMatch(matches);
-                        }
+                        onComplete: () => { }
                     });
                 }
                 else {
                     TweenMax.to(tweenTarget.blockImg, .2, {
                         alpha: 0,
                         delay: .2,
-                        onComplete: () => {
-                            // TweenMax.killAll();
-                            // this.increaseCardsPointsAfterMatch(matches);
-                        }
+                        onComplete: () => { }
                     });
                 }
             }
@@ -374,27 +364,10 @@ export default class Grid extends PIXI.Container {
             console.log(matches);
             if (matches.length > 0) {
                 this.gatherMatchingBlocks(matches);
-                // TweenMax.delayedCall(0, () => {
                 this.increaseCardsPointsAfterMatch(matches);
                 // })
             } else {
-
-
-                // this.app.playerTurn = !this.app.playerTurn;
-                // this.app.level.animationInProgress = !this.app.playerTurn;
-
-
-                //  TweenMax.delayedCall(1.5, () => {
                 this.checkPossibleMove();
-                // })
-
-                // if (!this.app.playerTurn) {
-                //     TweenMax.delayedCall(1.5, () => {
-                //         this.checkPossibleMove();
-                //     })
-                // } else {
-
-                // }
             }
         })
     }
@@ -451,60 +424,49 @@ export default class Grid extends PIXI.Container {
 
         // these 3 ifs aim remove potentioal opponent dummy moves like matching red/yellow cards and injuries
         if (possibleMoves.length !== 1) {
-            possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_card"));
+            if (possibleMoves.filter(ps => ps.types.includes("red_card")).length === possibleMoves.length) {
+                let randomIndex = Math.floor(Math.random() * possibleMoves.length) + 1;
+                possibleMoves = possibleMoves.slice(randomIndex - 1, randomIndex);
+            } else {
+                possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_card"));
+            }
         }
         if (possibleMoves.length !== 1) {
-            possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_cross"));
+            if (possibleMoves.filter(ps => ps.types.includes("red_cross")).length === possibleMoves.length) {
+                let randomIndex = Math.floor(Math.random() * possibleMoves.length) + 1;
+                possibleMoves = possibleMoves.slice(randomIndex - 1, randomIndex);
+            } else {
+                possibleMoves = possibleMoves.filter(ps => !ps.types.includes("red_cross"));
+            }
         }
         if (possibleMoves.length !== 1) {
-            possibleMoves = possibleMoves.filter(ps => !ps.types.includes("yellow_card"));
+            if (possibleMoves.filter(ps => ps.types.includes("yellow_card")).length === possibleMoves.length) {
+                let randomIndex = Math.floor(Math.random() * possibleMoves.length) + 1;
+                possibleMoves = possibleMoves.slice(randomIndex - 1, randomIndex);
+            } else {
+                possibleMoves = possibleMoves.filter(ps => !ps.types.includes("yellow_card"));
+            }
         }
 
         let bestMatches = possibleMoves.filter(f => f.matches === Math.max(...possibleMoves.map(m => m.matches)));
+        this.hintMatch = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
         this.bestMatchAtRandom = bestMatches[Math.floor(Math.random() * bestMatches.length)];
 
-        // if (possibleMoves.length === 0) {
-        // this.popup = new NoMovesPopup(this.app);
-        // setTimeout(() => {
-        //     this.parent.addChild(this.popup);
-        //     TweenMax.delayedCall(2, () => {
-        //         this.parent.removeChild(this.popup);
-        //     })
-        // }, 1);
-        // this.reShufleGrid();
-        // return;
         this.noMoves = possibleMoves.length === 0;
-
-        // } else {
-        // this.noMoves = false;
+        console.log(`possible moves => ${JSON.stringify(possibleMoves)}`);
         if (!newlyCreatedGrid) {
-            // setTimeout(() => {
-            //     this.newRound();
-            // }, 1);
             setTimeout(() => {
                 this.checkGoalAttemps();
             }, 1);
         } else {
             setTimeout(() => {
-                console.log(this.app.level.animationInProgress)
-                console.log(this.app.playerTurn)
-
                 if (!this.app.playerTurn && this.app.level.currentRound === 0) {
-                    // setTimeout(() => {
-                    //     this.newRound();
-                    // }, 3000);
-
                     TweenMax.delayedCall(3 + this.nextRoundDelay, () => {
                         this.proceedToNextRound();
                     })
                 }
-
-                // this.checkGoalAttemps();
-                // this.proceedToNextRound();
-                // this.app.level.animationInProgress = !this.app.playerTurn;
             }, 1);
         }
-        // }
     }
     createNoMovesPopup() {
         this.popup = new NoMovesPopup(this.app);
@@ -529,18 +491,12 @@ export default class Grid extends PIXI.Container {
         else if (this.noMoves) {
             this.app.playerTurn = !this.app.playerTurn;
             this.createNoMovesPopup();
-
-            console.log(this.app.level.animationInProgress)
-            console.log(this.app.playerTurn)
         }
         else {
-            // this.parent.removeChild(this.popup);
             this.app.playerTurn = !this.app.playerTurn;
-
             setTimeout(() => {
                 this.newRound();
             }, 1);
-
             TweenMax.delayedCall(3 + this.nextRoundDelay, () => {
                 this.proceedToNextRound();
             })
@@ -548,7 +504,6 @@ export default class Grid extends PIXI.Container {
     }
 
     goalAttempt() {
-
         //repeat this for all goal attempts !!!!!!!
         let tweenTarget = this.app.level.goalAttempts[0];
         let attackColor = tweenTarget.color;
@@ -682,9 +637,43 @@ export default class Grid extends PIXI.Container {
             this.popup = new NewRoundPopup(this.app, this.app.level.currentRound > this.config.roundsInMatch);
             this.parent.addChild(this.popup);
         } else {
-            // this.app.playerTurn = !this.app.playerTurn;
             this.app.level.animationInProgress = !this.app.playerTurn;
         }
+
+        if (this.app.playerTurn) {
+            this.addHint();
+        }
+    }
+
+    addHint() {
+        this.hintTimeout = TweenMax.delayedCall(5, () => {
+            this.hintInterval = setInterval(() => {
+                let target1 = this.blocks[this.hintMatch.row][this.hintMatch.col];
+                let target2;
+                if (this.hintMatch.dir === "right") {
+                    target2 = this.blocks[this.hintMatch.row][this.hintMatch.col + 1];
+                } else {
+                    target2 = this.blocks[this.hintMatch.row + 1][this.hintMatch.col];
+                }
+                let width1 = target1.width * 1.1;
+                let height1 = target1.height * 1.1;
+                let width2 = target2.width * 1.1;
+                let height2 = target2.height * 1.1;
+
+                TweenMax.to(target1.blockImg, 0.5, {
+                    width: width1,
+                    height: height1,
+                    yoyo: true,
+                    repeat: 1
+                });
+                TweenMax.to(target2.blockImg, 0.5, {
+                    width: width2,
+                    height: height2,
+                    yoyo: true,
+                    repeat: 1
+                });
+            }, 1000);
+        })
     }
 
     reShufleGrid() {

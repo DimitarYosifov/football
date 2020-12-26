@@ -45,7 +45,6 @@ export function clubSelection(app) {
             for (let clubIdx = 0; clubIdx < clubs.length; clubIdx++) {
                 showClub(clubs[clubIdx], positions[clubIdx]);
             }
-            console.log(clubs[0].clubData);
         }, error: (err) => {
             console.log(err);
         }

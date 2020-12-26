@@ -62,10 +62,7 @@ export default class Card extends PIXI.Container {
 
     createCard() {
 
-        // this = new PIXI();
         this.index = this.index;
-
-        //stats            
         this.stats = this.stats;
 
         //card background
@@ -155,12 +152,6 @@ export default class Card extends PIXI.Container {
         this.addChild(this.yellowCard);
         this.addChild(this.injury);
         this.addChild(this.border);
-
-
-        //        TweenMax.delayedCall(1, () => {
-        //            TweenMax.to(this, 0.5, {alpha: 1});
-        //        })
-        //        console.log(this);
     }
 
     increasePoints(matches) {
@@ -172,8 +163,6 @@ export default class Card extends PIXI.Container {
 
         let initialScaleX = this.cardImg.scale.x;
         let initialScaley = this.cardImg.scale.y;
-        // let activateDefense = false;
-        // let activateAttack = false;
 
         if (def_points > 0 && !this.hasRedCard) {
             if (this.hasInjury) {
@@ -181,15 +170,12 @@ export default class Card extends PIXI.Container {
             }
             this.stats.defense_current += def_points;
             if (this.stats.defense_current >= this.stats.defense_full) {
-                this.stats.defense_current = this.stats.defense_full;
-                // activateDefense = true;
                 TweenMax.to(this.cardImg, .15, {
                     delay: .7,
                     onComplete: () => {
-                        // alert("defense activated")
                         this.cardImg.tint = 16777215;
-                        this.defenseValuesText.text = `0/${this.stats.defense_full}`;
-                        this.stats.defense_current = 0;
+                        this.stats.defense_current -= this.stats.defense_full;
+                        this.defenseValuesText.text = `${this.stats.defense_current}/${this.stats.defense_full}`;
                     }
 
                 });
@@ -242,8 +228,6 @@ export default class Card extends PIXI.Container {
             }
             this.stats.attack_current += atk_points;
             if (this.stats.attack_current >= this.stats.attack_full) {
-                this.stats.attack_current = this.stats.attack_full;
-                // activateAttack = true;
                 TweenMax.to(this.cardImg.scale, .15, {
                     x: initialScaleX * 1.05,
                     y: initialScaley * 1.05,
@@ -253,10 +237,9 @@ export default class Card extends PIXI.Container {
                 TweenMax.to(this.cardImg, .15, {
                     delay: .7,
                     onComplete: () => {
-                        // alert("attack activated")
                         this.cardImg.tint = 16777215;
-                        this.attackValuesText.text = `0/${this.stats.attack_full}`;
-                        this.stats.attack_current = 0;
+                        this.stats.attack_current -= this.stats.attack_full;
+                        this.attackValuesText.text = `${this.stats.attack_current}/${this.stats.attack_full}`;
                     }
                 });
                 this.cardImg.tint = "0x" + this.stats.attack_color;
