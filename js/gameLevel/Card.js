@@ -65,6 +65,14 @@ export default class Card extends PIXI.Container {
         this.index = this.index;
         this.stats = this.stats;
 
+        if (this.config.randomCardColors) {
+            const colors = Object.keys(this.colors);
+            const atk_index = Math.floor(Math.random() * colors.length);
+            const def_index = Math.floor(Math.random() * colors.length);
+            this.stats.attack_color = colors[atk_index];
+            this.stats.defense_color = colors[def_index];
+        }
+
         //card background
         let cardTexture = this.app.loader.resources.players.textures[this.cardTexture];
         this.cardImg = new PIXI.Sprite(cardTexture);
