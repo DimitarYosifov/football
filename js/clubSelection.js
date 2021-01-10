@@ -89,6 +89,7 @@ export function clubSelection(app) {
         container.addChild(name);
 
         const logoTexture = app.loader.resources.logos.textures[`${club.clubData.logo}`];
+        app.stage.alpha = 1;
         let logo = new PIXI.Sprite(logoTexture);
         logo.x = name.x;
         logo.y = name.y - name.height / 2;

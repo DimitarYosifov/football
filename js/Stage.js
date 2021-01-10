@@ -114,11 +114,18 @@ export default class Stage {
         }
         this.loader.onComplete.add(handleLoadComplete);
 
-        this.loader.on("progress", loadProgressHandler);
-        this.loader.load(this.setup);
-        window.onresize = resolutiion;
+        //TEST loading!!
+        // this.xx = 0;
+        // this.interval = setInterval(() => {
+        //     this.xx += 5
+        //     this.loadingView.updateProgress(this.xx);
+        //     if (this.xx >= 100) {
+        //         clearInterval(this.interval );
+        //     }
+        // }, 100);
 
-        function loadProgressHandler(loader, resource) {
+        let loadProgressHandler = (loader, resource) => {
+            this.loadingView.updateProgress(Math.ceil(loader.progress));
 
             //Display the file `url` currently being loaded
             console.log("loading: " + resource.url);
@@ -130,5 +137,9 @@ export default class Stage {
             //of the `add` method, you can access them like this
             //console.log("loading: " + resource.name);
         }
+
+        this.loader.on("progress", loadProgressHandler);
+        this.loader.load(this.setup);
+        window.onresize = resolutiion;
     }
 }

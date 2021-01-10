@@ -74,9 +74,9 @@ body {
     font-size: 3em;
     border: none;
     right: 0%;
-    bottom: -50%;
+    /* bottom: -50%; */
     font-weight: bold;
-    position: absolute;
+    /* position: absolute; */
 }
 
 #login {
@@ -84,10 +84,10 @@ body {
     font-size: 1em;
     border: none;
     right: 0%;
-    bottom: -70%;
+    /* bottom: -70%; */
     background: transparent;
     font-weight: bold;
-    position: absolute;
+    /* position: absolute; */
     color: white;
 }
 
@@ -99,7 +99,7 @@ body {
     bottom: -95%;
     background: transparent;
     font-weight: bold;
-    position: absolute;
+    /* position: absolute; */
     color: white;
 }
 
@@ -115,7 +115,16 @@ body {
 }
 
 #wrapper {
-    box-sizing: border-box;
+    box-sizing: border-box;    display: block;
+    position: relative;
+    top: 30%;
+    /* left: 50%; */
+    /* transform: translate(-50%, -55%); */
+    width: 288px;
+    height: 128px;
+    opacity: 1;
+    pointer-events: none;
+    margin: 0 auto;
 }
 
 /* #proton_canvas {

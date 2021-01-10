@@ -5,14 +5,17 @@ import LogIn from "./LogIn.js";
 import config from "./Config.js";
 import { createNewClub, getClubData } from "./newClub.js";
 import { clubSelection } from "./clubSelection.js";
-// import ClubData from "./newClub.js";
+import LoadingView from "./LoadingView.js";
 
 export default class App extends Stage {
 
     constructor() {
-
         super();
-
+        this.loadingView = new LoadingView(this.width, this.height);
+        this.stage.addChild(this.loadingView.loadingBar);
+        this.stage.addChild(this.loadingView.loadingBarFull);
+        this.stage.addChild(this.loadingView.progress);
+        this.stage.addChild(this.loadingView.loadingText);
         window.onload = () => {
             this.windowLoaded = true;
             if (config.addTeam) {
@@ -25,10 +28,10 @@ export default class App extends Stage {
     }
 
     loadComplete() {
+        this.stage.removeChildren();
         this.config = config;
         this.storageData = localStorage.getItem('match3football');
         if (!config.hasLogin) {                   // REMOVES LOGIN PHASE..FOR TESTS ONLY
-            // this.startLevel();
             clubSelection(this);
         } else {
             if (this.storageData) {
@@ -47,26 +50,8 @@ export default class App extends Stage {
 
     startLevel() {
         // this.proton = new ProtonEffects(this);
-        // Promise.all(
-        //     [
-        //         new Promise((resolve, reject) => {
-        //             resolve(getClubData("Levski"))
-        //         }),
-        //         new Promise((resolve, reject) => {
-        //             resolve(getClubData("Ludogorets"))
-        //         })
-        //     ]
-        // ).then((x) => {
-        //     this.playerClubData = x[0];
-        //     this.opponentClubData = x[1];
-        //     this.level = new Level(this, this.config.isPlayerHome);
-        //     this.stage.addChild(this.level);
-        // });
-
-        // this.playerClubData = x[0];
-        //     this.opponentClubData = x[1];
-            this.level = new Level(this, this.config.isPlayerHome);
-            this.stage.addChild(this.level);
+        this.level = new Level(this, this.config.isPlayerHome);
+        this.stage.addChild(this.level);
     }
 
     getLevel() {
@@ -83,8 +68,7 @@ export default class App extends Stage {
                 if (!res.authorized) {
                     this.login = new LogIn(this);
                 } else {
-
-                    this.startLevel();
+                    clubSelection(this);
                 }
             }
         });

@@ -1,4 +1,5 @@
-"use strict";
+import { clubSelection } from "./clubSelection.js";
+
 export default class LogIn {
 
     constructor(app) {
@@ -36,9 +37,11 @@ export default class LogIn {
         }));
 
         this.login = document.querySelector("#login");
+        this.login.style.pointerEvents = "auto";
         this.login.addEventListener("click", this.loginPressed);
 
         this.register = document.querySelector("#register");
+        this.register.style.pointerEvents = "auto";
         this.register.addEventListener("click", this.registerPressed);
 
         this.go.style.display = "block";
@@ -110,7 +113,7 @@ export default class LogIn {
                     TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
                         alpha: 0, onComplete: () => {
                             this.stage.removeChildren();
-                            this.app.startLevel();
+                            clubSelection(this.app);
                             TweenMax.killAll();
                             this.wrapper.remove();
                             this.wrapper.style.display = "none"
