@@ -5,7 +5,7 @@ export default class LineUps {
 
         this.onPlayerCardsData = onPlayerCardsData;
         this.clubName2 = clubName2;
-        this.testClub1 = [
+        this.Levski = [
             {
                 defense_current: 0,
                 defense_color: "FF1D00",

@@ -9,7 +9,7 @@ export default class LevelCardsSet extends PIXI.Container {
         this.stageWidth = width;
         this.stageHeight = height;
         this.dataRecieved = dataRecieved;
-        this.lineUps = new LineUps("testClub1", "testClub2", this.onPlayerCardsData);
+        this.lineUps = new LineUps("Levski", "Barcelona", this.onPlayerCardsData);
         this.interactive = false;
     }
 

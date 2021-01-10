@@ -195,8 +195,8 @@ app.post('/addClub', async (req, res) => {
 //         });
 //     });
 // });
-app.use('/:test', (req, res) => {
-    if (req.params.test === 'getClubsPlayers') {
+app.use('/getClubsPlayers', (req, res) => {
+    // if (req.params.test === 'getClubsPlayers') {
         let name = req.body.name;
         firebase.database().ref("/clubs/").orderByChild("name").equalTo(name).once('value').then(function (snapshot) {
             res.status(200);
@@ -204,7 +204,7 @@ app.use('/:test', (req, res) => {
                 clubData: Object.values(snapshot.val())[0]
             });
         });
-    }
+    // }
 
 });
 
