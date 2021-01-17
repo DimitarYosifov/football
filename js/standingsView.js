@@ -104,7 +104,7 @@ export function standingsView() {
 
     teams.forEach((club, i) => {
         let row = new PIXI.Container;
-        let y = standingsContainer.height//0 + this.height / 20 * i + 1;
+        let y = standingsContainer.height;
         row.addChild(createText(i + 1, this.width * 0.02, y)); //this is position of the club 
         Object.keys(club).forEach((prop, index) => {
             let isName = prop === "name";

@@ -11,9 +11,9 @@ export default class NoMovesPopup extends PIXI.Container {
         this.text = new PIXI.Text('No Moves', {
             fontFamily: this.app.config.mainFont,
             fontSize: this.app.height / 8,
-            fill: '#df2525',
+            fill: '#000000',
             align: 'center',
-            stroke: '#dbb7b7',
+            stroke: '#ffffff',
             strokeThickness: 7
         });
         this.text.position.set(this.app.width / 2, this.app.height / 2);

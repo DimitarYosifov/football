@@ -55,9 +55,9 @@ export function clubSelection(app) {
         selectClub = new PIXI.Text(text, {
             fontFamily: app.config.mainFont,
             fontSize: app.height / 13,
-            fill: '#ffffff',
+            fill: '#000000',
             align: 'center',
-            stroke: '#dbb7b7',
+            stroke: '#ffffff',
             fontWeight: 800,
             lineJoin: "bevel",
             strokeThickness: 6

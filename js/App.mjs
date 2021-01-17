@@ -6,6 +6,7 @@ import config from "./Config.js";
 import { createNewClub, getClubData } from "./newClub.js";
 import { clubSelection } from "./clubSelection.js";
 import { standingsView } from "./standingsView.js";
+import { generateResult } from "./generateResult.js";
 import LoadingView from "./LoadingView.js";
 
 export default class App extends Stage {
@@ -39,6 +40,7 @@ export default class App extends Stage {
                 this.checkUserData();
             } else {
                 // let standings = standingsView.bind(this)();
+                generateResult(4, 3);
                 this.login = new LogIn(this);
             }
         }
