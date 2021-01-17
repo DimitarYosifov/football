@@ -40,7 +40,7 @@ export default class App extends Stage {
                 this.checkUserData();
             } else {
                 // let standings = standingsView.bind(this)();
-                generateResult(4, 3);
+                // generateResult(3, 3);
                 this.login = new LogIn(this);
             }
         }
