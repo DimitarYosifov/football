@@ -115,7 +115,8 @@ body {
 }
 
 #wrapper {
-    box-sizing: border-box;    display: block;
+    box-sizing: border-box;   
+    display: block;
     position: relative;
     top: 30%;
     /* left: 50%; */
@@ -125,17 +126,11 @@ body {
     opacity: 1;
     pointer-events: none;
     margin: 0 auto;
+    z-index: 5555;
 }
 
-/* #proton_canvas {
+/* #proton_canvas { 
     position: absolute;
     top: 0px
 } */
 
-
-
-/* @media screen and (orientation:landscape) {
-    body{
-        background: red; test
-    }
-}  */

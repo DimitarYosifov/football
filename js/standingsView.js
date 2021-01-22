@@ -64,8 +64,8 @@ export function standingsView() {
             lost: 13,
             goalsFor: 63,
             goalsAgainst: 13,
-            goalsDifference: "+53",
-            points: 100
+            goalsDifference: "+73",
+            points: 50
         },
         {
             name: "Levski",
@@ -75,7 +75,7 @@ export function standingsView() {
             goalsFor: 63,
             goalsAgainst: 13,
             goalsDifference: "+53",
-            points: 100
+            points: 50
         },
         {
             name: "Dunav",
@@ -84,10 +84,31 @@ export function standingsView() {
             lost: 13,
             goalsFor: 63,
             goalsAgainst: 13,
-            goalsDifference: "+53",
-            points: 100
+            goalsDifference: "+63",
+            points: 133
         }
     ]
+
+    const comparingFunction = (club1, club2) => {
+        if (club1.points < club2.points) {
+            return 1;
+        }
+        if (club1.points > club2.points) {
+            return -1;
+        }
+
+        if (club1.points == club2.points) {
+            if (club1.goalsDifference < club2.goalsDifference) {
+                return 1;
+            }
+            if (club1.goalsDifference > club2.goalsDifference) {
+                return -1;
+            }
+            return 0;
+        }
+    };
+
+    teams.sort(comparingFunction);
 
     let createHeaders = () => {
         let row = new PIXI.Container;

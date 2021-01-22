@@ -41,6 +41,10 @@ export default class Stage {
 
             ////THIS DOESNT WORK ON FULL SCREEN TODO-FIX IT
             document.getElementById("rotate").style.display = this.landscape ? "flex" : "none";
+            let loginWrapper = document.getElementById("wrapper");
+            if (loginWrapper) {
+                loginWrapper.style.display = this.landscape ? "none" : "block";
+            }
             ///////////////////////////////////////////////
 
             if (this.landscape) {
@@ -74,6 +78,8 @@ export default class Stage {
                 this.isAppStarted = true;
                 this.checkLoaded();
             }
+            this.stage.scale.x = 1;
+            this.stage.scale.y = 1;
         }
 
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height, {

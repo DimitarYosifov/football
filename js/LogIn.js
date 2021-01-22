@@ -5,6 +5,7 @@ export default class LogIn {
     constructor(app) {
 
         this.stage = app.stage;
+        this.stage.visible = false;
         this.stage.alpha = 0;
         this.app = app;
         this.config = this.app.config;
@@ -116,7 +117,8 @@ export default class LogIn {
                             clubSelection(this.app);
                             TweenMax.killAll();
                             this.wrapper.remove();
-                            this.wrapper.style.display = "none"
+                            this.wrapper.style.display = "none";
+                            this.stage.visible = true;
                         }
                     });
                 } else if (!res.authorized) {
