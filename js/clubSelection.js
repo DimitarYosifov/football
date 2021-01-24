@@ -1,5 +1,6 @@
+import { standingsView } from "./standingsView.js";
 
-export function clubSelection(app) {
+export function clubSelection(app, mode) {
     let clubs = [];
     let isPlayerTurn = true;
     let selectClub;
@@ -40,10 +41,10 @@ export function clubSelection(app) {
         type: 'POST',
         contentType: 'application/json',
         success: (res) => {
-            clubs = res.clubs;
+            app.allClubs = res.clubs;
             createText(true);
-            for (let clubIdx = 0; clubIdx < clubs.length; clubIdx++) {
-                showClub(clubs[clubIdx], positions[clubIdx]);
+            for (let clubIdx = 0; clubIdx < app.allClubs.length; clubIdx++) {
+                showClub(app.allClubs[clubIdx], positions[clubIdx]);
             }
         }, error: (err) => {
             console.log(err);
@@ -102,7 +103,15 @@ export function clubSelection(app) {
             container.visible = false;
             isPlayerTurn ? app.playerClubData = club.clubData : app.opponentClubData = club.clubData;
             app.stage.removeChild(selectClub);
-            if (isPlayerTurn) {
+            let friendly = mode === "friendly";
+            // if (!friendly) {
+            //     //TODO 
+            //     // alert("League Selected")
+            //     app.stage.removeChildren();
+            //     standingsView.bind(app)(true);
+            // }
+            // else
+             if (isPlayerTurn) {
                 isPlayerTurn = false;
                 createText(false);
             } else {

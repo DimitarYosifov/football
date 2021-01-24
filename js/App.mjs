@@ -5,6 +5,7 @@ import LogIn from "./LogIn.js";
 import config from "./Config.js";
 import { createNewClub, getClubData } from "./newClub.js";
 import { clubSelection } from "./clubSelection.js";
+import { modeSelection } from "./modeSelection.js";
 import { standingsView } from "./standingsView.js";
 import { generateResult } from "./generateResult.js";
 import LoadingView from "./LoadingView.js";
@@ -41,6 +42,8 @@ export default class App extends Stage {
             } else {
                 // let standings = standingsView.bind(this)();
                 // generateResult(3, 3);
+                // modeSelection(this);
+
                 this.login = new LogIn(this);
             }
         }
@@ -72,6 +75,8 @@ export default class App extends Stage {
                 if (!res.authorized) {
                     this.login = new LogIn(this);
                 } else {
+
+                    //TODO  CHECK IF THERE'S GAME IN PROGRESS FR THIS USER!
                     clubSelection(this);
                 }
             }

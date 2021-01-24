@@ -1,5 +1,5 @@
 
-export function standingsView() {
+export function standingsView(newLeague) {
 
     let standingsContainer = new PIXI.Container;
 
@@ -42,11 +42,11 @@ export function standingsView() {
         return separator;
     }
 
-    let createText = (_text, x, y, anchorX = 0.5) => {
+    let createText = (_text, x, y, anchorX = 0.5, isPlayerClub) => {
         let text = new PIXI.Text(_text, {
             fontFamily: this.config.mainFont,
-            fontSize: this.height / 33,
-            fill: '#dbb7b7',
+            fontSize: this.height / 50,
+            fill: isPlayerClub ? "#6ddd48" : '#dbb7b7',
             align: 'center',
             stroke: '#dbb7b7',
             strokeThickness: 0
@@ -56,38 +56,65 @@ export function standingsView() {
         return text;
     }
 
-    let teams = [
-        {
-            name: "Barcelona",
-            won: 33,
-            ties: 13,
-            lost: 13,
-            goalsFor: 63,
-            goalsAgainst: 13,
-            goalsDifference: "+73",
-            points: 50
-        },
-        {
-            name: "Levski",
-            won: 33,
-            ties: 13,
-            lost: 13,
-            goalsFor: 63,
-            goalsAgainst: 13,
-            goalsDifference: "+53",
-            points: 50
-        },
-        {
-            name: "Dunav",
-            won: 33,
-            ties: 13,
-            lost: 13,
-            goalsFor: 63,
-            goalsAgainst: 13,
-            goalsDifference: "+63",
-            points: 133
-        }
-    ]
+
+    console.log(newLeague);
+    console.log(this.stage);
+
+    this.allClubNames = this.allClubs.map(club => club.name);
+
+    let teams = [];
+
+    //testing!!!
+    // let teams = [
+    //     {
+    //         name: "Barcelona",
+    //         won: 33,
+    //         ties: 13,
+    //         lost: 13,
+    //         goalsFor: 63,
+    //         goalsAgainst: 13,
+    //         goalsDifference: "+73",
+    //         points: 50
+    //     },
+    //     {
+    //         name: "Levski",
+    //         won: 33,
+    //         ties: 13,
+    //         lost: 13,
+    //         goalsFor: 63,
+    //         goalsAgainst: 13,
+    //         goalsDifference: "+53",
+    //         points: 50
+    //     },
+    //     {
+    //         name: "Dunav",
+    //         won: 33,
+    //         ties: 13,
+    //         lost: 13,
+    //         goalsFor: 63,
+    //         goalsAgainst: 13,
+    //         goalsDifference: "+63",
+    //         points: 133
+    //     }
+    // ]
+
+    if (newLeague) {
+        this.allClubNames.forEach((club, clubIdx) => {
+            let team = {};
+            team.name = club;
+            team.won = 0;
+            team.ties = 0;
+            team.lost = 0;
+            team.goalsFor = 0;
+            team.goalsAgainst = 0;
+            team.goalsDifference = "0";
+            team.points = 0;
+            teams.push(team);
+        })
+        //TODO record this in player;s table !!!!!!!!!! + selected club by the player!!!
+    } else {
+        //TODO get standings from DB...! important !!!!!
+    }
 
     const comparingFunction = (club1, club2) => {
         if (club1.points < club2.points) {
@@ -126,11 +153,11 @@ export function standingsView() {
     teams.forEach((club, i) => {
         let row = new PIXI.Container;
         let y = standingsContainer.height;
-        row.addChild(createText(i + 1, this.width * 0.02, y)); //this is position of the club 
+        row.addChild(createText(i + 1, this.width * 0.02, y, null, club.name === this.playerClubData.name)); //this is position of the club 
         Object.keys(club).forEach((prop, index) => {
             let isName = prop === "name";
             let anchorX = isName ? 0 : 0.5;
-            row.addChild(createText(club[prop], positionsX[prop], y, anchorX));
+            row.addChild(createText(club[prop], positionsX[prop], y, anchorX, club.name === this.playerClubData.name));
         });
         standingsContainer.addChild(row);
         standingsContainer.addChild(createSeparator(
