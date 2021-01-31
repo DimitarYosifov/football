@@ -3,6 +3,8 @@ import { clubSelection } from "./clubSelection.js";
 
 export function modeSelection(app) {
 
+    app.stage.alpha = 1;
+    app.stage.visible = true;
     //BG
     let bg = new PIXI.Graphics();
     bg.beginFill(0x000000, 1);
@@ -14,7 +16,6 @@ export function modeSelection(app) {
     );
     bg.endFill();
     app.stage.addChild(bg);
-
 
     let friendly = new PIXI.Text("Friendly", {
         fontFamily: app.config.mainFont,

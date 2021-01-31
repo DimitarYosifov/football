@@ -75,9 +75,9 @@ export default class App extends Stage {
                 if (!res.authorized) {
                     this.login = new LogIn(this);
                 } else {
-
                     //TODO  CHECK IF THERE'S GAME IN PROGRESS FR THIS USER!
-                    clubSelection(this);
+                    // clubSelection(this);
+                    modeSelection(this);
                 }
             }
         });

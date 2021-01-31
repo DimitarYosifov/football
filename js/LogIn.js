@@ -1,4 +1,5 @@
 import { clubSelection } from "./clubSelection.js";
+import { modeSelection } from "./modeSelection.js";
 
 export default class LogIn {
 
@@ -114,7 +115,11 @@ export default class LogIn {
                     TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
                         alpha: 0, onComplete: () => {
                             this.stage.removeChildren();
-                            clubSelection(this.app);
+
+                            //TODO  CHECK IF THERE'S GAME IN PROGRESS FR THIS USER!
+                            // clubSelection(this);
+                            modeSelection(this.app);
+
                             TweenMax.killAll();
                             this.wrapper.remove();
                             this.wrapper.style.display = "none";

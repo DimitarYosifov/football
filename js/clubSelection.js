@@ -104,13 +104,12 @@ export function clubSelection(app, mode) {
             isPlayerTurn ? app.playerClubData = club.clubData : app.opponentClubData = club.clubData;
             app.stage.removeChild(selectClub);
             let friendly = mode === "friendly";
-            // if (!friendly) {
-            //     //TODO 
-            //     // alert("League Selected")
-            //     app.stage.removeChildren();
-            //     standingsView.bind(app)(true);
-            // }
-            // else
+            if (!friendly) {
+                //TODO 
+                app.stage.removeChildren();
+                standingsView.bind(app)(true);
+            }
+            else
              if (isPlayerTurn) {
                 isPlayerTurn = false;
                 createText(false);

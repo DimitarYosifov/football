@@ -1,3 +1,4 @@
+import SeasonFixtures from "./SeasonFixtures.js";
 
 export function standingsView(newLeague) {
 
@@ -112,9 +113,12 @@ export function standingsView(newLeague) {
             teams.push(team);
         })
         //TODO record this in player;s table !!!!!!!!!! + selected club by the player!!!
+        //TODO display results before game
+        this.seasonFixtures = new SeasonFixtures(this.allClubNames);
     } else {
         //TODO get standings from DB...! important !!!!!
     }
+
 
     const comparingFunction = (club1, club2) => {
         if (club1.points < club2.points) {
