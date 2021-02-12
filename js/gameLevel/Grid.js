@@ -93,7 +93,9 @@ export default class Grid extends PIXI.Container {
                 let matches = this.checkGridForMatches();
 
                 if (matches.length !== 0) {
-                    this.hintTimeout.kill()
+                    if (this.hintTimeout) {
+                        this.hintTimeout.kill();
+                    }
                     clearInterval(this.hintInterval);
                     for (let m = 0; m < matches.length; m++) {
                         if (matches[m].row === item2.row && matches[m].col === item2.col) {

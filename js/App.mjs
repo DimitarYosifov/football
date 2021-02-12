@@ -35,15 +35,12 @@ export default class App extends Stage {
         this.config = config;
         this.storageData = localStorage.getItem('match3football');
         if (!config.hasLogin) {                   // REMOVES LOGIN PHASE..FOR TESTS ONLY
-            clubSelection(this);
+            modeSelection(this);
         } else {
             if (this.storageData) {
                 this.checkUserData();
             } else {
-                // let standings = standingsView.bind(this)();
-                // generateResult(3, 3);
                 // modeSelection(this);
-
                 this.login = new LogIn(this);
             }
         }
@@ -57,7 +54,7 @@ export default class App extends Stage {
 
     startLevel() {
         // this.proton = new ProtonEffects(this);
-        this.level = new Level(this, this.config.isPlayerHome);
+        this.level = new Level(this);
         this.stage.addChild(this.level);
     }
 

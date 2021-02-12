@@ -6,6 +6,7 @@ export function generateResult(power1, power2) {
 
     const areClubsEqual = power1 === power2;
     const isFirstClubStronger = power1 > power2;
+    const isSecondClubStronger = power2 > power1;
     let powerDifference = Math.abs(power1 - power2);
     let winChanceConfig = config.winChance[powerDifference];
 
@@ -39,18 +40,19 @@ export function generateResult(power1, power2) {
                         break;
                     }
                 }
+                return;
             });
         }
     }
 
-    if (result === "lose") {
+    if ((result === "lose" && !isSecondClubStronger) || (isSecondClubStronger && result === "win")) {
         exactResult = exactResult.split("").reverse().join("");
     }
 
     let a = 0
     Object.keys(exactResultConfig.exactWin[5]).forEach((element, index) => {
-        a += exactResultConfig.exactWin[5][element]
+        a += exactResultConfig.exactWin[5][element];
     });
     console.log(exactResult);
-    console.log(a);
+    return exactResult;
 }

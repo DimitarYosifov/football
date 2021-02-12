@@ -11,13 +11,8 @@ export default class MatchStartPopup extends PIXI.Container {
     }
 
     create() {
-
-        this.container1 = new PIXI.Container;
-        this.container1.alpha = 0;
-        this.addChild(this.container1);
-
         TweenMax.delayedCall(1, () => {
-            this.showPlayerLogo();
+            this.app.isPlayerHome ? this.showPlayerLogo() : this.showOpponentLogo();
         })
     }
 
@@ -55,11 +50,15 @@ export default class MatchStartPopup extends PIXI.Container {
                 y: this.app.height / 2,
                 x: this.app.width / 2,
                 onComplete: () => {
-                    this.parent.removeChild(this);
-                    this.app.level.onIntroFinish();
+                    this.removeChildren();
+                    if (this.app.isPlayerHome) {
+                        this.parent.removeChild(this);
+                        this.app.level.onIntroFinish();
+                    } else {
+                        this.showPlayerLogo();
+                    }
                 }
             });
-
         })
     }
 
@@ -98,14 +97,23 @@ export default class MatchStartPopup extends PIXI.Container {
                 x: this.app.width / 2,
                 onComplete: () => {
                     this.removeChildren();
-                    this.showOpponentLogo();
+                    if (this.app.isPlayerHome) {
+                        this.showOpponentLogo();
+                    } else {
+                        this.parent.removeChild(this);
+                        this.app.level.onIntroFinish();
+                    }
                 }
             });
-
         })
     }
 
     showPlayerLogo() {
+
+        this.container1 = new PIXI.Container;
+        this.container1.alpha = 0;
+        this.addChild(this.container1);
+
         //PLAYER CLUB LOGO
         const playerLogoTexture = this.app.loader.resources.logos.textures[`${this.app.playerClubData.logo}`];
         this.playerClubLogo = new PIXI.Sprite(playerLogoTexture);

@@ -109,13 +109,15 @@ export function clubSelection(app, mode) {
                 app.stage.removeChildren();
                 standingsView.bind(app)(true);
             }
-            else
-             if (isPlayerTurn) {
-                isPlayerTurn = false;
-                createText(false);
-            } else {
-                app.stage.removeChildren();
-                app.startLevel();
+            else {
+                if (isPlayerTurn) {
+                    isPlayerTurn = false;
+                    createText(false);
+                } else {
+                    app.stage.removeChildren();
+                    app.isPlayerHome = true;
+                    app.startLevel();
+                }
             }
         })
 
