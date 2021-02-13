@@ -97,11 +97,7 @@ export default class LogIn {
         $.ajax({
             url: this.action, //login or register
             type: 'POST',
-            //            mode: 'cors',
             contentType: 'application/json',
-            //            Accept: 'application/json',
-            //            Origin: "http://localhost:3000",
-            //            "Access-Control-Allow-Origin": "*",
             data: JSON.stringify({ user: this.username.value, pass: this.password.value }),
             success: (res) => {
                 if (res.nameInUse) {
@@ -110,16 +106,14 @@ export default class LogIn {
                     return;
                 }
                 if (res.authorized) {
+                    this.app.user = this.username.value;
                     localStorage.setItem("match3football", res.storageItem);
+                    localStorage.setItem("user", this.app.user);
                     TweenMax.to(this.wrapper, this.config.fadeTimeBetweenPhases, { opacity: 0 });
                     TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
                         alpha: 0, onComplete: () => {
                             this.stage.removeChildren();
-
-                            //TODO  CHECK IF THERE'S GAME IN PROGRESS FR THIS USER!
-                            // clubSelection(this);
-                            modeSelection(this.app);
-
+                            this.app.checkGameInProgress();
                             TweenMax.killAll();
                             this.wrapper.remove();
                             this.wrapper.style.display = "none";

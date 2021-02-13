@@ -118,6 +118,53 @@ app.post('/register', async (req, res) => {
     };
 });
 
+app.post('/fixtures', async (req, res) => {
+    let seasonFixtures = req.body.seasonFixtures;
+    let user = req.body.user;
+    let playerClubData = req.body.playerClubData;
+    let currentRound = req.body.currentRound;
+    let teams = req.body.teams;
+    res.set('Content-Type', 'application/json');
+    firebase.database().ref('/users/' + user + `/fixtures`).set({
+        seasonFixtures: {
+            seasonFixtures: seasonFixtures,
+            currentRound: currentRound,
+            playerClubData: playerClubData,
+            teams: teams
+        }
+    }, function (error) {
+        if (error) {
+            res.status(200);
+            res.json({
+                ok: false
+            });
+        } else {
+            res.status(200);
+            res.json({
+                ok: true
+            });
+        }
+    });
+
+});
+
+app.post('/getFixtures', async (req, res) => {
+    let user = req.body.user;
+    firebase.database().ref("/users/" + user + "/fixtures").once('value').then(function (snapshot) {
+        res.set('Content-Type', 'application/json');
+        res.status(200);
+        try {
+            res.json({
+                data: Object.values(snapshot.val())[0]
+            });
+        } catch {
+            res.json({
+                data: null
+            });
+        }
+    });
+});
+
 app.post('/storageData', async (req, res) => {
     let data = req.body.data;
     firebase.database().ref("/users/").orderByChild("password").equalTo(data).once('value').then(function (snapshot) {

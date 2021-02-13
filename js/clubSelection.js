@@ -107,7 +107,7 @@ export function clubSelection(app, mode) {
             if (!friendly) {
                 //TODO 
                 app.stage.removeChildren();
-                standingsView.bind(app)(true);
+                standingsView.bind(app)();
             }
             else {
                 if (isPlayerTurn) {

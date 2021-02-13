@@ -34,13 +34,12 @@ export default class App extends Stage {
         this.stage.removeChildren();
         this.config = config;
         this.storageData = localStorage.getItem('match3football');
-        if (!config.hasLogin) {                   // REMOVES LOGIN PHASE..FOR TESTS ONLY
-            modeSelection(this);
+        if (!config.hasLogin) {
+            this.checkGameInProgress();                // REMOVES LOGIN PHASE..FOR TESTS ONLY
         } else {
             if (this.storageData) {
                 this.checkUserData();
             } else {
-                // modeSelection(this);
                 this.login = new LogIn(this);
             }
         }
@@ -72,8 +71,23 @@ export default class App extends Stage {
                 if (!res.authorized) {
                     this.login = new LogIn(this);
                 } else {
-                    //TODO  CHECK IF THERE'S GAME IN PROGRESS FR THIS USER!
-                    // clubSelection(this);
+                    this.user = localStorage.getItem('user');
+                    this.checkGameInProgress();
+                }
+            }
+        });
+    }
+
+    checkGameInProgress() {
+        $.ajax({
+            url: "getFixtures",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ user: this.user }),
+            success: (res) => {
+                if (res.data) {
+                    standingsView.bind(this)(res.data);
+                } else {
                     modeSelection(this);
                 }
             }

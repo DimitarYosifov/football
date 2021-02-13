@@ -1,3 +1,5 @@
+import { standingsView } from "./../standingsView.js";
+
 export default class NewRoundPopup extends PIXI.Container {
 
     constructor(app, matchFinished) {
@@ -170,7 +172,9 @@ export default class NewRoundPopup extends PIXI.Container {
             this.continueBtn.interactive = true;
             this.continueBtn.interactive = true;
             this.continueBtn.on('pointerdown', () => {
-                location.reload();
+                this.app.stage.removeChildren();
+                standingsView.bind(this.app)();
+                // location.reload();
                 // TODO...lead to somehwere else...
             });
 

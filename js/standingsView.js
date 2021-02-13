@@ -1,9 +1,47 @@
 import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
 
-export function standingsView(newLeague, round) {
-    let currentRound = round || 1;
-    let teams = []; // TODO !!!!!!!!  take clubs from DB here!!!!!!!!
+export function standingsView(data) {
+
+    let getClubData = () => {
+        $.ajax({
+            url: "getAllClubsData",
+            type: 'POST',
+            contentType: 'application/json',
+            success: (res) => {
+                this.allClubs = res.clubs;
+                this.allClubNames = this.allClubs.map(club => club.name);
+                if (!this.seasonFixtures) {
+                    this.teams = [];
+                    this.allClubNames.forEach((club, clubIdx) => {
+                        let team = {};
+                        team.name = club;
+                        team.won = 0;
+                        team.ties = 0;
+                        team.lost = 0;
+                        team.goalsFor = 0;
+                        team.goalsAgainst = 0;
+                        team.goalsDifference = "0";
+                        team.points = 0;
+                        this.teams.push(team);
+                    })
+                    this.currentRound = 1;
+                    this.seasonFixtures = new SeasonFixtures(this.allClubNames).seasonFixtures;
+                }
+                createFixtures();
+            }, error: (err) => {
+                console.log(err);
+            }
+        });
+    }
+
+    if (data) {
+        this.seasonFixtures = data.seasonFixtures;
+        this.playerClubData = data.playerClubData;
+        this.currentRound = data.currentRound;
+        this.teams = data.teams;
+    }
+    getClubData();
 
     let createText = (_text, x, y, anchorX = 0.5, isPlayerClub) => {
         let text = new PIXI.Text(_text, {
@@ -60,12 +98,6 @@ export function standingsView(newLeague, round) {
             return separator;
         }
 
-        console.log(newLeague);
-        console.log(this.stage);
-
-
-
-
         //testing!!!
         // let teams = [
         //     {
@@ -119,7 +151,7 @@ export function standingsView(newLeague, round) {
             }
         };
 
-        teams.sort(comparingFunction);
+        this.teams.sort(comparingFunction);
 
         let createHeaders = () => {
             let row = new PIXI.Container;
@@ -134,7 +166,7 @@ export function standingsView(newLeague, round) {
         }
         createHeaders();
 
-        teams.forEach((club, i) => {
+        this.teams.forEach((club, i) => {
             let row = new PIXI.Container;
             let y = standingsContainer.height;
             row.addChild(createText(i + 1, this.width * 0.02, y, null, club.name === this.playerClubData.name)); //this is position of the club 
@@ -167,28 +199,26 @@ export function standingsView(newLeague, round) {
         this.stage.addChild(standingsContainer);
     }
 
+    let recordFixtures = (currentRound) => {
+        console.log(this);
+        $.ajax({
+            url: "fixtures",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                seasonFixtures: this.seasonFixtures,
+                user: this.user,
+                currentRound: currentRound,
+                playerClubData: this.playerClubData,
+                teams: this.teams
+            }),
+            success: (res) => {
+                console.log(res);
+            }
+        });
+    }
+
     let createFixtures = () => {
-        this.allClubNames = this.allClubs.map(club => club.name);
-        if (newLeague) {
-            this.allClubNames.forEach((club, clubIdx) => {
-                let team = {};
-                team.name = club;
-                team.won = 0;
-                team.ties = 0;
-                team.lost = 0;
-                team.goalsFor = 0;
-                team.goalsAgainst = 0;
-                team.goalsDifference = "0";
-                team.points = 0;
-                teams.push(team);
-            })
-            //TODO record this in player;s table !!!!!!!!!! + selected club by the player!!!
-            //TODO display results before game
-            this.seasonFixtures = new SeasonFixtures(this.allClubNames).seasonFixtures;
-            console.log(this.seasonFixtures);
-        } else {
-            //TODO get standings from DB...! important !!!!!
-        }
 
         let addLogo = (clubName, x, y, height, anchorX, anchorY) => {
             let logo = this.allClubs.filter(club => club.name === clubName)[0].clubData.logo;
@@ -205,9 +235,10 @@ export function standingsView(newLeague, round) {
         let displayFixtures = () => {
             let fixturesContainer = new PIXI.Container;
             let playerClub = this.playerClubData.name;
-            this.seasonFixtures[currentRound].forEach((game, i) => {
-                let firstClub = game.split(":")[0];
-                let secondClub = game.split(":")[1];
+            this.seasonFixtures[this.currentRound].forEach((game, i) => {
+                let splitGame = game.split(' ')[0];
+                let firstClub = splitGame.split(":")[0];
+                let secondClub = splitGame.split(":")[1];
 
                 if (firstClub === playerClub) {
                     this.opponentClubData = this.allClubs.find(c => c.name === secondClub).clubData;
@@ -233,9 +264,11 @@ export function standingsView(newLeague, round) {
                 let logo2 = addLogo(secondClub, text.x + text.width / 2, text.y, text.height, 0, 0)
                 row.addChild(logo2);
 
+                let generateResult = !text.text.split(" ")[1];
+
                 if (firstClub !== playerClub && secondClub !== playerClub) {
                     let textResult = createText(
-                        randomResult(firstClub, secondClub, i),
+                        generateResult ? randomResult(firstClub, secondClub, i) : "",
                         text.x + text.width / 2 + logo2.width * 2,
                         y,
                         0,
@@ -248,7 +281,7 @@ export function standingsView(newLeague, round) {
                 fixturesContainer.addChild(row);
             })
 
-            // TODO !!!!!! here record this in the DB !!!!!!!!!!!!!!!!!!
+            recordFixtures(this.currentRound);
 
             fixturesContainer.y = this.height / 4 - fixturesContainer.height / 2;
             this.stage.addChild(fixturesContainer);
@@ -297,9 +330,9 @@ export function standingsView(newLeague, round) {
                 this.allClubs.find(club => club.name === secondClub).clubData.power
             );
 
-            this.seasonFixtures[currentRound][i] += ` ${result}`;
+            this.seasonFixtures[this.currentRound][i] += ` ${result}`;
 
-            let first = teams.find(t => t.name === firstClub);
+            let first = this.teams.find(t => t.name === firstClub);
             first.won += +result.split(':')[0] > +result.split(':')[1] ? 1 : 0;
             first.ties += +result.split(':')[0] === +result.split(':')[1] ? 1 : 0;
             first.lost += +result.split(':')[0] < +result.split(':')[1] ? 1 : 0;
@@ -308,7 +341,7 @@ export function standingsView(newLeague, round) {
             first.goalsDifference = first.goalsFor - first.goalsAgainst;
             first.points = first.won * 3 + first.ties;
 
-            let second = teams.find(t => t.name === secondClub);
+            let second = this.teams.find(t => t.name === secondClub);
             second.won += +result.split(':')[0] < +result.split(':')[1] ? 1 : 0;
             second.ties += +result.split(':')[0] === +result.split(':')[1] ? 1 : 0;
             second.lost += +result.split(':')[0] > +result.split(':')[1] ? 1 : 0;
@@ -323,6 +356,4 @@ export function standingsView(newLeague, round) {
         displayFixtures();
         addButton();
     }
-
-    createFixtures();
 }
