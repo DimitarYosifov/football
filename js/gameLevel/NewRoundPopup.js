@@ -173,9 +173,12 @@ export default class NewRoundPopup extends PIXI.Container {
             this.continueBtn.interactive = true;
             this.continueBtn.on('pointerdown', () => {
                 this.app.stage.removeChildren();
-                standingsView.bind(this.app)();
-                // location.reload();
-                // TODO...lead to somehwere else...
+                if (this.app.friendly) {
+                    location.reload();
+                }
+                else {
+                    standingsView.bind(this.app,)(true, false, this.result._text);
+                }
             });
 
             this.addChild(this.continueBtn);

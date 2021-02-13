@@ -103,8 +103,8 @@ export function clubSelection(app, mode) {
             container.visible = false;
             isPlayerTurn ? app.playerClubData = club.clubData : app.opponentClubData = club.clubData;
             app.stage.removeChild(selectClub);
-            let friendly = mode === "friendly";
-            if (!friendly) {
+            app.friendly = mode === "friendly";
+            if (!app.friendly) {
                 //TODO 
                 app.stage.removeChildren();
                 standingsView.bind(app)();

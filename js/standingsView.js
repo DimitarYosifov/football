@@ -1,8 +1,8 @@
 import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
 
-export function standingsView(data) {
-
+export function standingsView(data, increaseRound = false, lastGameRersult = null) {
+    this.currentRound = 1;
     let getClubData = () => {
         $.ajax({
             url: "getAllClubsData",
@@ -35,12 +35,15 @@ export function standingsView(data) {
         });
     }
 
-    if (data) {
+    if (data && typeof data !== "boolean") {
         this.seasonFixtures = data.seasonFixtures;
         this.playerClubData = data.playerClubData;
-        this.currentRound = data.currentRound;
         this.teams = data.teams;
+        this.currentRound = data.currentRound;
     }
+
+    increaseRound ? this.currentRound++ : null;
+
     getClubData();
 
     let createText = (_text, x, y, anchorX = 0.5, isPlayerClub) => {
@@ -270,11 +273,24 @@ export function standingsView(data) {
                     let textResult = createText(
                         generateResult ? randomResult(firstClub, secondClub, i) : "",
                         text.x + text.width / 2 + logo2.width * 2,
-                        y,
-                        0,
+                        text.y,
+                        0.5,
                         false
                     );
-                    textResult.style.fontSize = this.height / 25;
+                    textResult.style.fontSize = this.height / 30;
+                    row.addChild(textResult);
+                } else {
+                    let textResult = createText(
+                        lastGameRersult ? lastGameRersult : "",
+                        text.x + text.width / 2 + logo2.width * 2,
+                        text.y,
+                        0.5,
+                        false
+                    );
+                    // text.text += textResult.text;
+                    this.seasonFixtures[this.currentRound][i] += ` ${textResult.text}`;
+
+                    textResult.style.fontSize = this.height / 30;
                     row.addChild(textResult);
                 }
 
