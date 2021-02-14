@@ -233,6 +233,12 @@ app.post('/getClubData', async (req, res) => {
     });
 });
 
+app.post('/deleteProgress', async (req, res) => {
+    let user = req.body.user;
+    let a = firebase.database().ref('/users/' + user + `/fixtures`);
+    a.remove()
+});
+
 signOutUser = function () {
     //    firebase.auth().signOut().then(function () {
     //        $scope.user = '';
@@ -242,7 +248,7 @@ signOutUser = function () {
     //    }, function (error) {
     //        console.error('Sign Out Error', error);
     //    });
-};
+}; 
 //authStateChange
 user = function (callback) {
     firebase.auth().onAuthStateChanged(function (firebaseUser) {

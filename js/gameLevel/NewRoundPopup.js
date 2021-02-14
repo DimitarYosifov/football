@@ -177,7 +177,7 @@ export default class NewRoundPopup extends PIXI.Container {
                     location.reload();
                 }
                 else {
-                    standingsView.bind(this.app,)(true, false, this.result._text);
+                    standingsView.bind(this.app,)(true, false, this.result._text, true);
                 }
             });
 

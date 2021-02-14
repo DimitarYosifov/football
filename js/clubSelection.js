@@ -8,19 +8,35 @@ export function clubSelection(app, mode) {
     let positions = [
         {
             x: app.width / 4,
-            y: app.height * 0.5
+            y: app.height * 0.37
         },
         {
             x: app.width * 0.75,
-            y: app.height * 0.5
+            y: app.height * 0.37
         },
         {
             x: app.width / 4,
-            y: app.height * 0.85
+            y: app.height * 0.55
         },
         {
             x: app.width * 0.75,
-            y: app.height * 0.85
+            y: app.height * 0.55
+        },
+        {
+            x: app.width / 4,
+            y: app.height * 0.73
+        },
+        {
+            x: app.width * 0.75,
+            y: app.height * 0.73
+        },
+        {
+            x: app.width / 4,
+            y: app.height * 0.91
+        },
+        {
+            x: app.width * 0.75,
+            y: app.height * 0.91
         }
     ]
 
@@ -74,7 +90,7 @@ export function clubSelection(app, mode) {
 
         let name = new PIXI.Text(`${club.name}`, {
             fontFamily: app.config.mainFont,
-            fontSize: app.height / 20,
+            fontSize: app.height / 30,
             fill: '#ffffff',
             align: 'center',
             stroke: '#000000',
@@ -94,7 +110,7 @@ export function clubSelection(app, mode) {
         let logo = new PIXI.Sprite(logoTexture);
         logo.x = name.x;
         logo.y = name.y - name.height / 2;
-        logo.height = app.height / 6;
+        logo.height = app.height / 10;
         logo.scale.x = logo.scale.y;
         logo.anchor.set(0.5, 1);
         container.addChild(logo);
@@ -125,7 +141,7 @@ export function clubSelection(app, mode) {
         for (let s = 0; s < power; s++) {
             const starTexture = app.loader.resources.main1.textures[`star`];
             const star = new PIXI.Sprite(starTexture);
-            star.height = app.height * 0.025;
+            star.height = app.height * 0.015;
             star.scale.x = star.scale.y;
             star.x = logo.x - star.width * s + star.width * power / 2;
             star.y = logo.y - logo.height;

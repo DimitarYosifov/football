@@ -1,7 +1,7 @@
 
 export function createNewClub() {
-    //possible options are: Levski , Barcelona, Dunav, Ludogorets
-    const newClub = "Ludogorets";
+    //possible options are: Levski , Barcelona, Dunav, Ludogorets, Bayern , Dortmund , Parma ,Inter
+    const newClub = "Inter";
     $.ajax({
         url: "addClub",
         type: 'POST',
@@ -323,6 +323,310 @@ const teams = {
                 special: null,
                 position: "F",
                 player_img_id: '010'
+            }
+        ]
+    },
+    Bayern: {
+        clubData: {
+            name: "Bayern",
+            colors: null,
+            power: 7,
+            logo: "testlogo5"
+        },
+        players: [
+            {
+                defense_current: 0,
+                defense_color: "FF1D00",
+                defense_full: 5,
+                attack_current: 0,
+                attack_color: "B200FF",
+                attack_full: 20,
+                special: null,
+                position: "GK",
+                player_img_id: '009'
+            },
+            {
+                defense_current: 0,
+                defense_color: "E2D841",
+                defense_full: 8,
+                attack_current: 0,
+                attack_color: "B200FF",
+                attack_full: 15,
+                special: null,
+                position: "DF1",
+                player_img_id: '003'
+            },
+            {
+                defense_current: 0,
+                defense_color: "E2D841",
+                defense_full: 9,
+                attack_current: 0,
+                attack_color: "FF1D00",
+                attack_full: 14,
+                special: null,
+                position: "DF2",
+                player_img_id: '004'
+            },
+            {
+                defense_current: 0,
+                defense_color: "2F7F07",
+                defense_full: 12,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 12,
+                special: null,
+                position: "MD1",
+                player_img_id: '005'
+            },
+            {
+                defense_current: 0,
+                defense_color: "FF1D00",
+                defense_full: 13,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 11,
+                special: null,
+                position: "MD2",
+                player_img_id: '006'
+            },
+            {
+                defense_current: 0,
+                defense_color: "2F7F07",
+                defense_full: 15,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 8,
+                special: null,
+                position: "F",
+                player_img_id: '007'
+            }
+        ]
+    },
+    Dortmund: {
+        clubData: {
+            name: "Dortmund",
+            colors: null,
+            power: 6,
+            logo: "testlogo6"
+        },
+        players: [
+            {
+                defense_current: 0,
+                defense_color: "FF1D00",
+                defense_full: 5,
+                attack_current: 0,
+                attack_color: "B200FF",
+                attack_full: 20,
+                special: null,
+                position: "GK",
+                player_img_id: '009'
+            },
+            {
+                defense_current: 0,
+                defense_color: "E2D841",
+                defense_full: 8,
+                attack_current: 0,
+                attack_color: "B200FF",
+                attack_full: 15,
+                special: null,
+                position: "DF1",
+                player_img_id: '003'
+            },
+            {
+                defense_current: 0,
+                defense_color: "E2D841",
+                defense_full: 9,
+                attack_current: 0,
+                attack_color: "FF1D00",
+                attack_full: 14,
+                special: null,
+                position: "DF2",
+                player_img_id: '004'
+            },
+            {
+                defense_current: 0,
+                defense_color: "2F7F07",
+                defense_full: 12,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 12,
+                special: null,
+                position: "MD1",
+                player_img_id: '005'
+            },
+            {
+                defense_current: 0,
+                defense_color: "FF1D00",
+                defense_full: 13,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 11,
+                special: null,
+                position: "MD2",
+                player_img_id: '006'
+            },
+            {
+                defense_current: 0,
+                defense_color: "2F7F07",
+                defense_full: 15,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 8,
+                special: null,
+                position: "F",
+                player_img_id: '007'
+            }
+        ]
+    },
+    Parma: {
+        clubData: {
+            name: "Parma",
+            colors: null,
+            power: 5,
+            logo: "testlogo7"
+        },
+        players: [
+            {
+                defense_current: 0,
+                defense_color: "FF1D00",
+                defense_full: 5,
+                attack_current: 0,
+                attack_color: "B200FF",
+                attack_full: 20,
+                special: null,
+                position: "GK",
+                player_img_id: '009'
+            },
+            {
+                defense_current: 0,
+                defense_color: "E2D841",
+                defense_full: 8,
+                attack_current: 0,
+                attack_color: "B200FF",
+                attack_full: 15,
+                special: null,
+                position: "DF1",
+                player_img_id: '003'
+            },
+            {
+                defense_current: 0,
+                defense_color: "E2D841",
+                defense_full: 9,
+                attack_current: 0,
+                attack_color: "FF1D00",
+                attack_full: 14,
+                special: null,
+                position: "DF2",
+                player_img_id: '004'
+            },
+            {
+                defense_current: 0,
+                defense_color: "2F7F07",
+                defense_full: 12,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 12,
+                special: null,
+                position: "MD1",
+                player_img_id: '005'
+            },
+            {
+                defense_current: 0,
+                defense_color: "FF1D00",
+                defense_full: 13,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 11,
+                special: null,
+                position: "MD2",
+                player_img_id: '006'
+            },
+            {
+                defense_current: 0,
+                defense_color: "2F7F07",
+                defense_full: 15,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 8,
+                special: null,
+                position: "F",
+                player_img_id: '007'
+            }
+        ]
+    },
+    Inter: {
+        clubData: {
+            name: "Inter",
+            colors: null,
+            power: 6,
+            logo: "testlogo8"
+        },
+        players: [
+            {
+                defense_current: 0,
+                defense_color: "FF1D00",
+                defense_full: 5,
+                attack_current: 0,
+                attack_color: "B200FF",
+                attack_full: 20,
+                special: null,
+                position: "GK",
+                player_img_id: '009'
+            },
+            {
+                defense_current: 0,
+                defense_color: "E2D841",
+                defense_full: 8,
+                attack_current: 0,
+                attack_color: "B200FF",
+                attack_full: 15,
+                special: null,
+                position: "DF1",
+                player_img_id: '003'
+            },
+            {
+                defense_current: 0,
+                defense_color: "E2D841",
+                defense_full: 9,
+                attack_current: 0,
+                attack_color: "FF1D00",
+                attack_full: 14,
+                special: null,
+                position: "DF2",
+                player_img_id: '004'
+            },
+            {
+                defense_current: 0,
+                defense_color: "2F7F07",
+                defense_full: 12,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 12,
+                special: null,
+                position: "MD1",
+                player_img_id: '005'
+            },
+            {
+                defense_current: 0,
+                defense_color: "FF1D00",
+                defense_full: 13,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 11,
+                special: null,
+                position: "MD2",
+                player_img_id: '006'
+            },
+            {
+                defense_current: 0,
+                defense_color: "2F7F07",
+                defense_full: 15,
+                attack_current: 0,
+                attack_color: "3052FF",
+                attack_full: 8,
+                special: null,
+                position: "F",
+                player_img_id: '007'
             }
         ]
     }

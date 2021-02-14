@@ -1,8 +1,11 @@
 import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
 
-export function standingsView(data, increaseRound = false, lastGameRersult = null) {
-    this.currentRound = 1;
+export function standingsView(data, increaseRound = false, lastGameRersult = null, generateResults = false) {
+
+    this.fixturesHeader;
+    let fixturesContainer = new PIXI.Container;
+    this.stage.alpha = 1;
     let getClubData = () => {
         $.ajax({
             url: "getAllClubsData",
@@ -100,40 +103,6 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             separator.drawRect(x, y, width, height);
             return separator;
         }
-
-        //testing!!!
-        // let teams = [
-        //     {
-        //         name: "Barcelona",
-        //         won: 33,
-        //         ties: 13,
-        //         lost: 13,
-        //         goalsFor: 63,
-        //         goalsAgainst: 13,
-        //         goalsDifference: "+73",
-        //         points: 50
-        //     },
-        //     {
-        //         name: "Levski",
-        //         won: 33,
-        //         ties: 13,
-        //         lost: 13,
-        //         goalsFor: 63,
-        //         goalsAgainst: 13,
-        //         goalsDifference: "+53",
-        //         points: 50
-        //     },
-        //     {
-        //         name: "Dunav",
-        //         won: 33,
-        //         ties: 13,
-        //         lost: 13,
-        //         goalsFor: 63,
-        //         goalsAgainst: 13,
-        //         goalsDifference: "+63",
-        //         points: 133
-        //     }
-        // ]
 
         const comparingFunction = (club1, club2) => {
             if (club1.points < club2.points) {
@@ -236,7 +205,19 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         }
 
         let displayFixtures = () => {
-            let fixturesContainer = new PIXI.Container;
+
+            //Header
+            let _y = this.height * 0.1;
+            this.fixturesHeader = createText(
+                `Round ${this.currentRound}. Today's games:`,
+                this.width / 2,
+                _y,
+                0.5,
+                false
+            );
+            this.fixturesHeader.style.fontSize = this.height / 30;
+            this.stage.addChild(this.fixturesHeader);
+
             let playerClub = this.playerClubData.name;
             this.seasonFixtures[this.currentRound].forEach((game, i) => {
                 let splitGame = game.split(' ')[0];
@@ -267,10 +248,12 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 let logo2 = addLogo(secondClub, text.x + text.width / 2, text.y, text.height, 0, 0)
                 row.addChild(logo2);
 
-                let generateResult = !text.text.split(" ")[1];
+                // let generateResult = !text.text.split(" ")[1];
+                let generateResult = generateResults;
+                let textResult;
 
                 if (firstClub !== playerClub && secondClub !== playerClub) {
-                    let textResult = createText(
+                    textResult = createText(
                         generateResult ? randomResult(firstClub, secondClub, i) : "",
                         text.x + text.width / 2 + logo2.width * 2,
                         text.y,
@@ -280,7 +263,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     textResult.style.fontSize = this.height / 30;
                     row.addChild(textResult);
                 } else {
-                    let textResult = createText(
+                    textResult = createText(
                         lastGameRersult ? lastGameRersult : "",
                         text.x + text.width / 2 + logo2.width * 2,
                         text.y,
@@ -290,10 +273,13 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     // text.text += textResult.text;
                     this.seasonFixtures[this.currentRound][i] += ` ${textResult.text}`;
 
+                    if (generateResults) {
+                        calculatePoints(firstClub, secondClub, textResult.text)
+                    }
+
                     textResult.style.fontSize = this.height / 30;
                     row.addChild(textResult);
                 }
-
                 fixturesContainer.addChild(row);
             })
 
@@ -302,6 +288,25 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             fixturesContainer.y = this.height / 4 - fixturesContainer.height / 2;
             this.stage.addChild(fixturesContainer);
             createStandings();
+        }
+
+        let deleteProgress = () => {
+            console.log(this);
+            $.ajax({
+                url: "deleteProgress",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    user: this.user
+                }),
+                success: (res) => {
+                    console.log(res);
+                    console.log("progress deleted successfully");
+                }, error: (er) => {
+                    console.log(er);
+                    console.log("ERRor");
+                }
+            });
         }
 
         let addButton = () => {
@@ -315,8 +320,25 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             continueBtn.interactive = true;
             continueBtn.interactive = true;
             continueBtn.on('pointerdown', () => {
-                this.opponentClubData
-                this.startLevel();
+                if (!this.seasonFixtures[this.currentRound + 1]) {
+                    // season has ended . TODO - congrat player.... and delete progress from DB
+                    deleteProgress();
+                    alert("You have reached the end of the season.Thank you for playing :)");
+                    location.reload();
+                }
+                else if (lastGameRersult || this.seasonFixtures[this.currentRound][0].split(" ")[1]) {
+                    this.currentRound++;
+                    increaseRound = false;
+                    lastGameRersult = null;
+                    generateResults = false;
+                    this.stage.removeChild(this.fixturesHeader);
+                    fixturesContainer.removeChildren();
+                    createFixtures();
+                }
+                else {
+                    this.stage.removeChildren();
+                    this.startLevel();
+                }
             });
 
             this.stage.addChild(continueBtn);
@@ -347,7 +369,11 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             );
 
             this.seasonFixtures[this.currentRound][i] += ` ${result}`;
+            calculatePoints(firstClub, secondClub, result);
+            return result;
+        }
 
+        let calculatePoints = (firstClub, secondClub, result) => {
             let first = this.teams.find(t => t.name === firstClub);
             first.won += +result.split(':')[0] > +result.split(':')[1] ? 1 : 0;
             first.ties += +result.split(':')[0] === +result.split(':')[1] ? 1 : 0;
@@ -365,8 +391,6 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             second.goalsAgainst += +result.split(':')[0];
             second.goalsDifference = second.goalsFor - second.goalsAgainst;
             second.points = second.won * 3 + second.ties;
-
-            return result;
         }
 
         displayFixtures();

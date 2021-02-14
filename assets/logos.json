@@ -72,10 +72,106 @@
         "y": 0.5
       }
     },
-    "testlogo3": {
+    "testlogo8": {
       "frame": {
         "x": 390,
         "y": 1342,
+        "w": 333,
+        "h": 333
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 333,
+        "h": 333
+      },
+      "sourceSize": {
+        "w": 333,
+        "h": 333
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "testlogo5": {
+      "frame": {
+        "x": 390,
+        "y": 1675,
+        "w": 331,
+        "h": 331
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 1,
+        "y": 1,
+        "w": 331,
+        "h": 331
+      },
+      "sourceSize": {
+        "w": 333,
+        "h": 333
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "testlogo7": {
+      "frame": {
+        "x": 721,
+        "y": 1675,
+        "w": 268,
+        "h": 330
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 33,
+        "y": 1,
+        "w": 268,
+        "h": 330
+      },
+      "sourceSize": {
+        "w": 333,
+        "h": 333
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "testlogo6": {
+      "frame": {
+        "x": 989,
+        "y": 1675,
+        "w": 324,
+        "h": 320
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 5,
+        "y": 6,
+        "w": 324,
+        "h": 320
+      },
+      "sourceSize": {
+        "w": 333,
+        "h": 333
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "testlogo3": {
+      "frame": {
+        "x": 1309,
+        "y": 1675,
         "w": 292,
         "h": 292
       },
@@ -103,8 +199,8 @@
     "image": "logos.png",
     "format": "RGBA8888",
     "size": {
-      "w": 732,
-      "h": 1843
+      "w": 1601,
+      "h": 2006
     },
     "scale": 1
   }
