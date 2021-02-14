@@ -337,10 +337,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
-                defense_full: 5,
+                defense_full: 6,
                 attack_current: 0,
                 attack_color: "B200FF",
-                attack_full: 20,
+                attack_full: 19,
                 special: null,
                 position: "GK",
                 player_img_id: '009'
@@ -359,10 +359,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "E2D841",
-                defense_full: 9,
+                defense_full: 7,
                 attack_current: 0,
                 attack_color: "FF1D00",
-                attack_full: 14,
+                attack_full: 16,
                 special: null,
                 position: "DF2",
                 player_img_id: '004'
@@ -370,10 +370,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "2F7F07",
-                defense_full: 12,
+                defense_full: 13,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 12,
+                attack_full: 11,
                 special: null,
                 position: "MD1",
                 player_img_id: '005'
@@ -381,10 +381,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
-                defense_full: 13,
+                defense_full: 11,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 11,
+                attack_full: 13,
                 special: null,
                 position: "MD2",
                 player_img_id: '006'
@@ -392,10 +392,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "2F7F07",
-                defense_full: 15,
+                defense_full: 16,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 8,
+                attack_full: 7,
                 special: null,
                 position: "F",
                 player_img_id: '007'
@@ -413,7 +413,7 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
-                defense_full: 5,
+                defense_full: 7,
                 attack_current: 0,
                 attack_color: "B200FF",
                 attack_full: 20,
@@ -424,7 +424,7 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "E2D841",
-                defense_full: 8,
+                defense_full: 10,
                 attack_current: 0,
                 attack_color: "B200FF",
                 attack_full: 15,
@@ -438,7 +438,7 @@ const teams = {
                 defense_full: 9,
                 attack_current: 0,
                 attack_color: "FF1D00",
-                attack_full: 14,
+                attack_full: 16,
                 special: null,
                 position: "DF2",
                 player_img_id: '004'
@@ -446,10 +446,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "2F7F07",
-                defense_full: 12,
+                defense_full: 13,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 12,
+                attack_full: 13,
                 special: null,
                 position: "MD1",
                 player_img_id: '005'
@@ -457,10 +457,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
-                defense_full: 13,
+                defense_full: 14,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 11,
+                attack_full: 12,
                 special: null,
                 position: "MD2",
                 player_img_id: '006'
@@ -468,7 +468,7 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "2F7F07",
-                defense_full: 15,
+                defense_full: 17,
                 attack_current: 0,
                 attack_color: "3052FF",
                 attack_full: 8,
@@ -489,10 +489,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
-                defense_full: 5,
+                defense_full: 8,
                 attack_current: 0,
                 attack_color: "B200FF",
-                attack_full: 20,
+                attack_full: 21,
                 special: null,
                 position: "GK",
                 player_img_id: '009'
@@ -500,10 +500,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "E2D841",
-                defense_full: 8,
+                defense_full: 10,
                 attack_current: 0,
                 attack_color: "B200FF",
-                attack_full: 15,
+                attack_full: 17,
                 special: null,
                 position: "DF1",
                 player_img_id: '003'
@@ -514,7 +514,7 @@ const teams = {
                 defense_full: 9,
                 attack_current: 0,
                 attack_color: "FF1D00",
-                attack_full: 14,
+                attack_full: 18,
                 special: null,
                 position: "DF2",
                 player_img_id: '004'
@@ -522,10 +522,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "2F7F07",
-                defense_full: 12,
+                defense_full: 15,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 12,
+                attack_full: 13,
                 special: null,
                 position: "MD1",
                 player_img_id: '005'
@@ -536,7 +536,7 @@ const teams = {
                 defense_full: 13,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 11,
+                attack_full: 15,
                 special: null,
                 position: "MD2",
                 player_img_id: '006'
@@ -544,10 +544,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "2F7F07",
-                defense_full: 15,
+                defense_full: 16,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 8,
+                attack_full: 11,
                 special: null,
                 position: "F",
                 player_img_id: '007'
@@ -568,7 +568,7 @@ const teams = {
                 defense_full: 5,
                 attack_current: 0,
                 attack_color: "B200FF",
-                attack_full: 20,
+                attack_full: 22,
                 special: null,
                 position: "GK",
                 player_img_id: '009'
@@ -579,7 +579,7 @@ const teams = {
                 defense_full: 8,
                 attack_current: 0,
                 attack_color: "B200FF",
-                attack_full: 15,
+                attack_full: 17,
                 special: null,
                 position: "DF1",
                 player_img_id: '003'
@@ -590,7 +590,7 @@ const teams = {
                 defense_full: 9,
                 attack_current: 0,
                 attack_color: "FF1D00",
-                attack_full: 14,
+                attack_full: 16,
                 special: null,
                 position: "DF2",
                 player_img_id: '004'
@@ -601,7 +601,7 @@ const teams = {
                 defense_full: 12,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 12,
+                attack_full: 14,
                 special: null,
                 position: "MD1",
                 player_img_id: '005'
@@ -609,10 +609,10 @@ const teams = {
             {
                 defense_current: 0,
                 defense_color: "FF1D00",
-                defense_full: 13,
+                defense_full: 12,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 11,
+                attack_full: 14,
                 special: null,
                 position: "MD2",
                 player_img_id: '006'
@@ -623,7 +623,7 @@ const teams = {
                 defense_full: 15,
                 attack_current: 0,
                 attack_color: "3052FF",
-                attack_full: 8,
+                attack_full: 10,
                 special: null,
                 position: "F",
                 player_img_id: '007'
