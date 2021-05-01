@@ -18,7 +18,8 @@ export function modeSelection(app) {
     app.stage.addChild(bg);
 
     let friendly = new PIXI.Text("Friendly", {
-        fontFamily: app.config.mainFont,
+        fontFamily: "Girassol",
+        // fontFamily: app.config.mainFont,
         fontSize: app.height / 13,
         fill: '#000000',
         align: 'center',

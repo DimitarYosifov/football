@@ -54,6 +54,8 @@ export default class LoadingView {
     }
 
     updateProgress(loaded) {
+
+        console.log(loaded);
         this.currentProgress = loaded;
         this.loadingBarFull.width = this.loadingBar.width * this.currentProgress / 100;
         this.progress.text = `${this.currentProgress}%`;

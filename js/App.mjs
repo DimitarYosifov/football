@@ -31,7 +31,7 @@ export default class App extends Stage {
     }
 
     loadComplete() {
-        this.stage.removeChildren();
+        // this.stage.removeChildren();
         this.config = config;
         this.storageData = localStorage.getItem('match3football');
         if (!config.hasLogin) {

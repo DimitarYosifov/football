@@ -6,8 +6,8 @@ export default class LogIn {
     constructor(app) {
 
         this.stage = app.stage;
-        this.stage.visible = false;
-        this.stage.alpha = 0;
+        // this.stage.visible = false;
+        // this.stage.alpha = 0;
         this.app = app;
         this.config = this.app.config;
 

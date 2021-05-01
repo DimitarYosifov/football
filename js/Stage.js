@@ -56,7 +56,7 @@ export default class Stage {
             if (this.landscape) {
                 // document.getElementById("stage").style.height = "0px";
                 // this.body.style.height = screen.height - window.innerHeight + "px";
-                return;
+                // return;  //  ?????
             }
 
             this.height = window.innerHeight;
@@ -76,8 +76,22 @@ export default class Stage {
             // console.log(this.width)
             // console.log(this.height)
 
-            this.renderer.resize(this.canvas.width, this.canvas.height);
 
+            console.log(`this.canvas.width => ${this.canvas.width}`);
+            console.log(`this.canvas.height => ${this.canvas.height}`);
+            console.log(`body width => ${window.innerWidth}`);
+            console.log(`body height => ${window.innerHeight}`);
+            console.log(` this.stage.width => ${this.stage.width}`);
+            console.log(` this.stage.height => ${this.stage.height}`);
+
+            this.stage.height = this.canvas.height;
+            this.stage.width = this.canvas.width;
+
+            this.renderer.resize(this.canvas.width, this.canvas.height);
+            console.log(`this.canvas.width => ${this.canvas.width}`);
+            console.log(`this.canvas.height => ${this.canvas.height}`);
+            console.log(` this.stage.width => ${this.stage.width}`);
+            console.log(` this.stage.height => ${this.stage.height}`);
             this.body.style.width = window.innerWidth + "px";
             this.body.style.height = window.innerHeight + "px";
             if (!this.isAppStarted) {
@@ -106,9 +120,9 @@ export default class Stage {
         resolutiion();
         this.animationLoop = () => {
             this.renderer.render(this.stage);
-            if (!this.landscape) {
+            // if (!this.landscape) {
                 requestAnimationFrame(this.animationLoop);
-            }
+            // }
         };
 
         this.setup = () => {
@@ -122,7 +136,7 @@ export default class Stage {
         this.loader.add('backgrounds', "assets/backgrounds.json");
         this.loader.add('buttons', "assets/buttons.json");
 
-        this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
+        // this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
 
         //this is needed to handle weird texture not loaded issue 
         let handleLoadComplete = () => {
