@@ -459,7 +459,7 @@ export default class Grid extends PIXI.Container {
         if (!newlyCreatedGrid) {
             setTimeout(() => {
                 this.checkGoalAttemps();
-            }, 1);
+            }, 1.2);
         } else {
             setTimeout(() => {
                 if (!this.app.playerTurn && this.app.level.currentRound === 0) {
@@ -540,7 +540,7 @@ export default class Grid extends PIXI.Container {
             //GOAL SCORED!!!
             let finalY = this.app.playerTurn ? this.app.height * 0.12 : this.app.height * 0.88
             TweenMax.to(tweenTarget, .5, {
-                delay: 1,
+                delay: 1.1,
                 y: finalY,
                 alpha: 0,
                 onComplete: () => {
@@ -551,7 +551,7 @@ export default class Grid extends PIXI.Container {
                 }
             });
             TweenMax.to(tweenTarget.scale, .5, {
-                delay: 1,
+                delay: 1.1,
                 x: scaleValue,
                 y: scaleValue,
                 onComplete: () => { }
@@ -560,18 +560,18 @@ export default class Grid extends PIXI.Container {
             let newX = this.app.width / 2;
             let newY = this.app.playerTurn ? this.app.height * 0.3 : this.app.height * 0.7;
             let scaleValue = firstActiveDefenseFound.scale.x;
-            TweenMax.to(firstActiveDefenseFound, 1, {
+            TweenMax.to(firstActiveDefenseFound, 1.1, {
                 x: newX,
                 y: newY,
                 onComplete: () => { }
             });
-            TweenMax.to(firstActiveDefenseFound.scale, 1, {
+            TweenMax.to(firstActiveDefenseFound.scale, 1.1, {
                 x: scaleValue * 5,
                 y: scaleValue * 5,
                 onComplete: () => { }
             });
             TweenMax.to(tweenTarget, .25, {
-                delay: 1,
+                delay: 1.1,
                 y: this.app.height / 2,
                 alpha: 0,
                 onComplete: () => {
@@ -579,7 +579,7 @@ export default class Grid extends PIXI.Container {
                 }
             });
             TweenMax.to(firstActiveDefenseFound, .25, {
-                delay: 1,
+                delay: 1.1,
                 y: this.app.height / 2,
                 alpha: 0,
                 onComplete: () => {
@@ -594,7 +594,6 @@ export default class Grid extends PIXI.Container {
                 }
             });
         }
-
     }
 
     showText(text, shake) {
@@ -617,7 +616,7 @@ export default class Grid extends PIXI.Container {
             yoyo: true,
             repeat: 10,
             onComplete: () => {
-                TweenMax.delayedCall(1, () => {
+                TweenMax.delayedCall(1.2, () => {
                     this.removeChild(this.goalText);
                     this.checkGoalAttemps();
                 })

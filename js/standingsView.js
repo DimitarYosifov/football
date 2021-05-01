@@ -320,8 +320,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             continueBtn.interactive = true;
             continueBtn.interactive = true;
             continueBtn.on('pointerdown', () => {
-                if (!this.seasonFixtures[this.currentRound + 1]) {
-                    // season has ended . TODO - congrat player.... and delete progress from DB
+                if (!this.seasonFixtures[this.currentRound + 2]) { //there's something wrong here!!!
                     deleteProgress();
                     alert("You have reached the end of the season.Thank you for playing :)");
                     location.reload();

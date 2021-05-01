@@ -25,10 +25,10 @@ body {
 
 #rotate{
     width: 100vw;
-    height: 50vh;
+    height: 100vh;
     background: black;
     z-index: 2;
-    top: 25vh;
+    /* top: 25vh; */
     position: fixed;
     color: white;
     font-size: 3em;
