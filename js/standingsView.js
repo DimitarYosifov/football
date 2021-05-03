@@ -5,7 +5,12 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
     this.fixturesHeader;
     let fixturesContainer = new PIXI.Container;
-    this.stage.alpha = 1;
+    this.stage.alpha = 0;
+    setTimeout(() => {
+        const loadingWrapper = document.getElementById("loading-wrapper");
+        if (loadingWrapper) { loadingWrapper.remove() };
+        TweenMax.to(this.stage, 0.5, { alpha: 1 });
+    }, 1000);
     let getClubData = () => {
         $.ajax({
             url: "getAllClubsData",
