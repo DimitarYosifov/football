@@ -121,7 +121,7 @@ export default class Stage {
         this.animationLoop = () => {
             this.renderer.render(this.stage);
             // if (!this.landscape) {
-                requestAnimationFrame(this.animationLoop);
+            requestAnimationFrame(this.animationLoop);
             // }
         };
 
@@ -156,13 +156,16 @@ export default class Stage {
         // }, 100);
 
         let loadProgressHandler = (loader, resource) => {
-            this.loadingView.updateProgress(Math.ceil(loader.progress));
+            // this.loadingView.updateProgress(Math.ceil(loader.progress));
 
             //Display the file `url` currently being loaded
             console.log("loading: " + resource.url);
 
             //Display the percentage of files currently loaded
             console.log("progress: " + loader.progress + "%");
+
+            document.getElementById('loading-progress').style.width = `${loader.progress}%`;
+            document.getElementById('loading-value').innerHTML = `${loader.progress}%`;
 
             //If you gave your files names as the first argument 
             //of the `add` method, you can access them like this

@@ -5,6 +5,10 @@ export default class LogIn {
 
     constructor(app) {
 
+        setTimeout(() => {
+            document.getElementById("loading-wrapper").remove();
+        }, 1000);
+
         this.stage = app.stage;
         // this.stage.visible = false;
         // this.stage.alpha = 0;

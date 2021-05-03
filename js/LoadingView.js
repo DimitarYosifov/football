@@ -51,10 +51,10 @@ export default class LoadingView {
         });
         this.progress.position.set(this.width / 2, this.height * 0.6);
         this.progress.anchor.set(0.5, 0.5);
+        this.progress.text = "ss"
     }
 
     updateProgress(loaded) {
-
         console.log(loaded);
         this.currentProgress = loaded;
         this.loadingBarFull.width = this.loadingBar.width * this.currentProgress / 100;

@@ -12,7 +12,7 @@ export default class Level extends PIXI.Container {
         this.app = app;
         this.config = Config;
         this.stage = app.stage;
-        this.stage.alpha = 0;
+        // this.stage.alpha = 0;
         this.proton = app.proton;
         this.width = app.width; // / this.config.rendererResolution;
         this.height = app.height;//  / this.config.rendererResolution;

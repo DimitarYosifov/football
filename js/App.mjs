@@ -14,11 +14,6 @@ export default class App extends Stage {
 
     constructor() {
         super();
-        this.loadingView = new LoadingView(this.width, this.height);
-        this.stage.addChild(this.loadingView.loadingBar);
-        this.stage.addChild(this.loadingView.loadingBarFull);
-        this.stage.addChild(this.loadingView.progress);
-        this.stage.addChild(this.loadingView.loadingText);
         window.onload = () => {
             this.windowLoaded = true;
             if (config.addTeam) {

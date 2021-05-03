@@ -2,8 +2,11 @@ import { clubSelection } from "./clubSelection.js";
 
 
 export function modeSelection(app) {
-
-    app.stage.alpha = 1;
+    app.stage.alpha = 0;
+    setTimeout(() => {
+        document.getElementById("loading-wrapper").remove();
+        TweenMax.to(app.stage, 0.5, { alpha: 1 });
+    }, 1000);
     app.stage.visible = true;
     //BG
     let bg = new PIXI.Graphics();
