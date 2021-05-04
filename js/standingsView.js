@@ -2,7 +2,7 @@ import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
 
 export function standingsView(data, increaseRound = false, lastGameRersult = null, generateResults = false) {
-
+    this.data = data;
     this.fixturesHeader;
     let fixturesContainer = new PIXI.Container;
     this.stage.alpha = 0;
@@ -325,7 +325,16 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             continueBtn.interactive = true;
             continueBtn.interactive = true;
             continueBtn.on('pointerdown', () => {
-                if (!this.seasonFixtures[this.currentRound]) {
+
+                if (
+                    !this.seasonFixtures[this.currentRound + 1] &&
+                    lastGameRersult &&
+                    typeof this.data === "boolean"
+                ) {
+                    /*
+                        ONE HELL OF A TODO - HANDLE END OF SEASON IN A NORMAL SENSE VISUALLY 
+                        instead of an alert !!!!!!!!!!!!
+                    */
                     deleteProgress();
                     alert("You have reached the end of the season.Thank you for playing :)");
                     location.reload();

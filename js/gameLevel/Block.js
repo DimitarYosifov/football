@@ -71,13 +71,12 @@ export default class Block extends PIXI.Container {
 
         this.on('pointerdown', this.onDragStart);
         this.on('pointerup', this.onDragEnd)
-        //  TODO        block.on('pointerupoutside', onDragEnd)
+        // block.on('pointerupoutside', onDragEnd)
         this.on('pointermove', this.onDragMove)
-
-
     }
 
     generateRandomColorBlock() {
+        if (this.config.predefinedBlockColor) { return this.config.predefinedBlockColor };
         let x = Math.floor(Math.random() * 100) + 1;
         let a;
         switch (true) {  //blocks - 17%       yellow card - 7%     red card- 4%      injury - 4%

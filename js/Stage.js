@@ -33,16 +33,12 @@ export default class Stage {
 
         let resolutiion = () => { //16:9
 
-            let testScale = 1;// Math.min(window.innerWidth / 1080, window.innerHeight / 1920)
-            console.log(testScale);
-            this.width = 1080 * testScale;
-            this.height = 1920 * testScale;
-
             //resume requestAnimationFrame 
             if (this.landscape && this.isMobile && window.screen.width < window.screen.height) {
                 requestAnimationFrame(this.animationLoop);
                 // this.stage.visible = false;
             }
+            
             this.landscape = this.isMobile && window.screen.width > window.screen.height;
             this.stage.visible = true;
             ////THIS DOESNT WORK ON FULL SCREEN TODO-FIX IT
@@ -51,12 +47,11 @@ export default class Stage {
             if (loginWrapper) {
                 loginWrapper.style.display = this.landscape ? "none" : "block";
             }
-            ///////////////////////////////////////////////
 
             if (this.landscape) {
-                // document.getElementById("stage").style.height = "0px";
-                // this.body.style.height = screen.height - window.innerHeight + "px";
-                // return;  //  ?????
+                document.getElementById("stage").style.height = "0px";
+                this.body.style.height = screen.height - window.innerHeight + "px";
+                return;  
             }
 
             this.height = window.innerHeight;
@@ -70,41 +65,20 @@ export default class Stage {
             this.canvas.width = this.width;
             this.canvas.height = this.height;
 
-            this.stage.height = this.height;
-            this.stage.width = this.width;
-
-            // console.log(this.width)
-            // console.log(this.height)
-
-
-            console.log(`this.canvas.width => ${this.canvas.width}`);
-            console.log(`this.canvas.height => ${this.canvas.height}`);
-            console.log(`body width => ${window.innerWidth}`);
-            console.log(`body height => ${window.innerHeight}`);
-            console.log(` this.stage.width => ${this.stage.width}`);
-            console.log(` this.stage.height => ${this.stage.height}`);
-
             this.stage.height = this.canvas.height;
             this.stage.width = this.canvas.width;
 
             this.renderer.resize(this.canvas.width, this.canvas.height);
-            console.log(`this.canvas.width => ${this.canvas.width}`);
-            console.log(`this.canvas.height => ${this.canvas.height}`);
-            console.log(` this.stage.width => ${this.stage.width}`);
-            console.log(` this.stage.height => ${this.stage.height}`);
-            this.body.style.width = window.innerWidth + "px";
-            this.body.style.height = window.innerHeight + "px";
+          
             if (!this.isAppStarted) {
                 this.isAppStarted = true;
                 this.checkLoaded();
             }
-            // this.stage.scale.x = testScale;
-            // this.stage.scale.y = testScale;
 
-            if (this.stage.scale.x > 1) {
-                this.stage.scale.x = 1;
-            }
-            this.stage.scale.y = this.stage.scale.x;
+            // if (this.stage.scale.x > 1) {
+            //     this.stage.scale.x = 1;
+            // }
+            // this.stage.scale.y = this.stage.scale.x;
         }
 
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height, {
@@ -120,9 +94,9 @@ export default class Stage {
         resolutiion();
         this.animationLoop = () => {
             this.renderer.render(this.stage);
-            // if (!this.landscape) {
-            requestAnimationFrame(this.animationLoop);
-            // }
+            if (!this.landscape) {
+                requestAnimationFrame(this.animationLoop);
+            }
         };
 
         this.setup = () => {

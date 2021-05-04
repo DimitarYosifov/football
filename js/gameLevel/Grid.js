@@ -25,16 +25,18 @@ export default class Grid extends PIXI.Container {
             this.addChild(rowContainer);
             this.gridArrays.push(rowContainer.children.map(c => c.type));
         }
-        // const mask = new PIXI.Graphics();
-        // mask.beginFill(0xffffff, 1);
-        // mask.drawRect(
-        //     this.globalBlocksPositions[0][0].x - this.blocks[0][0].width / 2,
-        //     this.globalBlocksPositions[0][0].y - this.blocks[0][0].height / 2,
-        //     this.width,
-        //     this.height
-        // );
-        // mask.endFill();
-        // this.mask = mask;
+
+        // TODO - FIX THIS FUCKING SHIT!!!
+        const mask = new PIXI.Graphics();
+        mask.beginFill(0xffffff, 1);
+        mask.drawRect(
+            this.globalBlocksPositions[0][0].x - this.blocks[0][0].width / 2,
+            this.globalBlocksPositions[0][0].y - this.blocks[0][0].height / 2,
+            this.width,
+            this.height
+        );
+        mask.endFill();
+        this.mask = mask;
         this.checkPossibleMove(2, true);
     }
 
