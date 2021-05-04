@@ -75,10 +75,10 @@ export default class Stage {
                 this.checkLoaded();
             }
 
-            // if (this.stage.scale.x > 1) {
-            //     this.stage.scale.x = 1;
-            // }
-            // this.stage.scale.y = this.stage.scale.x;
+            if (this.stage.scale.x > 1) {
+                this.stage.scale.x = 1;
+            }
+            this.stage.scale.y = this.stage.scale.x;
         }
 
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height, {
