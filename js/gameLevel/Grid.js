@@ -93,7 +93,6 @@ export default class Grid extends PIXI.Container {
                 item2.gridPosition = gridPosition1;
                 //              START OF PROTON EFFECT AFTER MATCH
                 let matches = this.checkGridForMatches();
-
                 if (matches.length !== 0) {
                     if (this.hintTimeout) {
                         this.hintTimeout.kill();
@@ -175,14 +174,6 @@ export default class Grid extends PIXI.Container {
                 let prevBlock_left1 = this.blocks[row][col - 1] ? this.blocks[row][col - 1].type : null;
                 let prevBlock_left2 = this.blocks[row][col - 2] ? this.blocks[row][col - 2].type : null;
 
-                if ((thisBlock === nextBlock_right1 && thisBlock === nextBlock_right2) ||
-                    (thisBlock === prevBlock_left1 && thisBlock === prevBlock_left2) ||
-                    (thisBlock === nextBlock_right1 && thisBlock === prevBlock_left1)
-                ) {
-                    matches.push(match);
-                    continue; // already match, no need to check downwards    ?????????????????????
-                }
-
                 //              check down
                 let nextBlock_down1 = null;
                 if (this.children[row + 1]) {
@@ -203,14 +194,55 @@ export default class Grid extends PIXI.Container {
                     prevBlock_Up2 = this.blocks[row - 2][col] ? this.blocks[row - 2][col].type : null;
                 }
 
-                if ((thisBlock === prevBlock_Up1 && thisBlock === prevBlock_Up2) ||
+                if (
+                    (thisBlock === prevBlock_Up1 && thisBlock === prevBlock_Up2) ||
                     (thisBlock === nextBlock_down1 && thisBlock === nextBlock_down2) ||
-                    (thisBlock === nextBlock_down1 && thisBlock === prevBlock_Up1)
+                    (thisBlock === nextBlock_down1 && thisBlock === prevBlock_Up1) ||
+                    (thisBlock === nextBlock_right1 && thisBlock === nextBlock_right2) ||
+                    (thisBlock === prevBlock_left1 && thisBlock === prevBlock_left2) ||
+                    (thisBlock === nextBlock_right1 && thisBlock === prevBlock_left1)
                 ) {
                     matches.push(match);
                 }
+                else {
+                    //...
+                }
             }
         }
+
+
+        let tepmID = 0;
+        let checkMatchId = (id, currentMatchIndex) => {
+            let suitableId = false;
+            let _matches = matches.filter(m => m.type === matches[currentMatchIndex].type);
+            _matches.forEach((match, index) => {
+                if (
+                    (matches[currentMatchIndex].row === _matches[index].row &&
+                        matches[currentMatchIndex].col - _matches[index].col === 1 &&
+                        matches[currentMatchIndex].type === _matches[index].type)
+                    ||
+                    (matches[currentMatchIndex].col === _matches[index].col &&
+                        matches[currentMatchIndex].row - _matches[index].row === 1 &&
+                        matches[currentMatchIndex].type === _matches[index].type)
+                ) {
+                    tepmID = _matches[index].id;
+                    suitableId = true;
+                }
+            })
+            return suitableId;
+        };
+
+        let id = 1;
+        matches.forEach((match, index) => {
+            if (index === 0) {
+                match.id = 1;
+            } else if (checkMatchId(id, index)) {
+                match.id = tepmID;
+            } else {
+                id++;
+                match.id = id;
+            }
+        })
         return matches;
     }
 
@@ -219,24 +251,20 @@ export default class Grid extends PIXI.Container {
         this.nullifyMatchesInGridArray(matches);
 
         let beingSwapped = matches.filter(e => e.beingSwapped);
+        const arrTypes = [...new Set(matches.map(m => m.type))];
 
+        /* in this case this is automatch and we need to set target
+            blocks for each match so that the rest of certain color can 
+            go to target block position
+        */
 
-        if (beingSwapped.length === 0) {
-            /* in this case this is automatch and we need to set target
-                blocks for each match so that the rest of certain color can 
-                go to target block position
-            */
-
-            // array of all matches types... for example ["ball_red", "ball_green"] etc.
-            const arrTypes = [...new Set(matches.map(m => m.type))];
-
-            for (let type of arrTypes) {
-                let typeItems = matches.filter(m => m.type === type);
-                let centralItem = Math.floor(typeItems.length / 2);
-                console.log(centralItem)
-                matches[centralItem].beingSwapped = true;   //?? might cause problems!!!!
-                beingSwapped.push(matches[centralItem]);
-            }
+        // array of all matches types... for example ["ball_red", "ball_green"] etc.
+        for (let type of arrTypes) {
+            if (beingSwapped.map(m => m.type).includes(type)) { continue; }
+            console.log(type);
+            let centralItem = matches.indexOf(matches.find(m => m.type === type));
+            matches[centralItem].beingSwapped = true;   //?? might cause problems!!!!
+            beingSwapped.push(matches[centralItem]);
         }
 
         for (let m = 0; m < beingSwapped.length; m++) {

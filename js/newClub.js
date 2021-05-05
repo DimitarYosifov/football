@@ -1,7 +1,7 @@
 
 export function createNewClub() {
     //possible options are: Levski , Barcelona, Dunav, Ludogorets, Bayern , Dortmund , Parma ,Inter
-    const newClub = "Inter";
+    const newClub = "Levski";
     $.ajax({
         url: "addClub",
         type: 'POST',
