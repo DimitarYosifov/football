@@ -2,10 +2,11 @@ import { standingsView } from "./../standingsView.js";
 
 export default class NewRoundPopup extends PIXI.Container {
 
-    constructor(app, matchFinished) {
+    constructor(app, matchFinished, lastRound) {
         super();
         this.app = app;
         this.matchFinished = matchFinished;
+        this.lastRound = lastRound;
         this.homeTeamScore = this.app.level.isPlayerHome ? this.app.level.playerScore : this.app.level.opponentScore;
         this.awayTeamScore = this.app.level.isPlayerHome ? this.app.level.opponentScore : this.app.level.playerScore;
         this.create();
@@ -24,7 +25,12 @@ export default class NewRoundPopup extends PIXI.Container {
         );
         this.bg.endFill();
         this.addChild(this.bg);
-
+        this.bg.interactive = true;
+        this.bg.on('pointerdown', () => {
+            if (!this.matchFinished) {
+                this.remove();
+            }
+        });
         if (this.matchFinished) {
             // GAME IS OVER
             this.currentRound = new PIXI.Text(`FINAL SCORE`, {
@@ -42,7 +48,8 @@ export default class NewRoundPopup extends PIXI.Container {
             this.addChild(this.currentRound);
         } else {
             // CURRENT ROUND TEXT
-            this.currentRound = new PIXI.Text(`Round ${this.app.level.currentRound}/20`, {
+            let text = this.lastRound ? "Last Round" : `Round ${this.app.level.currentRound}/20`
+            this.currentRound = new PIXI.Text(`${text}`, {
                 fontFamily: this.app.config.mainFont,
                 fontSize: this.app.height / 10,
                 fill: '#000000',
@@ -180,7 +187,6 @@ export default class NewRoundPopup extends PIXI.Container {
                     standingsView.bind(this.app,)(true, false, this.result._text, true);
                 }
             });
-
             this.addChild(this.continueBtn);
 
             this.continueBtnLabel = new PIXI.Text(`Continue`, {
@@ -205,12 +211,15 @@ export default class NewRoundPopup extends PIXI.Container {
                 this.remove();
             })
         }
-
     }
 
-
     remove() {
-        this.parent.removeChild(this);
-        this.app.level.animationInProgress = !this.app.playerTurn;
+        if (this.parent) {
+            this.parent.removeChild(this);
+        }
+        // this.app.level.animationInProgress = !this.app.playerTurn;
+        if (this.app.level.grid && this.app.level.grid.hasGoalsInThisRound) {
+            this.app.level.grid.hasGoalsInThisRound = false;
+        }
     }
 }

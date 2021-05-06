@@ -251,7 +251,7 @@ export default class Grid extends PIXI.Container {
         this.nullifyMatchesInGridArray(matches);
 
         let beingSwapped = matches.filter(e => e.beingSwapped);
-        const arrTypes = [...new Set(matches.map(m => m.type))];
+        const arrTypes = [...new Set(matches.map(m => m.id))];
 
         /* in this case this is automatch and we need to set target
             blocks for each match so that the rest of certain color can 
@@ -259,23 +259,23 @@ export default class Grid extends PIXI.Container {
         */
 
         // array of all matches types... for example ["ball_red", "ball_green"] etc.
-        for (let type of arrTypes) {
-            if (beingSwapped.map(m => m.type).includes(type)) { continue; }
-            console.log(type);
-            let centralItem = matches.indexOf(matches.find(m => m.type === type));
+        for (let _id of arrTypes) {
+            if (beingSwapped.map(m => m.id).includes(_id)) { continue; }
+            console.log(_id);
+            let currentMatchItems = matches.filter(e => e.id === _id);
+            let central = Math.floor(currentMatchItems.length / 2);
+            let centralItem = matches.indexOf(matches.find(m => m === currentMatchItems[central]));
             matches[centralItem].beingSwapped = true;   //?? might cause problems!!!!
             beingSwapped.push(matches[centralItem]);
         }
 
         for (let m = 0; m < beingSwapped.length; m++) {
+            let thisColorMatchesIds = matches.filter(e => e.id === beingSwapped[m].id);
+            for (let e = 0; e < thisColorMatchesIds.length; e++) {
+                let targetBlock = thisColorMatchesIds.filter(x => x.beingSwapped)[0];
+                let tweenTarget = this.blocks[thisColorMatchesIds[e].row][thisColorMatchesIds[e].col];
 
-            let thisColorMatches = matches.filter(e => e.type === beingSwapped[m].type);
-
-            for (let e = 0; e < thisColorMatches.length; e++) {
-                let targetBlock = thisColorMatches.filter(x => x.beingSwapped)[0];
-                let tweenTarget = this.blocks[thisColorMatches[e].row][thisColorMatches[e].col];
-
-                if (!thisColorMatches[e].beingSwapped) {
+                if (!thisColorMatchesIds[e].beingSwapped) {
                     let newX = this.globalBlocksPositions[targetBlock.row][targetBlock.col].x;
                     let newY = this.globalBlocksPositions[targetBlock.row][targetBlock.col].y;
                     TweenMax.to(tweenTarget.blockImg, .2, {
@@ -537,6 +537,7 @@ export default class Grid extends PIXI.Container {
 
     goalAttempt() {
         //repeat this for all goal attempts !!!!!!!
+
         let tweenTarget = this.app.level.goalAttempts[0];
         let attackColor = tweenTarget.color;
 
@@ -567,6 +568,7 @@ export default class Grid extends PIXI.Container {
         }
 
         if (!firstActiveDefenseFound) {
+            this.hasGoalsInThisRound = true;
             //GOAL SCORED!!!
             let finalY = this.app.playerTurn ? this.app.height * 0.12 : this.app.height * 0.88
             TweenMax.to(tweenTarget, .5, {
@@ -662,15 +664,33 @@ export default class Grid extends PIXI.Container {
     }
 
     newRound() {
-        if (this.app.playerTurn && this.app.level.isPlayerHome ||
-            !this.app.playerTurn && !this.app.level.isPlayerHome) {
+        let defaultRoundToShowPopup = [0, 5, 10, 15].includes(this.app.level.currentRound);
+        if (
+            (
+                this.app.playerTurn && this.app.level.isPlayerHome ||
+                !this.app.playerTurn && !this.app.level.isPlayerHome
+            )
+        ) {
             this.app.level.currentRound++;
-            this.popup = new NewRoundPopup(this.app, this.app.level.currentRound > this.config.roundsInMatch);
-            this.parent.addChild(this.popup);
-        } else {
-            this.app.level.animationInProgress = !this.app.playerTurn;
         }
 
+        let matchFinished = this.app.level.currentRound > this.config.roundsInMatch;
+        let lastRound = this.app.level.currentRound === this.config.roundsInMatch;
+
+        if (
+            this.hasGoalsInThisRound || matchFinished || defaultRoundToShowPopup || lastRound
+        ) {
+            this.popup = new NewRoundPopup(this.app, matchFinished, lastRound);
+            this.parent.addChild(this.popup);
+        }
+        // else {
+        this.app.level.animationInProgress = !this.app.playerTurn;
+        // }
+
+        const spinningBall_y = this.app.playerTurn ? 0.85 : 0.15;
+        TweenMax.to(this.level.spinningBall, .35, {
+            y: this.app.height * spinningBall_y
+        });
         if (this.app.playerTurn) {
             this.addHint();
         }
