@@ -393,11 +393,9 @@ export default class Grid extends PIXI.Container {
     checkAutomaticMatch() {
         TweenMax.delayedCall(0.5, () => {
             let matches = this.checkGridForMatches();
-            console.log(matches);
             if (matches.length > 0) {
                 this.gatherMatchingBlocks(matches);
                 this.increaseCardsPointsAfterMatch(matches);
-                // })
             } else {
                 this.checkPossibleMove();
             }
@@ -406,6 +404,9 @@ export default class Grid extends PIXI.Container {
 
     // try to find possible match for move..TODO.. if non are found reshufle!
     checkPossibleMove(delay = 0, newlyCreatedGrid = false) {
+
+        console.log(`newlyCreatedGrid => ${newlyCreatedGrid}`);
+
         let possibleMoves = [];
         this.nextRoundDelay = delay;
         for (let row = 0; row < 8; row++) {
@@ -529,7 +530,8 @@ export default class Grid extends PIXI.Container {
             setTimeout(() => {
                 this.newRound();
             }, 1);
-            TweenMax.delayedCall(3 + this.nextRoundDelay, () => {
+            const nextRoundDelay = this.app.playerTurn ? 0 : 3
+            TweenMax.delayedCall(nextRoundDelay + this.nextRoundDelay, () => {
                 this.proceedToNextRound();
             })
         }
@@ -578,7 +580,6 @@ export default class Grid extends PIXI.Container {
                 onComplete: () => {
                     this.app.playerTurn ? this.app.level.playerScore++ : this.app.level.opponentScore++;
                     tweenTarget.parent.removeChild(tweenTarget);
-                    this.app.level.goalAttempts.shift();
                     this.showText("GOAL!", true);
                 }
             });
@@ -621,7 +622,6 @@ export default class Grid extends PIXI.Container {
                         this.app.level.playerActiveDefenses[firstActiveDefenseFound.index] = null;
                     }
                     firstActiveDefenseFound.parent.removeChild(firstActiveDefenseFound);
-                    this.app.level.goalAttempts.shift();
                     this.showText("MISS!", false);
                 }
             });
@@ -650,6 +650,7 @@ export default class Grid extends PIXI.Container {
             onComplete: () => {
                 TweenMax.delayedCall(1.2, () => {
                     this.removeChild(this.goalText);
+                    this.app.level.goalAttempts.shift();
                     this.checkGoalAttemps();
                 })
             }

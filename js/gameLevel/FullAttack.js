@@ -26,12 +26,10 @@ export default class FullAttack extends PIXI.Sprite {
 
         if (this.app.playerTurn) {
             // let firstEmpty = this.app.level.playerActiveDefenses.findIndex(i => i === null);
-            this.height = this.stageHeight * 0.05;
-            this.width = this.height;
-            this.newY = this.stageHeight * 0.6;
-            this.newX = this.stageWidth / 2;
-            console.log(this.newX);
-            console.log(this.newY);
+            // this.height = this.stageHeight * 0.05;
+            // this.width = this.height;
+            // this.newY = this.stageHeight * 0.6;
+            // this.newX = this.stageWidth / 2;
             // this.app.level.playerActiveDefenses[firstEmpty] = this;
         } else {
             // let firstEmpty = this.app.level.opponentActiveDefenses.findIndex(i => i === null);

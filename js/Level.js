@@ -75,8 +75,8 @@ export default class Level extends PIXI.Container {
             this.spinningBall.width = this.app.width / 11;
             this.spinningBall.scale.y = this.info.scale.x;
             this.addChild(this.spinningBall);
-            TweenMax.to(this.spinningBall, 300, {
-                rotation: 360
+            TweenMax.to(this.spinningBall, 3000, {
+                rotation: 3600
             });
         }
         this.addAdditionalChildren();
