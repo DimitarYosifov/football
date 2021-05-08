@@ -64,10 +64,8 @@ export default class NewRoundPopup extends PIXI.Container {
             this.addChild(this.currentRound);
         }
 
-
-
         //RESULT
-        this.result = new PIXI.Text(`${this.homeTeamScore} : ${this.awayTeamScore}`, {
+        this.result = new PIXI.Text(`${this.homeTeamScore}-${this.awayTeamScore}`, {
             fontFamily: this.app.config.mainFont,
             fontSize: this.app.height / 12,
             fill: '#ffffff',

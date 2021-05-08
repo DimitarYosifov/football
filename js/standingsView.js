@@ -178,6 +178,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
     let recordFixtures = (currentRound) => {
         console.log(this);
+        // if (typeof (this.data) !== "boolean") { return; }
         $.ajax({
             url: "fixtures",
             type: 'POST',
@@ -239,52 +240,72 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
                 let row = new PIXI.Container;
                 let y = fixturesContainer.height;
-                let text = createText(
-                    game,
+
+                let generateResult = generateResults;
+                let result;
+
+                if (firstClub !== playerClub && secondClub !== playerClub) {
+                    if (generateResult) {
+                        result = randomResult(firstClub, secondClub, i);
+                    } else {
+                        result = this.seasonFixtures[this.currentRound][i].split(" ")[1];
+                    }
+                } else {
+                    if (lastGameRersult) {
+                        result = lastGameRersult;
+                        //this is dirty hack here to remove undefined...
+                        this.seasonFixtures[this.currentRound][i] = this.seasonFixtures[this.currentRound][i].split(" ")[0];
+                        this.seasonFixtures[this.currentRound][i] += ` ${result}`;
+                    } else {
+                        result = this.seasonFixtures[this.currentRound][i].split(" ")[1];
+                    }
+                    if (generateResults) {
+                        calculatePoints(firstClub, secondClub, result)
+                    }
+                }
+
+                let team1 = game.split(" ")[0].split(":")[0];
+                let team2 = game.split(" ")[0].split(":")[1];
+
+                //result text
+                let _resultText = createText(
+                    result,
                     this.width / 2,
                     y,
                     0.5,
                     false
                 );
-                text.style.fontSize = this.height / 30;
-                row.addChild(text);
-                let logo1 = addLogo(firstClub, text.x - text.width / 2, text.y, text.height * 1.25, 1, 0)
+                _resultText.style.fontSize = this.height / 30;
+                row.addChild(_resultText);
+
+                let logo1 = addLogo(firstClub, _resultText.x - _resultText.width, _resultText.y, _resultText.height * 1.25, 1, 0)
                 row.addChild(logo1);
-                let logo2 = addLogo(secondClub, text.x + text.width / 2, text.y, text.height, 0, 0)
+
+                //first club
+                let _team1 = createText(
+                    `${team1} `,
+                    logo1.x - logo1.width,
+                    y,
+                    1,
+                    false
+                );
+                _team1.style.fontSize = this.height / 30;
+                row.addChild(_team1);
+
+
+                let logo2 = addLogo(secondClub, _resultText.x + _resultText.width, _resultText.y, _resultText.height * 1.25, 0, 0)
                 row.addChild(logo2);
 
-                // let generateResult = !text.text.split(" ")[1];
-                let generateResult = generateResults;
-                let textResult;
-
-                if (firstClub !== playerClub && secondClub !== playerClub) {
-                    textResult = createText(
-                        generateResult ? randomResult(firstClub, secondClub, i) : "",
-                        text.x + text.width / 2 + logo2.width * 2,
-                        text.y,
-                        0.5,
-                        false
-                    );
-                    textResult.style.fontSize = this.height / 30;
-                    row.addChild(textResult);
-                } else {
-                    textResult = createText(
-                        lastGameRersult ? lastGameRersult : "",
-                        text.x + text.width / 2 + logo2.width * 2,
-                        text.y,
-                        0.5,
-                        false
-                    );
-                    // text.text += textResult.text;
-                    this.seasonFixtures[this.currentRound][i] += ` ${textResult.text}`;
-
-                    if (generateResults) {
-                        calculatePoints(firstClub, secondClub, textResult.text)
-                    }
-
-                    textResult.style.fontSize = this.height / 30;
-                    row.addChild(textResult);
-                }
+                //second club
+                let _team2 = createText(
+                    ` ${team2}`,
+                    logo2.x + logo2.width,
+                    y,
+                    0,
+                    false
+                );
+                _team2.style.fontSize = this.height / 30;
+                row.addChild(_team2);
                 fixturesContainer.addChild(row);
             })
 
@@ -388,20 +409,20 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
         let calculatePoints = (firstClub, secondClub, result) => {
             let first = this.teams.find(t => t.name === firstClub);
-            first.won += +result.split(':')[0] > +result.split(':')[1] ? 1 : 0;
-            first.ties += +result.split(':')[0] === +result.split(':')[1] ? 1 : 0;
-            first.lost += +result.split(':')[0] < +result.split(':')[1] ? 1 : 0;
-            first.goalsFor += +result.split(':')[0];
-            first.goalsAgainst += +result.split(':')[1];
+            first.won += +result.split('-')[0] > +result.split('-')[1] ? 1 : 0;
+            first.ties += +result.split('-')[0] === +result.split('-')[1] ? 1 : 0;
+            first.lost += +result.split('-')[0] < +result.split('-')[1] ? 1 : 0;
+            first.goalsFor += +result.split('-')[0];
+            first.goalsAgainst += +result.split('-')[1];
             first.goalsDifference = first.goalsFor - first.goalsAgainst;
             first.points = first.won * 3 + first.ties;
 
             let second = this.teams.find(t => t.name === secondClub);
-            second.won += +result.split(':')[0] < +result.split(':')[1] ? 1 : 0;
-            second.ties += +result.split(':')[0] === +result.split(':')[1] ? 1 : 0;
-            second.lost += +result.split(':')[0] > +result.split(':')[1] ? 1 : 0;
-            second.goalsFor += +result.split(':')[1];
-            second.goalsAgainst += +result.split(':')[0];
+            second.won += +result.split('-')[0] < +result.split('-')[1] ? 1 : 0;
+            second.ties += +result.split('-')[0] === +result.split('-')[1] ? 1 : 0;
+            second.lost += +result.split('-')[0] > +result.split('-')[1] ? 1 : 0;
+            second.goalsFor += +result.split('-')[1];
+            second.goalsAgainst += +result.split('-')[0];
             second.goalsDifference = second.goalsFor - second.goalsAgainst;
             second.points = second.won * 3 + second.ties;
         }
