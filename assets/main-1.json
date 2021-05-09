@@ -144,6 +144,30 @@
         "y": 0.5
       }
     },
+    "rain": {
+      "frame": {
+        "x": 244,
+        "y": 2015,
+        "w": 89,
+        "h": 20
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 10,
+        "y": 7,
+        "w": 89,
+        "h": 20
+      },
+      "sourceSize": {
+        "w": 104,
+        "h": 34
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "shoe": {
       "frame": {
         "x": 348,

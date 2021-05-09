@@ -4,6 +4,7 @@ import LevelCardsSet from "./gameLevel/LevelCardsSet.js";
 import MatchStartPopup from "./gameLevel/MatchStartPopup.js";
 import Grid from "./gameLevel/Grid.js";
 import NewRoundPopup from "./gameLevel/NewRoundPopup.js";
+import Particles from "./AddParticles.js";
 
 export default class Level extends PIXI.Container {
 
@@ -84,7 +85,14 @@ export default class Level extends PIXI.Container {
         this.onIntroFinish = () => {
             this.grid = new Grid(this.app);
             this.addChild(this.grid);
+            // this.addSnow();
         }
+
+        this.addSnow = () => {
+            this.snowContainer = new Particles(this.app, this);
+            this.addChild(this.snowContainer);
+        }
+
 
         const createCards = async () => {
             let [player, opponent] = await
