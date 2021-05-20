@@ -93,6 +93,8 @@ export default class Stage {
             // forceCanvas: true
         });
 
+        // this.renderer.plugins.interaction.moveWhenInside = true;
+
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
         resolutiion();
         this.animationLoop = () => {

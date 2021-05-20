@@ -3,7 +3,7 @@ import activeDefense from "./ActiveDefense.js";
 import fullAttack from "./FullAttack.js";
 
 export default class Card extends PIXI.Container {
-    constructor(data, app) {
+    constructor(data, app, showCurrentValues = true) {
 
         super();
 
@@ -56,6 +56,8 @@ export default class Card extends PIXI.Container {
             // 'FF9702': "ball_orange",  // ORANGE
             'B200FF': "ball_purple"   // PURPLE:
         }
+
+        this.showCurrentValues = showCurrentValues;
 
         this.createCard();
     }
@@ -129,7 +131,11 @@ export default class Card extends PIXI.Container {
 
         this.addChild(this.cardImg);
 
-        this.attackValuesText = new PIXI.Text(this.stats.attack_current + '/' + this.stats.attack_full, {
+        const attText = this.showCurrentValues ?
+            this.stats.attack_current + '/' + this.stats.attack_full :
+            this.stats.attack_full
+
+        this.attackValuesText = new PIXI.Text(attText, {
             fontFamily: this.config.mainFont,
             fontSize: this.font_size,
             fill: '#' + this.stats.attack_color, align: 'center',
@@ -139,7 +145,11 @@ export default class Card extends PIXI.Container {
         this.attackValuesText.position.set(this.attack_text.x, this.attack_text.y);
         this.attackValuesText.anchor.x = 1;
 
-        this.defenseValuesText = new PIXI.Text(this.stats.defense_current + '/' + this.stats.defense_full, {
+        const defText = this.showCurrentValues ?
+            this.stats.defense_current + '/' + this.stats.defense_full :
+            this.stats.defense_full
+
+        this.defenseValuesText = new PIXI.Text(defText, {
             fontFamily: this.config.mainFont,
             fontSize: this.font_size,
             fill: '#' + this.stats.defense_color, align: 'center',
@@ -289,10 +299,16 @@ export default class Card extends PIXI.Container {
                 }
             })
         }
-        // //TODO... => add opponent points same as player in the function above
-        // //TODO... => add yellow card, red card ana injury.....
-        // //TODO... => check for full attack or defence
-        // //TODO... => add sort of animations to show card gained points...
-        // //TODO... => check if card wins with two colors
+    }
+
+    makeInteractive() {
+        this.interactive = true;
+        this.on('pointerdown', function (e) {
+            this.selected = true;
+            this.parent.children.forEach(child => {
+                child.alpha = 0.35;
+            })
+            this.alpha = 1;
+        })
     }
 }

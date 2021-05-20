@@ -1,5 +1,6 @@
 import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
+import EditTeam from "./EditTeam.js";
 
 export function standingsView(data, increaseRound = false, lastGameRersult = null, generateResults = false) {
     this.data = data;
@@ -372,6 +373,12 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 else {
                     this.stage.removeChildren();
                     this.startLevel();
+
+                    //fot test!!!!!!
+
+                    // new EditTeam(this);
+
+
                 }
             });
 
