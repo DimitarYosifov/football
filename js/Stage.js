@@ -38,7 +38,7 @@ export default class Stage {
                 requestAnimationFrame(this.animationLoop);
                 // this.stage.visible = false;
             }
-            
+
             this.landscape = this.isMobile && window.screen.width > window.screen.height;
             this.stage.visible = true;
             ////THIS DOESNT WORK ON FULL SCREEN TODO-FIX IT
@@ -51,7 +51,7 @@ export default class Stage {
             if (this.landscape) {
                 document.getElementById("stage").style.height = "0px";
                 this.body.style.height = screen.height - window.innerHeight + "px";
-                return;  
+                return;
             }
 
             this.height = window.innerHeight;
@@ -69,7 +69,7 @@ export default class Stage {
             this.stage.width = this.canvas.width;
 
             this.renderer.resize(this.canvas.width, this.canvas.height);
-          
+
             if (!this.isAppStarted) {
                 this.isAppStarted = true;
                 this.checkLoaded();
@@ -81,18 +81,24 @@ export default class Stage {
             this.stage.scale.y = this.stage.scale.x;
         }
 
-        this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height, {
-            transparent: true,
-            resolution: window.devicePixelRatio || 1,//2, //7 :) //DPR
-            view: this.canvas,
-            autoResize: true,
-            autoDensity: true,
-            antialias: true
+        this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height,
+            {
+                transparent: true,
+                resolution: window.devicePixelRatio || 1,//2, //7 :) //DPR
+                view: this.canvas,
+                autoResize: true,
+                autoDensity: true,
+                antialias: true
+            }, {
+            // forceCanvas: true
         });
 
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
         resolutiion();
         this.animationLoop = () => {
+            if (this.level && this.level.snowContainer) {
+                this.level.snowContainer.update();
+            }
             this.renderer.render(this.stage);
             if (!this.landscape) {
                 requestAnimationFrame(this.animationLoop);

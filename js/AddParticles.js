@@ -4,7 +4,7 @@ export default class AddParticles {
     constructor(app, level) {
         this.app = app;
         this.level = level;
-        let container = new PIXI.Container();
+        this.container = new PIXI.particles.ParticleContainer(6000, { scale: true, position: true, rotation: true, alpha: true });
         // Create a new emitter
         // note: if importing library like "import * as particles from 'pixi-particles'"
         // or "const particles = require('pixi-particles')", the PIXI namespace will
@@ -16,7 +16,7 @@ export default class AddParticles {
             // The PIXI.Container to put the emitter in
             // if using blend modes, it's important to put this
             // on top of a bitmap, and not use the root stage Container
-            container,
+            this.container,
 
             // The collection of particle images to use
             // [PIXI.Texture.fromImage('image.jpg')],
@@ -26,20 +26,20 @@ export default class AddParticles {
             // of the emitter
             {
                 "alpha": {
-                    "start": 0.35,
-                    "end": 0.35
-                },
-                "scale": {
                     "start": 0.4,
                     "end": 0.4
+                },
+                "scale": {
+                    "start": 0.5,
+                    "end":  0.5
                 },
                 "color": {
                     "start": "ffffff",
                     "end": "ffffff"
                 },
                 "speed": {
-                    "start": 500,
-                    "end": 500
+                    "start": 900,
+                    "end": 900
                 },
                 "startRotation": {
                     "min": 80,
@@ -50,11 +50,11 @@ export default class AddParticles {
                     "max": 0
                 },
                 "lifetime": {
-                    "min": 3,
-                    "max": 3
+                    "min": 1,
+                    "max": 1
                 },
                 "blendMode": "normal",
-                "frequency": 0.007,
+                "frequency": 0.009,
                 "emitterLifetime": 0,
                 "maxParticles": 10000,
                 "pos": {
@@ -64,10 +64,10 @@ export default class AddParticles {
                 "addAtBack": false,
                 "spawnType": "rect",
                 "spawnRect": {
-                    "x": this.level.x - this.level.width / 2,
-                    "y": this.level.y - this.level.height / 2,
-                    "w": this.level.width * 2,
-                    "h": this.level.height
+                    "x": this.level.x,
+                    "y": this.level.y,
+                    "w": this.level.width * 0.95,
+                    "h": this.level.height * 0.5
                 }
             }
         );
@@ -76,10 +76,10 @@ export default class AddParticles {
         var elapsed = Date.now();
 
         // Update function every frame
-        var update = function () {
+        this.update = () => {
 
             // Update the next frame
-            requestAnimationFrame(update);
+            // requestAnimationFrame(this.update);
 
             var now = Date.now();
 
@@ -96,13 +96,13 @@ export default class AddParticles {
         emitter.emit = true;
 
         setTimeout(() => {
-            //test stop/destroy;
+            //      // test stop/destroy;
             // emitter.emit = false;
             // emitter.destroy(); // this will kill the emitter
         }, 3333);
 
         // Start the update
-        update();
+        // update();
 
         // container.x = 333
         // container.y = 333
@@ -110,7 +110,6 @@ export default class AddParticles {
         // container.height = 333
 
         // this.stage.addChild(container)
-        return container;
     }
 
 }

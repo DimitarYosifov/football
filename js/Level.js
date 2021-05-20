@@ -90,7 +90,8 @@ export default class Level extends PIXI.Container {
 
         this.addSnow = () => {
             this.snowContainer = new Particles(this.app, this);
-            this.addChild(this.snowContainer);
+            this.addChild(this.snowContainer.container);
+            this.snowContainer.update();
         }
 
 
@@ -109,5 +110,17 @@ export default class Level extends PIXI.Container {
             this.dataRecieved();
         };
         createCards().catch(err => { console.log('Run failed (does not matter which task)!'); });
+      
+        const mask = new PIXI.Graphics();
+        mask.beginFill(0xffffff, 1);
+        mask.drawRect(
+            0,
+            0,
+            this.width,
+            this.height
+        );
+        mask.endFill();
+        this.mask = mask;
+   
     }
 }
