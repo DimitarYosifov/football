@@ -15,7 +15,7 @@ export default {
     // gridHasMask: true,            // UNUSED!!!
 
     // predetermened grid for debug
-    isGridInDebug: false,
+    isGridInDebug: true,
 
     // temporary
     isPlayerHome: true,

@@ -372,11 +372,11 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 }
                 else {
                     this.stage.removeChildren();
-                    this.startLevel();
+                    // this.startLevel();
 
                     //fot test!!!!!!
 
-                    // new EditTeam(this);
+                    new EditTeam(this);
 
 
                 }

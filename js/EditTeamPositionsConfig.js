@@ -1,17 +1,13 @@
-/*
-    first key here is club power differences,
-    than keys are results 
-     and values are chance 
-    for example..  6["1-0"] has 3% chance to be generated
-*/
 
-export default {
-    startingLineUp: [
+export function EditTeamPositionsConfig(app) {
+
+    const startingLineUp = [
         {
-            x: null,
-            y: null,
+            card_x: (app.width / 6) * i,
+            card_y: app.height * 0.88,
+            card_width: app.width / 6,
+            card_height: app.height * 0.12
         }
-
-
     ]
+    return startingLineUp;
 }
