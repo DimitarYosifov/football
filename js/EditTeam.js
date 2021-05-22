@@ -1,11 +1,9 @@
 // import Background from "./Background.js";
 import Card from "./gameLevel/Card.js";
-import {EditTeamPositionsConfig} from "./EditTeamPositionsConfig.js";
 
 export default class EditTeam {
     constructor(app) {
         this.app = app;
-        this.EditTeamPositionsConfig = EditTeamPositionsConfig;
         this.clubName = this.app.playerClubData.name;
         this.players = this.app.allClubs.find(team => team.name === this.clubName).players;
         this.stageWidth = this.app.width;
@@ -13,7 +11,7 @@ export default class EditTeam {
         console.log(this);
         console.log(this.players);
         this.createHeader();
-        this.createLineUpText();
+        this.createTexts();
         this.createPlayers();
     }
 
@@ -24,38 +22,60 @@ export default class EditTeam {
             fill: '#ff0000',
             align: 'center',
             stroke: '#ffffff',
-            strokeThickness: 1
+            strokeThickness: 0.5
         });
         this.text.position.set(this.app.width / 2, this.app.height * 0.05);
         this.text.anchor.set(0.5, 0.5);
         this.app.stage.addChild(this.text);
     }
 
-    createLineUpText() {
-        this.text = new PIXI.Text('starting line-up', {
-            fontFamily: this.app.config.mainFont,
-            fontSize: this.app.height / 25,
-            fill: '#ff0000',
-            align: 'center',
-            stroke: '#ffffff',
-            strokeThickness: 1
-        });
-        this.text.position.set(this.app.width / 2, this.app.height * 0.85);
-        this.text.anchor.set(0.5, 0.5);
-        this.app.stage.addChild(this.text);
+    createTexts() {
+        let create = (_text, y) => {
+            let text = new PIXI.Text(_text, {
+                fontFamily: this.app.config.mainFont,
+                fontSize: this.app.height / 28,
+                fill: '#ff0000',
+                align: 'center',
+                stroke: '#ffffff',
+                strokeThickness: 0
+            });
+            text.position.set(0, y);
+            text.anchor.set(0, 0.5);
+            this.app.stage.addChild(text);
+        }
+        create('goalkeepers', this.app.height * 0.10);
+        create('defenders', this.app.height * 0.29);
+        create('midfielders', this.app.height * 0.48);
+        create('forwards', this.app.height * 0.67);
+        create('starting line-up', this.app.height * 0.86);
     }
 
     createPlayers() {
-        console.log(this.EditTeamPositionsConfig(this.app));
-        for (let i = 0; i < this.players.length; i++) {
+        let Y_positions = {
+            starting: this.app.height * 0.88,
+            GK: this.app.height * 0.69,
+            DF: this.app.height * 0.50,
+            MD: this.app.height * 0.31,
+            F: this.app.height * 0.12
+        }
 
-            // these parms should be in config!!!!!! IMPORTANT
-            let card_x = (this.app.width / 6) * i;
-            let card_y = this.app.height * 0.88;
+        let playersCount = {
+            starting: 0,
+            GK: 0,
+            DF: 0,
+            MD: 0,
+            F: 0
+        }
+
+        for (let i = 0; i < this.players.length; i++) {
+            let player = this.players[i];
+            const playerPosition = player.position;
+            const isSub = player.substitute;
+            let card_x = isSub ? (this.app.width / 6) * playersCount[playerPosition] : (this.app.width / 6) * playersCount.starting;
+            let card_y = isSub ? Y_positions[playerPosition] : Y_positions.starting;
             let card_width = this.app.width / 6;
             let card_height = this.app.height * 0.12;
 
-            let player = this.players[i];
             let card = new Card({
                 index: i,
                 stats: player,
@@ -106,6 +126,7 @@ export default class EditTeam {
             }, this.app, false);
             this.app.stage.addChild(card);
             card.makeInteractive();
+            isSub ? playersCount[playerPosition]++ : playersCount.starting++;
         }
     }
 }
