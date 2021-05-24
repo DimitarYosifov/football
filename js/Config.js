@@ -30,7 +30,7 @@ export default {
         ["ball_purple", "ball_purple", "ball_purple", "ball_purple", "ball_purple", "ball_red"],
         ["ball_green", "ball_red", "ball_red", "ball_red", "ball_red", "red_cross"]
     ],
-    roundsInMatch: 20,
+    roundsInMatch: 1,
 
     // this may be for debug and test or may be default
     randomCardColors: true,

@@ -1,4 +1,5 @@
 import { standingsView } from "./standingsView.js";
+import { recordClubPlayersParams } from "./recordClubPlayersParams.js";
 
 export function clubSelection(app, mode) {
     let clubs = [];
@@ -121,7 +122,7 @@ export function clubSelection(app, mode) {
             app.stage.removeChild(selectClub);
             app.friendly = mode === "friendly";
             if (!app.friendly) {
-                //TODO 
+                recordClubPlayersParams(app);
                 app.stage.removeChildren();
                 standingsView.bind(app)();
             }

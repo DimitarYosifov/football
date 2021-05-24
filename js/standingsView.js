@@ -179,7 +179,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
     let recordFixtures = (currentRound) => {
         console.log(this);
-        // if (typeof (this.data) !== "boolean") { return; }
+        //this.app.allClubsData
         $.ajax({
             url: "fixtures",
             type: 'POST',
@@ -342,12 +342,11 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             continueBtn.height = this.height * 0.1;
             continueBtn.scale.x = continueBtn.scale.y;
             continueBtn.x = this.width / 2;
-            continueBtn.y = this.height * 0.8;
+            continueBtn.y = this.height * 0.7;
             continueBtn.anchor.set(0.5);
             continueBtn.interactive = true;
             continueBtn.interactive = true;
             continueBtn.on('pointerdown', () => {
-
                 if (
                     !this.seasonFixtures[this.currentRound + 1] &&
                     lastGameRersult &&
@@ -372,13 +371,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 }
                 else {
                     this.stage.removeChildren();
-                    // this.startLevel();
-
-                    //fot test!!!!!!
-
-                    new EditTeam(this);
-
-
+                    this.startLevel();
                 }
             });
 
@@ -390,9 +383,9 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 fill: '#ffffff',
                 align: 'center',
                 stroke: '#000000',
-                fontWeight: 800,
+                fontWeight: 200,
                 lineJoin: "bevel",
-                strokeThickness: 6
+                strokeThickness: 2
             });
             continueBtnLabel.position.set(
                 continueBtn.x,
@@ -400,6 +393,39 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             );
             continueBtnLabel.anchor.set(0.5, 0.5);
             this.stage.addChild(continueBtnLabel);
+
+            //EDIT TEAM BTN
+            const editBtnTexture = this.loader.resources.buttons.textures[`btn1`];
+            let editTeamBtn = new PIXI.Sprite(editBtnTexture);
+            editTeamBtn.height = this.height * 0.06;
+            editTeamBtn.scale.x = editTeamBtn.scale.y;
+            editTeamBtn.x = this.width * 0.7;
+            editTeamBtn.y = this.height * 0.9;
+            editTeamBtn.anchor.set(0.5);
+            editTeamBtn.interactive = true;
+            editTeamBtn.interactive = true;
+            editTeamBtn.on('pointerdown', () => {
+                new EditTeam(this);
+            });
+
+            this.stage.addChild(editTeamBtn);
+
+            let editBtnLabel = new PIXI.Text(`edit team`, {
+                fontFamily: this.config.mainFont,
+                fontSize: editTeamBtn.height / 2.5,
+                fill: '#ffffff',
+                align: 'center',
+                stroke: '#000000',
+                fontWeight: 200,
+                lineJoin: "bevel",
+                strokeThickness: 2
+            });
+            editBtnLabel.position.set(
+                editTeamBtn.x,
+                editTeamBtn.y
+            );
+            editBtnLabel.anchor.set(0.5, 0.5);
+            this.stage.addChild(editBtnLabel);
         }
 
         let randomResult = (firstClub, secondClub, i) => {

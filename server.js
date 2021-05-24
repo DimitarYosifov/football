@@ -233,6 +233,40 @@ app.post('/getClubData', async (req, res) => {
     });
 });
 
+app.post('/playersParams', async (req, res) => {
+    let players = req.body.players;
+    let user = req.body.user;
+    firebase.database().ref('/users/' + user + '/lineUp/').set({
+        players: players,
+        user: user
+    }, function (error) {
+        if (error) {
+            res.set('Content-Type', 'application/json');
+            res.status(500);
+            res.json({
+                success: false
+            });
+        } else {
+            res.set('Content-Type', 'application/json');
+            res.status(200);
+            res.json({
+                success: true
+            });
+        }
+    });
+});
+
+app.post('/getPlayerLineUp', async (req, res) => {
+    let user = req.body.user;
+    firebase.database().ref("/users/" + user + '/lineUp/').once('value').then(function (snapshot) {
+        res.set('Content-Type', 'application/json');
+        res.status(200);
+        res.json({
+            players: Object.values(snapshot.val())[0]
+        });
+    });
+});
+
 app.post('/deleteProgress', async (req, res) => {
     let user = req.body.user;
     let a = firebase.database().ref('/users/' + user + `/fixtures`);
@@ -248,7 +282,7 @@ signOutUser = function () {
     //    }, function (error) {
     //        console.error('Sign Out Error', error);
     //    });
-}; 
+};
 //authStateChange
 user = function (callback) {
     firebase.auth().onAuthStateChanged(function (firebaseUser) {

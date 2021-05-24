@@ -23,6 +23,30 @@
         "x": 0.5,
         "y": 0.5
       }
+    },
+    "save": {
+      "frame": {
+        "x": 680,
+        "y": 0,
+        "w": 300,
+        "h": 117
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 300,
+        "h": 117
+      },
+      "sourceSize": {
+        "w": 300,
+        "h": 117
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
     }
   },
   "meta": {
@@ -31,7 +55,7 @@
     "image": "buttons.png",
     "format": "RGBA8888",
     "size": {
-      "w": 680,
+      "w": 980,
       "h": 229
     },
     "scale": 1

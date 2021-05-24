@@ -301,14 +301,59 @@ export default class Card extends PIXI.Container {
         }
     }
 
-    makeInteractive() {
-        this.interactive = true;
-        this.on('pointerdown', function (e) {
-            this.selected = true;
-            this.parent.children.forEach(child => {
-                child.alpha = 0.35;
-            })
-            this.alpha = 1;
-        })
+    addLeagueCardsAndInjury(count, hasRedCard, injuredFor_n_games) {
+        let yellowCardTexture = PIXI.Texture.fromImage(this.yellowCardTexture);
+        let yellowCard = new PIXI.Sprite(yellowCardTexture);
+        yellowCard.x = this.card_x + this.card_width * 0.5;
+        yellowCard.y = this.card_y + this.card_height * 1.2;
+        yellowCard.width = this.card_width / 5;
+        yellowCard.scale.y = yellowCard.scale.x;
+        yellowCard.alpha = 1;
+        yellowCard.anchor.set(1, 0);
+        yellowCard.visible = true;
+        this.addChild(yellowCard);
+        this.selectable = true;
+
+        if (count === 5) {
+            this.yellowCard.visible = true;
+            this.selectable = false;
+        }
+        else if (hasRedCard) {
+            this.yellowCard.texture = this.app.loader.resources.main1.textures[`red_card`];
+            this.yellowCard.visible = true;
+            this.selectable = false;
+        }
+        else if (injuredFor_n_games !== 0) {
+            this.injury.visible = true;
+            this.selectable = false;
+            this.createTexts.create(`${injuredFor_n_games}`, this.card_y + this.card_height / 2, this.card_x + this.card_width / 2, 0.5, 0.5, this.app.height / 50, false);
+        }
+    }
+
+    addGoalsScored(x) {
+        let ballTexture = this.app.loader.resources.main1.textures[`ball_prototype`];
+        let ball = new PIXI.Sprite(ballTexture);
+        ball.x = x;
+        ball.y = this.card_y + this.card_height * 1.02;
+        ball.width = this.card_width / 5;
+        ball.scale.y = ball.scale.x;
+        ball.alpha = 1;
+        ball.anchor.set(1, 0);
+        this.addChild(ball);
+    }
+
+    createTexts = {
+        create: (_text, y, x, anchorX, anchorY, fontSize, returnText = false, color = "#ffffff") => {
+            let text = new PIXI.Text(_text, {
+                fontFamily: this.app.config.mainFont,
+                fontSize: fontSize,
+                fill: color,
+                align: 'center'
+            });
+            text.position.set(x, y);
+            text.anchor.set(anchorX, anchorY);
+            this.addChild(text);
+            if (returnText) return text;
+        }
     }
 }

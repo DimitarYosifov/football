@@ -8,17 +8,38 @@ export default class LineUps {
         this.clubData();
     }
     clubData = () => {
-        $.ajax({
-            url: "getClubsPlayers",
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ name: this.clubName }),
-            success: (res) => {
-                this[this.targetDeck] = res.clubData.players;
-                this.onCardsData();
-            }, error: (err) => {
-                alert("err")
-            }
-        });
+        if (this.targetDeck === "player") {
+            $.ajax({
+                url: "getPlayerLineUp",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(
+                    {
+                        user: localStorage.getItem('user')
+                    }
+                ),
+                success: (res) => {
+                    console.log(res);
+                    this[this.targetDeck] = res.players;
+                    this.onCardsData();
+                }, error: (err) => {
+                    alert("err")
+                }
+            });
+        } else {
+            $.ajax({
+                url: "getClubsPlayers",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ name: this.clubName }),
+                success: (res) => {
+                    this[this.targetDeck] = res.clubData.players;
+                    this.onCardsData();
+                }, error: (err) => {
+                    alert("err")
+                }
+            });
+        }
+
     }
 }
