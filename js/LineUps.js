@@ -1,14 +1,16 @@
 import config from "./Config.js";
 
 export default class LineUps {
-    constructor(clubName, onCardsData, targetDeck) {
+    constructor(clubName, onCardsData, targetDeck, friendly) {
         this.clubName = clubName;
         this.onCardsData = onCardsData;
         this.targetDeck = targetDeck;
+        const playerReq = this.targetDeck === "player"
+        this.friendly = friendly;
         this.clubData();
     }
     clubData = () => {
-        if (this.targetDeck === "player") {
+        if (this.targetDeck === "player" && !this.friendly) {
             $.ajax({
                 url: "getPlayerLineUp",
                 type: 'POST',

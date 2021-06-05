@@ -3,7 +3,7 @@ import activeDefense from "./ActiveDefense.js";
 import fullAttack from "./FullAttack.js";
 
 export default class Card extends PIXI.Container {
-    constructor(data, app, showCurrentValues = true) {
+    constructor(data, app, showCurrentValues = true, randomColor) {
 
         super();
 
@@ -58,7 +58,8 @@ export default class Card extends PIXI.Container {
         }
 
         this.showCurrentValues = showCurrentValues;
-
+        this.goalsScored = 0;
+        this.randomColor = randomColor;
         this.createCard();
     }
 
@@ -67,7 +68,7 @@ export default class Card extends PIXI.Container {
         this.index = this.index;
         this.stats = this.stats;
 
-        if (this.config.randomCardColors) {
+        if (this.config.randomCardColors && this.randomColor) {
             const colors = Object.keys(this.colors);
             const atk_index = Math.floor(Math.random() * colors.length);
             const def_index = Math.floor(Math.random() * colors.length);
@@ -101,6 +102,17 @@ export default class Card extends PIXI.Container {
         this.glove.scale.x = this.glove.scale.y;
         this.glove.tint = '0x' + this.stats.defense_color;
 
+        let injuryTexture = PIXI.Texture.fromImage(this.injuryTexture);
+        this.injury = new PIXI.Sprite(injuryTexture);
+        this.injury.x = this.injury_x;
+        this.injury.y = this.injury_y;
+        this.injury.width = this.injury_width;
+        this.injury.scale.y = this.injury.scale.x;
+        this.injury.alpha = 0.75;
+        this.injury.anchor.set(0.5, 0.5);
+        this.injury.visible = this.stats.injured > 0;
+        this.hasInjury = this.stats.injured > 0;
+
         let yellowCardTexture = PIXI.Texture.fromImage(this.yellowCardTexture);
         this.yellowCard = new PIXI.Sprite(yellowCardTexture);
         this.yellowCard.x = this.yellowCard_x;
@@ -113,16 +125,7 @@ export default class Card extends PIXI.Container {
         this.hasYellowCard = false;
         this.hasRedCard = false;
 
-        let injuryTexture = PIXI.Texture.fromImage(this.injuryTexture);
-        this.injury = new PIXI.Sprite(injuryTexture);
-        this.injury.x = this.injury_x;
-        this.injury.y = this.injury_y;
-        this.injury.width = this.injury_width;
-        this.injury.scale.y = this.injury.scale.x;
-        this.injury.alpha = 0.75;
-        this.injury.anchor.set(0.5, 0.5);
-        this.injury.visible = false;
-        this.hasInjury = false;
+
 
         //border
         this.border = new PIXI.Graphics();
@@ -265,7 +268,8 @@ export default class Card extends PIXI.Container {
                     this.app, this.stats.attack_color,
                     this.card_x + this.card_width / 2,
                     this.card_y + this.card_height / 2,
-                    this.colors[this.stats.attack_color]
+                    this.colors[this.stats.attack_color],
+                    this.index
                 );
                 this.app.level.goalAttempts.push(fullAttackShoe);
                 this.app.level.addChild(fullAttackShoe);
@@ -316,16 +320,16 @@ export default class Card extends PIXI.Container {
 
         if (count === 5) {
             this.yellowCard.visible = true;
-            this.selectable = false;
+            // this.selectable = false;
         }
         else if (hasRedCard) {
             this.yellowCard.texture = this.app.loader.resources.main1.textures[`red_card`];
             this.yellowCard.visible = true;
-            this.selectable = false;
+            // this.selectable = false;
         }
         else if (injuredFor_n_games !== 0) {
             this.injury.visible = true;
-            this.selectable = false;
+            // this.selectable = false;
             this.createTexts.create(`${injuredFor_n_games}`, this.card_y + this.card_height / 2, this.card_x + this.card_width / 2, 0.5, 0.5, this.app.height / 50, false);
         }
     }

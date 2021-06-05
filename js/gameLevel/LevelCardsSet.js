@@ -3,13 +3,13 @@ import LineUps from "../LineUps.js";
 
 export default class LevelCardsSet extends PIXI.Container {
 
-    constructor(width, height, targetDeck, clubName) {
+    constructor(width, height, targetDeck, clubName, friendly) {
         super();
         this.targetDeck = targetDeck;
         this.clubName = clubName;
         this.stageWidth = width;
         this.stageHeight = height;
-        this.lineUps = new LineUps(this.clubName, this.onCardsData, this.targetDeck);
+        this.lineUps = new LineUps(this.clubName, this.onCardsData, this.targetDeck, friendly);
         this.interactive = false;
     }
 
@@ -66,7 +66,7 @@ export default class LevelCardsSet extends PIXI.Container {
                 border_y: card_y,
                 border_width: 0,
                 border_height: card_height
-            }, this.parent.app)
+            }, this.parent.app, false, false)
             this.addChild(card);
         }
     }
@@ -123,12 +123,15 @@ export default class LevelCardsSet extends PIXI.Container {
                 border_y: this.stageHeight * 0,
                 border_width: 0,
                 border_height: 0
-            }, this.parent.app)
+            }, this.parent.app, false, true)
             this.addChild(card);
         }
     }
 
     onCardsData = () => {
+        // if (this.targetDeck === "player") {
+        //     this.startingLineUp = [].concat(this.lineUps.player);
+        // }
         this.targetDeck === "player" ? this.createPlayerDeck() : this.createOpponentDeck();
     }
 }

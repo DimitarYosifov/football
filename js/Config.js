@@ -15,22 +15,22 @@ export default {
     // gridHasMask: true,            // UNUSED!!!
 
     // predetermened grid for debug
-    isGridInDebug: true,
+    isGridInDebug: false,
 
     // temporary
     isPlayerHome: true,
 
     debugGrid: [
-        ["ball_purple", "red_cross", "ball_red", "ball_red", "red_card", "ball_red"],
-        ["ball_green", "ball_yellow", "yellow_card", "ball_red", "ball_red", "ball_yellow"],
+        ["ball_purple", "red_cross", "ball_red", "red_cross", "red_card", "red_cross"],
+        ["ball_green", "ball_yellow", "yellow_card", "ball_red", "red_cross", "ball_yellow"],
         ["red_card", "yellow_card", "ball_green", "ball_red", "red_card", "ball_green"],
         ["ball_purple", "ball_yellow", "ball_purple", "red_cross", "red_card", "ball_blue"],
         ["ball_yellow", "ball_red", "ball_blue", "ball_yellow", "ball_blue", "yellow_card"],
         ["ball_red", "ball_red", "ball_red", "ball_red", "ball_green", "red_cross"],
-        ["ball_purple", "ball_purple", "ball_purple", "ball_purple", "ball_purple", "ball_red"],
-        ["ball_green", "ball_red", "ball_red", "ball_red", "ball_red", "red_cross"]
+        ["ball_red", "ball_red", "ball_red", "ball_red", "ball_red", "ball_red"],
+        ["ball_red", "ball_red", "ball_red", "ball_red", "ball_red", "ball_red"]
     ],
-    roundsInMatch: 1,
+    roundsInMatch: 20,
 
     // this may be for debug and test or may be default
     randomCardColors: true,
@@ -46,5 +46,7 @@ export default {
         0: { "win": 30, "tie": 70, "lose": 100 },
     },
     // color of every newly created block - for tests!
-    predefinedBlockColor : null
+    predefinedBlockColor: null,
+    maxInjuryDuration: 5,
+    yellowCardsToMissGame: 5
 }

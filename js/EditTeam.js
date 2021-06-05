@@ -5,7 +5,23 @@ import { recordClubPlayersParams } from "./recordClubPlayersParams.js";
 export default class EditTeam {
     constructor(app) {
         this.app = app;
-        this.app.stage.removeChildren();
+        this.container = new PIXI.Container;
+        this.app.stage.addChild(this.container);
+        // this.container.interactive = true
+
+        //BG
+        this.bg = new PIXI.Graphics();
+        this.bg.beginFill(0x000000, 1);
+        this.bg.drawRect(
+            0,
+            0,
+            this.app.width,
+            this.app.height
+        );
+        this.bg.endFill();
+        this.container.addChild(this.bg);
+        this.bg.interactive = true;
+        this.bg.on('pointerdown', () => { });
         this.clubName = this.app.playerClubData.name;
 
         $.ajax({
@@ -39,7 +55,8 @@ export default class EditTeam {
         });
         this.text.position.set(this.app.width / 2, this.app.height * 0.03);
         this.text.anchor.set(0.5, 0.5);
-        this.app.stage.addChild(this.text);
+
+        this.container.addChild(this.text);
     }
 
     createPlayers() {
@@ -111,8 +128,8 @@ export default class EditTeam {
                 injury_x: card_x + card_width / 2,
                 injury_y: card_y + card_height / 2,
                 injury_width: card_width * 0.75,
-            }, this.app, false);
-            this.app.stage.addChild(card);
+            }, this.app, false, false);
+            this.container.addChild(card);
             this.allCards.push(card);
             card.playerPosition = playerPosition;
             card.isSub = isSub;
@@ -144,7 +161,7 @@ export default class EditTeam {
             });
             text.position.set(x, y);
             text.anchor.set(anchorX, anchorY);
-            this.app.stage.addChild(text);
+            this.container.addChild(text);
             if (returnText) return text;
         }
     }
@@ -170,16 +187,12 @@ export default class EditTeam {
                     }
 
                     this.allCards.forEach((card, cardIdx) => {
-                        // card._zIndex = 1;
                         if (successfulSubstitution) {
                             card.alpha = 1;
                             card.interactive = true;
                             card.selected = false;
                         }
-                        else if (
-                            (card.playerPosition === child.playerPosition) ||
-                            samePlayerSelected
-                        ) {
+                        else if ((card.playerPosition === child.playerPosition) || samePlayerSelected) {
                             card.alpha = 1;
                             card.interactive = true;
                         } else {
@@ -197,7 +210,10 @@ export default class EditTeam {
                     child.interactive = true;
                 })
             } else {
+                // if (!child.selectable) { 
                 child.alpha = 0.35;
+                // }
+
             }
         })
         this.allCards = this.allCards.filter(el => el.selectable);
@@ -220,28 +236,24 @@ export default class EditTeam {
         const dist4 = Math.abs(card1.cardImg.y - card2.cardImg.y)
         const card2newY = `${card2newYDir}=${dist4}`;
 
-        this.app.stage.setChildIndex(card1, this.app.stage.children.length - 1);
-        this.app.stage.setChildIndex(card2, this.app.stage.children.length - 2);
+        this.container.setChildIndex(card1, this.container.children.length - 1);
+        this.container.setChildIndex(card2, this.container.children.length - 2);
 
         TweenMax.to(card1.children, .5, { x: card1newX, y: card1newY });
         TweenMax.to(card2.children, .5, { x: card2newX, y: card2newY });
 
-        console.log(this.players.indexOf(this.players.find(x => x === card1.stats)));
-        console.log(this.players.indexOf(this.players.find(x => x === card2.stats)));
-
         const card1Index = this.players.indexOf(this.players.find(x => x === card1.stats));
         const card2Index = this.players.indexOf(this.players.find(x => x === card2.stats));
 
-        card1.stats.substitute = !card1.stats.substitute;
-        card2.stats.substitute = !card2.stats.substitute;
+        if (card1.stats.substitute !== card2.stats.substitute) {
+            card1.stats.substitute = !card1.stats.substitute;
+            card2.stats.substitute = !card2.stats.substitute;
+        }
 
         const temp = this.players[card1Index];
         this.players[card1Index] = this.players[card2Index];
         this.players[card2Index] = temp;
 
-        this.players[card1Index].substitute = !this.players[card1Index].substitute;
-        this.players[card2Index].substitute = !this.players[card2Index].substitute;
-        console.log(this.players);
     }
 
     checkIfSubstitute(idx) {
@@ -260,7 +272,40 @@ export default class EditTeam {
         this.saveBtn.on('pointerdown', () => {
             this.recordData();
         });
-        this.app.stage.addChild(this.saveBtn);
+        this.container.addChild(this.saveBtn);
+
+        //BACK TEAM BTN
+        const backBtnTexture = this.app.loader.resources.buttons.textures[`btn1`];
+        let backBtn = new PIXI.Sprite(backBtnTexture);
+        backBtn.height = this.app.height * 0.06;
+        backBtn.scale.x = backBtn.scale.y;
+        backBtn.x = this.app.width * 0.89;
+        backBtn.y = this.app.height * 0.1;
+        backBtn.anchor.set(0.5);
+        backBtn.interactive = true;
+        backBtn.interactive = true;
+        backBtn.on('pointerdown', () => {
+            this.app.stage.removeChild(this.container);
+        });
+
+        this.container.addChild(backBtn);
+
+        let backBtnLabel = new PIXI.Text(`back`, {
+            fontFamily: this.app.config.mainFont,
+            fontSize: backBtn.height / 2.5,
+            fill: '#ffffff',
+            align: 'center',
+            stroke: '#000000',
+            fontWeight: 200,
+            lineJoin: "bevel",
+            strokeThickness: 2
+        });
+        backBtnLabel.position.set(
+            backBtn.x,
+            backBtn.y
+        );
+        backBtnLabel.anchor.set(0.5, 0.5);
+        this.container.addChild(backBtnLabel);
     }
 
     recordData() {

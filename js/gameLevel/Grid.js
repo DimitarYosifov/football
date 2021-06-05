@@ -570,8 +570,11 @@ export default class Grid extends PIXI.Container {
         }
 
         if (!firstActiveDefenseFound) {
-            this.hasGoalsInThisRound = true;
             //GOAL SCORED!!!
+            this.hasGoalsInThisRound = true;
+            if (this.app.playerTurn) {
+                this.app.level.playerCards.children[tweenTarget.initiatorIndex].goalsScored++;
+            }
             let finalY = this.app.playerTurn ? this.app.height * 0.12 : this.app.height * 0.88
             TweenMax.to(tweenTarget, .5, {
                 delay: 1.1,

@@ -1,4 +1,5 @@
 import { standingsView } from "./../standingsView.js";
+import { recordClubPlayersParams } from "./../recordClubPlayersParams.js";
 
 export default class NewRoundPopup extends PIXI.Container {
 
@@ -182,6 +183,7 @@ export default class NewRoundPopup extends PIXI.Container {
                     location.reload();
                 }
                 else {
+                    recordClubPlayersParams(this.app, true);
                     standingsView.bind(this.app,)(true, false, this.result._text, true);
                 }
             });

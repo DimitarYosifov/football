@@ -99,7 +99,7 @@ export default class Level extends PIXI.Container {
             let [player, opponent] = await
                 Promise.all(
                     [
-                        new LevelCardsSet(this.app.width, this.app.height, "player", this.clubNames[0]),
+                        new LevelCardsSet(this.app.width, this.app.height, "player", this.clubNames[0], this.app.friendly),
                         new LevelCardsSet(this.app.width, this.app.height, "opponent", this.clubNames[1]),
                     ]
                 );
@@ -110,7 +110,7 @@ export default class Level extends PIXI.Container {
             this.dataRecieved();
         };
         createCards().catch(err => { console.log('Run failed (does not matter which task)!'); });
-      
+
         const mask = new PIXI.Graphics();
         mask.beginFill(0xffffff, 1);
         mask.drawRect(
@@ -121,6 +121,6 @@ export default class Level extends PIXI.Container {
         );
         mask.endFill();
         this.mask = mask;
-   
+
     }
 }
