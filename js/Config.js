@@ -27,8 +27,8 @@ export default {
         ["ball_purple", "ball_yellow", "ball_purple", "red_cross", "red_card", "ball_blue"],
         ["ball_yellow", "ball_red", "ball_blue", "ball_yellow", "ball_blue", "yellow_card"],
         ["ball_red", "ball_red", "ball_red", "ball_red", "ball_green", "red_cross"],
-        ["ball_red", "ball_red", "ball_red", "ball_red", "ball_red", "ball_red"],
-        ["ball_red", "ball_red", "ball_red", "ball_red", "ball_red", "ball_red"]
+        ["ball_red", "ball_red", "ball_red", "ball_red", "red_cross", "ball_red"],
+        ["ball_red", "ball_red", "ball_red", "red_cross", "ball_red", "red_cross"]
     ],
     roundsInMatch: 20,
 

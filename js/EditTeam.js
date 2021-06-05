@@ -7,7 +7,6 @@ export default class EditTeam {
         this.app = app;
         this.container = new PIXI.Container;
         this.app.stage.addChild(this.container);
-        // this.container.interactive = true
 
         //BG
         this.bg = new PIXI.Graphics();
@@ -40,6 +39,7 @@ export default class EditTeam {
                 this.createHeader();
                 this.createPlayers();
                 this.addButtons();
+                this.checkSaveAllowed();
             }, error: (err) => {
                 alert("err")
             }
@@ -254,6 +254,8 @@ export default class EditTeam {
         this.players[card1Index] = this.players[card2Index];
         this.players[card2Index] = temp;
 
+        this.checkSaveAllowed();
+
     }
 
     checkIfSubstitute(idx) {
@@ -312,5 +314,18 @@ export default class EditTeam {
         let club = this.app.allClubs.find(t => t.name === this.clubName)
         club.players = this.players;
         recordClubPlayersParams(this.app);
+    }
+
+    checkSaveAllowed() {
+        const saveDisabled = this.players
+            .slice(0, 6)
+            .find(el => el.leagueRedCards || el.leagueYellowCards === 5 || el.injured > 0);
+        if (saveDisabled) {
+            this.saveBtn.interactive = false;
+            this.saveBtn.alpha = 0.4;
+        } else {
+            this.saveBtn.interactive = true;
+            this.saveBtn.alpha = 1;
+        }
     }
 }

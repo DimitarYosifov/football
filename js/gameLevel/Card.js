@@ -170,8 +170,8 @@ export default class Card extends PIXI.Container {
 
         this.addChild(this.shoe);
         this.addChild(this.glove);
-        this.addChild(this.yellowCard);
         this.addChild(this.injury);
+        this.addChild(this.yellowCard);
         this.addChild(this.border);
     }
 
