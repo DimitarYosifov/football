@@ -23,7 +23,7 @@ export default class EditTeam {
         this.bg.on('pointerdown', () => { });
         this.clubName = this.app.playerClubData.name;
 
-        this.players = this.app.playerLineUp;
+        this.players = [].concat(this.app.playerLineUp);
         this.stageWidth = this.app.width;
         this.stageHeight = this.app.height;
         this.createHeader();
@@ -274,7 +274,10 @@ export default class EditTeam {
         backBtn.interactive = true;
         backBtn.interactive = true;
         backBtn.on('pointerdown', () => {
-            this.app.playerLineUp = this.players;
+            //this fixes bug with mixing subs.... :(
+            for (let i = 0; i < this.players.length; i++) {
+                this.app.playerLineUp[i].substitute = i < 6 ? false : true;
+            }
             this.app.checkContinueAllowed();
             this.app.stage.removeChild(this.container);
         });
@@ -324,6 +327,7 @@ export default class EditTeam {
     recordData() {
         let club = this.app.allClubs.find(t => t.name === this.clubName)
         club.players = this.players;
+        this.app.playerLineUp = this.players;
         recordClubPlayersParams(this.app);
     }
 
