@@ -129,9 +129,6 @@ export default class LevelCardsSet extends PIXI.Container {
     }
 
     onCardsData = () => {
-        // if (this.targetDeck === "player") {
-        //     this.startingLineUp = [].concat(this.lineUps.player);
-        // }
         this.targetDeck === "player" ? this.createPlayerDeck() : this.createOpponentDeck();
     }
 }

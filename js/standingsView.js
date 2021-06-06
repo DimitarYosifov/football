@@ -7,12 +7,26 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     this.fixturesHeader;
     let fixturesContainer = new PIXI.Container;
     this.stage.alpha = 0;
+
+    this.checkContinueAllowed = () => {
+        const continueDisabled = this.playerLineUp
+            .slice(0, 6)
+            .find(el => el.leagueRedCards || el.leagueYellowCards === 5 || el.injured > 0);
+        if (continueDisabled) {
+            this.continueBtn.interactive = false;
+            this.continueBtn.alpha = 0.4;
+        } else {
+            this.continueBtn.interactive = true;
+            this.continueBtn.alpha = 1;
+        }
+    }
+    
     setTimeout(() => {
         const loadingWrapper = document.getElementById("loading-wrapper");
         if (loadingWrapper) { loadingWrapper.remove() };
         TweenMax.to(this.stage, 0.5, { alpha: 1 });
     }, 1000);
-    let getClubData = () => {
+    let getClubsData = () => {
         $.ajax({
             url: "getAllClubsData",
             type: 'POST',
@@ -51,9 +65,120 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.currentRound = data.currentRound;
     }
 
+
     increaseRound ? this.currentRound++ : null;
 
-    getClubData();
+    let addButton = () => {
+        const btnTexture = this.loader.resources.buttons.textures[`btn1`];
+        this.continueBtn = new PIXI.Sprite(btnTexture);
+        this.continueBtn.height = this.height * 0.1;
+        this.continueBtn.scale.x = this.continueBtn.scale.y;
+        this.continueBtn.x = this.width / 2;
+        this.continueBtn.y = this.height * 0.7;
+        this.continueBtn.anchor.set(0.5);
+        this.continueBtn.interactive = true;
+        this.continueBtn.interactive = true;
+        this.continueBtn.on('pointerdown', () => {
+            if (
+                !this.seasonFixtures[this.currentRound + 1] &&
+                lastGameRersult &&
+                typeof this.data === "boolean"
+            ) {
+                /*
+                    ONE HELL OF A TODO - HANDLE END OF SEASON IN A NORMAL SENSE VISUALLY 
+                    instead of an alert !!!!!!!!!!!!
+                */
+                deleteProgress();
+                alert("You have reached the end of the season.Thank you for playing :)");
+                location.reload();
+            }
+            else if (lastGameRersult || this.seasonFixtures[this.currentRound][0].split(" ")[1]) {
+                this.currentRound++;
+                increaseRound = false;
+                lastGameRersult = null;
+                generateResults = false;
+                this.stage.removeChild(this.fixturesHeader);
+                fixturesContainer.removeChildren();
+                createFixtures();
+            }
+            else {
+                this.stage.removeChildren();
+                this.startLevel();
+            }
+        });
+
+        this.stage.addChild(this.continueBtn);
+
+        let continueBtnLabel = new PIXI.Text(`Continue`, {
+            fontFamily: this.config.mainFont,
+            fontSize: this.continueBtn.height / 2.5,
+            fill: '#ffffff',
+            align: 'center',
+            stroke: '#000000',
+            fontWeight: 200,
+            lineJoin: "bevel",
+            strokeThickness: 2
+        });
+        continueBtnLabel.position.set(
+            this.continueBtn.x,
+            this.continueBtn.y
+        );
+        continueBtnLabel.anchor.set(0.5, 0.5);
+        this.stage.addChild(continueBtnLabel);
+
+        //EDIT TEAM BTN
+        const editBtnTexture = this.loader.resources.buttons.textures[`btn1`];
+        let editTeamBtn = new PIXI.Sprite(editBtnTexture);
+        editTeamBtn.height = this.height * 0.06;
+        editTeamBtn.scale.x = editTeamBtn.scale.y;
+        editTeamBtn.x = this.width * 0.7;
+        editTeamBtn.y = this.height * 0.9;
+        editTeamBtn.anchor.set(0.5);
+        editTeamBtn.interactive = true;
+        editTeamBtn.interactive = true;
+        editTeamBtn.on('pointerdown', () => {
+            new EditTeam(this);
+        });
+
+        this.stage.addChild(editTeamBtn);
+
+        let editBtnLabel = new PIXI.Text(`edit team`, {
+            fontFamily: this.config.mainFont,
+            fontSize: editTeamBtn.height / 2.5,
+            fill: '#ffffff',
+            align: 'center',
+            stroke: '#000000',
+            fontWeight: 200,
+            lineJoin: "bevel",
+            strokeThickness: 2
+        });
+        editBtnLabel.position.set(
+            editTeamBtn.x,
+            editTeamBtn.y
+        );
+        editBtnLabel.anchor.set(0.5, 0.5);
+        this.stage.addChild(editBtnLabel);
+    }
+
+    $.ajax({
+        url: "getPlayerLineUp",
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(
+            {
+                user: localStorage.getItem('user')
+            }
+        ),
+        success: (res) => {
+            this.playerLineUp = res.players;
+            console.log(this.playerLineUp);
+            addButton();
+            this.checkContinueAllowed();
+        }, error: (err) => {
+            alert("err")
+        }
+    });
+    getClubsData();
 
     let createText = (_text, x, y, anchorX = 0.5, isPlayerClub) => {
         let text = new PIXI.Text(_text, {
@@ -336,98 +461,6 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             });
         }
 
-        let addButton = () => {
-            const btnTexture = this.loader.resources.buttons.textures[`btn1`];
-            let continueBtn = new PIXI.Sprite(btnTexture);
-            continueBtn.height = this.height * 0.1;
-            continueBtn.scale.x = continueBtn.scale.y;
-            continueBtn.x = this.width / 2;
-            continueBtn.y = this.height * 0.7;
-            continueBtn.anchor.set(0.5);
-            continueBtn.interactive = true;
-            continueBtn.interactive = true;
-            continueBtn.on('pointerdown', () => {
-                if (
-                    !this.seasonFixtures[this.currentRound + 1] &&
-                    lastGameRersult &&
-                    typeof this.data === "boolean"
-                ) {
-                    /*
-                        ONE HELL OF A TODO - HANDLE END OF SEASON IN A NORMAL SENSE VISUALLY 
-                        instead of an alert !!!!!!!!!!!!
-                    */
-                    deleteProgress();
-                    alert("You have reached the end of the season.Thank you for playing :)");
-                    location.reload();
-                }
-                else if (lastGameRersult || this.seasonFixtures[this.currentRound][0].split(" ")[1]) {
-                    this.currentRound++;
-                    increaseRound = false;
-                    lastGameRersult = null;
-                    generateResults = false;
-                    this.stage.removeChild(this.fixturesHeader);
-                    fixturesContainer.removeChildren();
-                    createFixtures();
-                }
-                else {
-                    this.stage.removeChildren();
-                    this.startLevel();
-                }
-            });
-
-            this.stage.addChild(continueBtn);
-
-            let continueBtnLabel = new PIXI.Text(`Continue`, {
-                fontFamily: this.config.mainFont,
-                fontSize: continueBtn.height / 2.5,
-                fill: '#ffffff',
-                align: 'center',
-                stroke: '#000000',
-                fontWeight: 200,
-                lineJoin: "bevel",
-                strokeThickness: 2
-            });
-            continueBtnLabel.position.set(
-                continueBtn.x,
-                continueBtn.y
-            );
-            continueBtnLabel.anchor.set(0.5, 0.5);
-            this.stage.addChild(continueBtnLabel);
-
-            //EDIT TEAM BTN
-            const editBtnTexture = this.loader.resources.buttons.textures[`btn1`];
-            let editTeamBtn = new PIXI.Sprite(editBtnTexture);
-            editTeamBtn.height = this.height * 0.06;
-            editTeamBtn.scale.x = editTeamBtn.scale.y;
-            editTeamBtn.x = this.width * 0.7;
-            editTeamBtn.y = this.height * 0.9;
-            editTeamBtn.anchor.set(0.5);
-            editTeamBtn.interactive = true;
-            editTeamBtn.interactive = true;
-            editTeamBtn.on('pointerdown', () => {
-                new EditTeam(this);
-            });
-
-            this.stage.addChild(editTeamBtn);
-
-            let editBtnLabel = new PIXI.Text(`edit team`, {
-                fontFamily: this.config.mainFont,
-                fontSize: editTeamBtn.height / 2.5,
-                fill: '#ffffff',
-                align: 'center',
-                stroke: '#000000',
-                fontWeight: 200,
-                lineJoin: "bevel",
-                strokeThickness: 2
-            });
-            editBtnLabel.position.set(
-                editTeamBtn.x,
-                editTeamBtn.y
-            );
-            editBtnLabel.anchor.set(0.5, 0.5);
-            this.stage.addChild(editBtnLabel);
-        }
-
         let randomResult = (firstClub, secondClub, i) => {
 
             let result = generateResult(
@@ -461,6 +494,5 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         }
 
         displayFixtures();
-        addButton();
     }
 }

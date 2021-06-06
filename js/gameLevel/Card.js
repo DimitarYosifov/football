@@ -53,7 +53,6 @@ export default class Card extends PIXI.Container {
             '3052FF': "ball_blue",    // BLUE:
             '2F7F07': "ball_green",   // GREEN:
             'E2D841': "ball_yellow",  // YELLOW:
-            // 'FF9702': "ball_orange",  // ORANGE
             'B200FF': "ball_purple"   // PURPLE:
         }
 

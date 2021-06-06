@@ -23,27 +23,13 @@ export default class EditTeam {
         this.bg.on('pointerdown', () => { });
         this.clubName = this.app.playerClubData.name;
 
-        $.ajax({
-            url: "getPlayerLineUp",
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(
-                {
-                    user: localStorage.getItem('user')
-                }
-            ),
-            success: (res) => {
-                this.players = res.players;
-                this.stageWidth = this.app.width;
-                this.stageHeight = this.app.height;
-                this.createHeader();
-                this.createPlayers();
-                this.addButtons();
-                this.checkSaveAllowed();
-            }, error: (err) => {
-                alert("err")
-            }
-        });
+        this.players = this.app.playerLineUp;
+        this.stageWidth = this.app.width;
+        this.stageHeight = this.app.height;
+        this.createHeader();
+        this.createPlayers();
+        this.addButtons();
+        this.checkSaveAllowed();
     }
 
     createHeader() {
@@ -273,6 +259,7 @@ export default class EditTeam {
         this.saveBtn.interactive = true;
         this.saveBtn.on('pointerdown', () => {
             this.recordData();
+            this.addSavedtext();
         });
         this.container.addChild(this.saveBtn);
 
@@ -287,6 +274,8 @@ export default class EditTeam {
         backBtn.interactive = true;
         backBtn.interactive = true;
         backBtn.on('pointerdown', () => {
+            this.app.playerLineUp = this.players;
+            this.app.checkContinueAllowed();
             this.app.stage.removeChild(this.container);
         });
 
@@ -310,6 +299,28 @@ export default class EditTeam {
         this.container.addChild(backBtnLabel);
     }
 
+    addSavedtext() {
+        //changes saved text
+        let changesSaved = new PIXI.Text(`saved`, {
+            fontFamily: this.app.config.mainFont,
+            fontSize: this.app.height / 8,
+            fill: '#ffffff',
+            align: 'center',
+            stroke: '#000000',
+            fontWeight: 200,
+            lineJoin: "bevel",
+            strokeThickness: 2
+        });
+        changesSaved.position.set(
+            this.app.width / 2,
+            this.app.height / 2
+        );
+        changesSaved.anchor.set(0.5, 0.5);
+        this.container.addChild(changesSaved);
+        TweenMax.delayedCall(0.75, () => {
+            this.container.removeChild(changesSaved)
+        });
+    }
     recordData() {
         let club = this.app.allClubs.find(t => t.name === this.clubName)
         club.players = this.players;
