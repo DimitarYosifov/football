@@ -8,6 +8,25 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     let fixturesContainer = new PIXI.Container;
     this.stage.alpha = 0;
 
+    let deleteProgress = () => {
+        console.log(this);
+        $.ajax({
+            url: "deleteProgress",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                user: this.user
+            }),
+            success: (res) => {
+                console.log(res);
+                console.log("progress deleted successfully");
+            }, error: (er) => {
+                console.log(er);
+                console.log("ERRor");
+            }
+        });
+    }
+
     this.checkContinueAllowed = () => {
         const continueDisabled = this.playerLineUp
             .slice(0, 6)
@@ -440,25 +459,6 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             fixturesContainer.y = this.height / 4 - fixturesContainer.height / 2;
             this.stage.addChild(fixturesContainer);
             createStandings();
-        }
-
-        let deleteProgress = () => {
-            console.log(this);
-            $.ajax({
-                url: "deleteProgress",
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    user: this.user
-                }),
-                success: (res) => {
-                    console.log(res);
-                    console.log("progress deleted successfully");
-                }, error: (er) => {
-                    console.log(er);
-                    console.log("ERRor");
-                }
-            });
         }
 
         let randomResult = (firstClub, secondClub, i) => {

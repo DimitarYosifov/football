@@ -7,9 +7,9 @@ export function recordClubPlayersParams(app, matchEnd = false) {
     let initialParamsPlayers = app.allClubs.find(t => t.name === team).players;
 
     if (matchEnd) {
-        players = initialParamsPlayers;
+        // players = initialParamsPlayers;
         //app.level.children.find(child => child.clubName === team).lineUps.player;
-        // players = app.level.children.find(child => child.clubName === team).lineUps.player;
+        players = app.level.children.find(child => child.clubName === team).lineUps.player;
         for (let playerIdx = 0; playerIdx < 6; playerIdx++) {
 
             players[playerIdx].leagueYellowCards += app.level.playerCards.children[playerIdx].hasYellowCard;
@@ -21,10 +21,10 @@ export function recordClubPlayersParams(app, matchEnd = false) {
                 players[playerIdx].injured = Math.floor(Math.random() * config.maxInjuryDuration) + 1;
             }
 
-            players[playerIdx].attack_full = initialParamsPlayers[playerIdx].attack_full;
-            players[playerIdx].attack_current = initialParamsPlayers[playerIdx].attack_current;
-            players[playerIdx].defense_full = initialParamsPlayers[playerIdx].defense_full;
-            players[playerIdx].defense_current = initialParamsPlayers[playerIdx].defense_current;
+            players[playerIdx].attack_full -= app.opponentClubData.power;
+            players[playerIdx].attack_current = 0;
+            players[playerIdx].defense_full -= app.opponentClubData.power;
+            players[playerIdx].defense_current = 0;
 
         }
         for (let playerIdx = 6; playerIdx < 18; playerIdx++) {
@@ -42,7 +42,7 @@ export function recordClubPlayersParams(app, matchEnd = false) {
     } else {
         players = initialParamsPlayers;
     }
-   
+
     $.ajax({
         url: "playersParams",
         type: 'POST',
