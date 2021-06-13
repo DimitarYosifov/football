@@ -11,6 +11,7 @@ export default class Level extends PIXI.Container {
     constructor(app) {
 
         super();
+        TweenMax.killAll();
         this.app = app;
         this.config = Config;
         this.stage = app.stage;
