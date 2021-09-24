@@ -1,6 +1,7 @@
 import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
 import EditTeam from "./EditTeam.js";
+import { serverRequest } from "./Request.js"
 
 export function standingsView(data, increaseRound = false, lastGameRersult = null, generateResults = false) {
     this.data = data;
@@ -9,22 +10,19 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     this.stage.alpha = 0;
 
     let deleteProgress = () => {
-        console.log(this);
-        $.ajax({
-            url: "deleteProgress",
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                user: this.user
-            }),
-            success: (res) => {
-                console.log(res);
-                console.log("progress deleted successfully");
-            }, error: (er) => {
-                console.log(er);
-                console.log("ERRor");
-            }
-        });
+        serverRequest(
+            "deleteProgress",
+            'POST',
+            'application/json',
+            JSON.stringify(
+                {
+                    user: this.user
+                }
+            )
+        ).then(res => {
+            console.log(res);
+            console.log("progress deleted successfully");
+        })
     }
 
     this.checkContinueAllowed = () => {
@@ -39,42 +37,39 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             this.continueBtn.alpha = 1;
         }
     }
-    
+
     setTimeout(() => {
         const loadingWrapper = document.getElementById("loading-wrapper");
         if (loadingWrapper) { loadingWrapper.remove() };
         TweenMax.to(this.stage, 0.5, { alpha: 1 });
     }, 1000);
     let getClubsData = () => {
-        $.ajax({
-            url: "getAllClubsData",
-            type: 'POST',
-            contentType: 'application/json',
-            success: (res) => {
-                this.allClubs = res.clubs;
-                this.allClubNames = this.allClubs.map(club => club.name);
-                if (!this.seasonFixtures) {
-                    this.teams = [];
-                    this.allClubNames.forEach((club, clubIdx) => {
-                        let team = {};
-                        team.name = club;
-                        team.won = 0;
-                        team.ties = 0;
-                        team.lost = 0;
-                        team.goalsFor = 0;
-                        team.goalsAgainst = 0;
-                        team.goalsDifference = "0";
-                        team.points = 0;
-                        this.teams.push(team);
-                    })
-                    this.currentRound = 1;
-                    this.seasonFixtures = new SeasonFixtures(this.allClubNames).seasonFixtures;
-                }
-                createFixtures();
-            }, error: (err) => {
-                console.log(err);
+        serverRequest(
+            "getAllClubsData",
+            'POST',
+            'application/json'
+        ).then(res => {
+            this.allClubs = res.clubs;
+            this.allClubNames = this.allClubs.map(club => club.name);
+            if (!this.seasonFixtures) {
+                this.teams = [];
+                this.allClubNames.forEach((club, clubIdx) => {
+                    let team = {};
+                    team.name = club;
+                    team.won = 0;
+                    team.ties = 0;
+                    team.lost = 0;
+                    team.goalsFor = 0;
+                    team.goalsAgainst = 0;
+                    team.goalsDifference = "0";
+                    team.points = 0;
+                    this.teams.push(team);
+                })
+                this.currentRound = 1;
+                this.seasonFixtures = new SeasonFixtures(this.allClubNames).seasonFixtures;
             }
-        });
+            createFixtures();
+        })
     }
 
     if (data && typeof data !== "boolean") {
@@ -179,24 +174,20 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.stage.addChild(editBtnLabel);
     }
 
-    $.ajax({
-        url: "getPlayerLineUp",
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(
+    serverRequest(
+        "getPlayerLineUp",
+        'POST',
+        'application/json',
+        JSON.stringify(
             {
                 user: localStorage.getItem('user')
             }
-        ),
-        success: (res) => {
-            this.playerLineUp = res.players;
-            console.log(this.playerLineUp);
-            addButton();
-            this.checkContinueAllowed();
-        }, error: (err) => {
-            alert("err")
-        }
-    });
+        )
+    ).then(res => {
+        this.playerLineUp = res.players;
+        addButton();
+        this.checkContinueAllowed();
+    })
     getClubsData();
 
     let createText = (_text, x, y, anchorX = 0.5, isPlayerClub) => {
@@ -322,23 +313,22 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     }
 
     let recordFixtures = (currentRound) => {
-        console.log(this);
-        //this.app.allClubsData
-        $.ajax({
-            url: "fixtures",
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                seasonFixtures: this.seasonFixtures,
-                user: this.user,
-                currentRound: currentRound,
-                playerClubData: this.playerClubData,
-                teams: this.teams
-            }),
-            success: (res) => {
-                console.log(res);
-            }
-        });
+        serverRequest(
+            "fixtures",
+            'POST',
+            'application/json',
+            JSON.stringify(
+                {
+                    seasonFixtures: this.seasonFixtures,
+                    user: this.user,
+                    currentRound: currentRound,
+                    playerClubData: this.playerClubData,
+                    teams: this.teams
+                }
+            )
+        ).then(res => {
+            console.log(res);
+        })
     }
 
     let createFixtures = () => {

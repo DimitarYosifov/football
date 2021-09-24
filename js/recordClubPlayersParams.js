@@ -1,4 +1,5 @@
 import config from "./Config.js";
+import { serverRequest } from "./Request.js"
 
 export function recordClubPlayersParams(app, matchEnd = false) {
 
@@ -43,20 +44,17 @@ export function recordClubPlayersParams(app, matchEnd = false) {
         players = initialParamsPlayers;
     }
 
-    $.ajax({
-        url: "playersParams",
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(
+    serverRequest(
+        "playersParams",
+        'POST',
+        'application/json',
+        JSON.stringify(
             {
                 players: players,
                 user: localStorage.getItem('user')
             }
-        ),
-        success: (res) => {
+        )
+    ).then(res => {
 
-        }, error: (err) => {
-
-        }
-    });
+    })
 }

@@ -1,4 +1,5 @@
 import config from "./Config.js";
+import { serverRequest } from "./Request.js"
 
 export default class LineUps {
     constructor(clubName, onCardsData, targetDeck, friendly) {
@@ -11,37 +12,25 @@ export default class LineUps {
     }
     clubData = () => {
         if (this.targetDeck === "player" && !this.friendly) {
-            $.ajax({
-                url: "getPlayerLineUp",
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(
-                    {
-                        user: localStorage.getItem('user')
-                    }
-                ),
-                success: (res) => {
-                    console.log(res);
-                    this[this.targetDeck] = res.players;
-                    this.onCardsData();
-                }, error: (err) => {
-                    alert("err")
-                }
-            });
+            serverRequest(
+                "getPlayerLineUp",
+                'POST',
+                'application/json',
+                JSON.stringify({ user: localStorage.getItem('user') })
+            ).then(res => {
+                this[this.targetDeck] = res.players;
+                this.onCardsData();
+            })
         } else {
-            $.ajax({
-                url: "getClubsPlayers",
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ name: this.clubName }),
-                success: (res) => {
-                    this[this.targetDeck] = res.clubData.players;
-                    this.onCardsData();
-                }, error: (err) => {
-                    alert("err")
-                }
-            });
+            serverRequest(
+                "getClubsPlayers",
+                'POST',
+                'application/json',
+                JSON.stringify({ name: this.clubName })
+            ).then(res => {
+                this[this.targetDeck] = res.clubData.players;
+                this.onCardsData();
+            })
         }
-
     }
 }

@@ -1,24 +1,24 @@
 
+import { serverRequest } from "./Request.js"
+
+// TODO ------ ADD UI FOR EASY ADDING CLUBS ----------------------
 export function createNewClub() {
     //possible options are: Levski , Barcelona, Dunav, Ludogorets, Bayern , Dortmund , Parma ,Inter
     const newClub = "Bayern";
-    $.ajax({
-        url: "addClub",
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(
+    serverRequest(
+        "addClub",
+        'POST',
+        'application/json',
+        JSON.stringify(
             {
                 name: newClub,
                 clubData: teams[newClub].clubData,
                 players: teams[newClub].players
             }
-        ),
-        success: (res) => {
-            alert("successfully added")
-        }, error: (err) => {
-            alert("err");
-        }
-    });
+        )
+    ).then(res => {
+        alert("successfully added");
+    })
 }
 
 const teams = {
@@ -2553,20 +2553,17 @@ const teams = {
 }
 
 export function getClubData(clubName) {
-    return $.ajax({
-        url: "getClubData",
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(
+    return serverRequest(
+        "getClubData",
+        'POST',
+        'application/json',
+        JSON.stringify(
             {
                 name: clubName
             }
-        ),
-        success: (res) => {
-            console.log(res);
-            // alert("successfully received")
-        }, error: (err) => {
-            // alert("err");
-        }
-    });
+        )
+    ).then(res => {
+        console.log(res);
+        alert("successfully received");
+    })
 }

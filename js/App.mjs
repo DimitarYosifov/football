@@ -9,6 +9,7 @@ import { modeSelection } from "./modeSelection.js";
 import { standingsView } from "./standingsView.js";
 import { generateResult } from "./generateResult.js";
 import LoadingView from "./LoadingView.js";
+import { serverRequest } from "./Request.js"
 
 export default class App extends Stage {
 
@@ -57,36 +58,34 @@ export default class App extends Stage {
     }
 
     checkUserData() {
-        $.ajax({
-            url: "storageData",
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ data: this.storageData }),
-            success: (res) => {
-                if (!res.authorized) {
-                    this.login = new LogIn(this);
-                } else {
-                    this.user = localStorage.getItem('user');
-                    this.checkGameInProgress();
-                }
+        serverRequest(
+            "storageData",
+            'POST',
+            'application/json',
+            JSON.stringify({ data: this.storageData })
+        ).then(res => {
+            if (res.data) {
+                standingsView.bind(this)(res.data);
+            } else {
+                modeSelection(this);
             }
-        });
+        })
+
     }
 
-    checkGameInProgress() {
-        $.ajax({
-            url: "getFixtures",
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ user: this.user }),
-            success: (res) => {
-                if (res.data) {
-                    standingsView.bind(this)(res.data);
-                } else {
-                    modeSelection(this);
-                }
+    checkGameInProgress = () => {
+        serverRequest(
+            "getFixtures",
+            'POST',
+            'application/json',
+            JSON.stringify({ user: this.user })
+        ).then(res => {
+            if (res.data) {
+                standingsView.bind(this)(res.data);
+            } else {
+                modeSelection(this);
             }
-        });
+        })
     }
 }
 

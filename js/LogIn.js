@@ -1,5 +1,6 @@
 import { clubSelection } from "./clubSelection.js";
 import { modeSelection } from "./modeSelection.js";
+import { serverRequest } from "./Request.js"
 
 export default class LogIn {
 
@@ -98,38 +99,38 @@ export default class LogIn {
     }
 
     validate() {
-        $.ajax({
-            url: this.action, //login or register
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ user: this.username.value, pass: this.password.value }),
-            success: (res) => {
-                if (res.nameInUse) {
-                    this.clearUserInput();
-                    window.alert("name in use!"); //TODO... 
-                    return;
-                }
-                if (res.authorized) {
-                    this.app.user = this.username.value;
-                    localStorage.setItem("match3football", res.storageItem);
-                    localStorage.setItem("user", this.app.user);
-                    TweenMax.to(this.wrapper, this.config.fadeTimeBetweenPhases, { opacity: 0 });
-                    TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
-                        alpha: 0, onComplete: () => {
-                            this.stage.removeChildren();
-                            this.app.checkGameInProgress();
-                            TweenMax.killAll();
-                            this.wrapper.remove();
-                            this.wrapper.style.display = "none";
-                            this.stage.visible = true;
-                        }
-                    });
-                } else if (!res.authorized) {
-                    this.clearUserInput();
-                    window.alert("invalid username or password!"); //TODO...
-                }
+        serverRequest(
+            this.action, //login or register,
+            'POST',
+            'application/json',
+            JSON.stringify({ user: this.username.value, pass: this.password.value }),
+        ).then(res => {
+            if (res.nameInUse) {
+                this.clearUserInput();
+                window.alert("name in use!"); //TODO... 
+                return;
             }
-        });
+            if (res.authorized) {
+                this.app.user = this.username.value;
+                localStorage.setItem("match3football", res.storageItem);
+                localStorage.setItem("user", this.app.user);
+                TweenMax.to(this.wrapper, this.config.fadeTimeBetweenPhases, { opacity: 0 });
+                TweenMax.to(this.stage, this.config.fadeTimeBetweenPhases, {
+                    alpha: 0, onComplete: () => {
+                        this.stage.removeChildren();
+                        this.app.checkGameInProgress();
+                        TweenMax.killAll();
+                        this.wrapper.remove();
+                        this.wrapper.style.display = "none";
+                        this.stage.visible = true;
+                    }
+                });
+            }
+            else if (!res.authorized) {
+                this.clearUserInput();
+                window.alert("invalid username or password!"); //TODO...
+            }
+        })
     }
 
     clearUserInput() {

@@ -1,5 +1,6 @@
 import { standingsView } from "./standingsView.js";
 import { recordClubPlayersParams } from "./recordClubPlayersParams.js";
+import { serverRequest } from "./Request.js"
 
 export function clubSelection(app, mode) {
     let clubs = [];
@@ -53,20 +54,17 @@ export function clubSelection(app, mode) {
     bg.endFill();
     app.stage.addChild(bg);
 
-    $.ajax({
-        url: "getAllClubsData",
-        type: 'POST',
-        contentType: 'application/json',
-        success: (res) => {
-            app.allClubs = res.clubs;
-            createText(true);
-            for (let clubIdx = 0; clubIdx < app.allClubs.length; clubIdx++) {
-                showClub(app.allClubs[clubIdx], positions[clubIdx]);
-            }
-        }, error: (err) => {
-            console.log(err);
+    serverRequest(
+        "getAllClubsData",
+        'POST',
+        'application/json',
+    ).then(res => {
+        app.allClubs = res.clubs;
+        createText(true);
+        for (let clubIdx = 0; clubIdx < app.allClubs.length; clubIdx++) {
+            showClub(app.allClubs[clubIdx], positions[clubIdx]);
         }
-    });
+    })
 
     let createText = () => {
         let text = isPlayerTurn ? "Select club" : "Select opponent"
