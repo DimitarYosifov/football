@@ -1,5 +1,6 @@
 import { standingsView } from "./../standingsView.js";
 import { recordClubPlayersParams } from "./../recordClubPlayersParams.js";
+import GameTexture from "./../GameTexture.js";
 
 export default class NewRoundPopup extends PIXI.Container {
 
@@ -97,8 +98,7 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.playerTeamName);
 
         //PLAYER CLUB LOGO
-        const playerLogoTexture = this.app.loader.resources.logos.textures[`${this.app.playerClubData.logo}`];
-        this.playerClubLogo = new PIXI.Sprite(playerLogoTexture);
+        this.playerClubLogo = new GameTexture(this.app, `${this.app.playerClubData.logo}`).sprite;
         this.playerClubLogo.x = this.playerTeamName.x;
         this.playerClubLogo.y = this.playerTeamName.y - this.playerTeamName.height / 2;
         this.playerClubLogo.height = this.app.height / 6;
@@ -109,8 +109,7 @@ export default class NewRoundPopup extends PIXI.Container {
         //PLAYER CLUB STARS
         this.playerClubPower = this.app.playerClubData.power;
         for (let s = 0; s < this.playerClubPower; s++) {
-            const starTexture = this.app.loader.resources.main1.textures[`star`];
-            const star = new PIXI.Sprite(starTexture);
+            const star = new GameTexture(this.app, "star").sprite;
             star.height = this.app.height * 0.025;
             star.scale.x = star.scale.y;
             star.x = this.playerClubLogo.x - star.width * s + star.width * this.playerClubPower / 2;
@@ -140,8 +139,7 @@ export default class NewRoundPopup extends PIXI.Container {
         this.addChild(this.opponentTeamName);
 
         //OPPONENT CLUB LOGO
-        const opponentLogoTexture = this.app.loader.resources.logos.textures[`${this.app.opponentClubData.logo}`];
-        this.opponentClubLogo = new PIXI.Sprite(opponentLogoTexture);
+        this.opponentClubLogo = new GameTexture(this.app, `${this.app.opponentClubData.logo}`).sprite;
         this.opponentClubLogo.x = this.opponentTeamName.x;
         this.opponentClubLogo.y = this.opponentTeamName.y - this.opponentTeamName.height / 2;
         this.opponentClubLogo.height = this.app.height / 6;
@@ -152,8 +150,7 @@ export default class NewRoundPopup extends PIXI.Container {
         //OPPONENT CLUB STARS
         this.opponentClubPower = this.app.opponentClubData.power; // should be taken from level!!  TODO............
         for (let s = 0; s < this.opponentClubPower; s++) {
-            const starTexture = this.app.loader.resources.main1.textures[`star`];
-            const star = new PIXI.Sprite(starTexture);
+            const star = new GameTexture(this.app, "star").sprite;
             star.height = this.app.height * 0.025;
             star.scale.x = star.scale.y;
             star.x = this.opponentClubLogo.x - star.width * s + star.width * this.opponentClubPower / 2;
@@ -168,8 +165,7 @@ export default class NewRoundPopup extends PIXI.Container {
 
             //continue button
             this.app.level.grid.interactive = false;
-            const btnTexture = this.app.loader.resources.buttons.textures[`btn1`];
-            this.continueBtn = new PIXI.Sprite(btnTexture);
+            this.continueBtn =      new GameTexture(this.app, "btn1").sprite;
             this.continueBtn.height = this.app.height * 0.1;
             this.continueBtn.scale.x = this.continueBtn.scale.y;
             this.continueBtn.x = this.app.width / 2;

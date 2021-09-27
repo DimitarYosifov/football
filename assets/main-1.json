@@ -240,9 +240,33 @@
         "y": 0.5
       }
     },
-    "ball_yellow": {
+    "ball_prototype": {
       "frame": {
         "x": 647,
+        "y": 1697,
+        "w": 195,
+        "h": 191
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 2,
+        "y": 4,
+        "w": 195,
+        "h": 191
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 200
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "ball_yellow": {
+      "frame": {
+        "x": 838,
         "y": 1697,
         "w": 195,
         "h": 190
@@ -264,9 +288,9 @@
         "y": 0.5
       }
     },
-    "ball_green": {
+    "ball_green - Copy": {
       "frame": {
-        "x": 837,
+        "x": 1028,
         "y": 0,
         "w": 194,
         "h": 190
@@ -290,12 +314,12 @@
     },
     "ball_orange": {
       "frame": {
-        "x": 546,
+        "x": 837,
         "y": 0,
         "w": 194,
         "h": 190
       },
-      "rotated": false,
+      "rotated": true,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 3,
@@ -314,12 +338,12 @@
     },
     "ball_purple": {
       "frame": {
-        "x": 1031,
-        "y": 0,
+        "x": 837,
+        "y": 194,
         "w": 194,
         "h": 190
       },
-      "rotated": false,
+      "rotated": true,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 2,
@@ -338,8 +362,8 @@
     },
     "ball_blue": {
       "frame": {
-        "x": 1225,
-        "y": 0,
+        "x": 546,
+        "y": 194,
         "w": 193,
         "h": 190
       },
@@ -360,24 +384,24 @@
         "y": 0.5
       }
     },
-    "ball_prototype": {
+    "ball_green": {
       "frame": {
-        "x": 1418,
+        "x": 1028,
         "y": 0,
-        "w": 184,
-        "h": 184
+        "w": 194,
+        "h": 190
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 38,
+        "x": 3,
         "y": 5,
-        "w": 184,
-        "h": 184
+        "w": 194,
+        "h": 190
       },
       "sourceSize": {
-        "w": 259,
-        "h": 194
+        "w": 200,
+        "h": 200
       },
       "pivot": {
         "x": 0.5,
@@ -391,7 +415,7 @@
     "image": "main-1.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1602,
+      "w": 1222,
       "h": 2038
     },
     "scale": 1

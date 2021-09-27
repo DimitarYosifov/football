@@ -1,5 +1,6 @@
 import Config from "../Config.js";
 import Grid from "./Grid.js";
+import GameTexture from "../GameTexture.js"
 
 export default class Block extends PIXI.Container {
     constructor(row, col, rowContainer, grid, app) {
@@ -26,8 +27,7 @@ export default class Block extends PIXI.Container {
             this.img = this.config.debugGrid[this.row][this.col];
         }
 
-        let blockTexture = this.app.loader.resources.main1.textures[`${this.img}`];
-        this.blockImg = new PIXI.Sprite(blockTexture);
+        this.blockImg = new GameTexture(this.app, `${this.img}`).sprite;
         this.interactive = true;
         // this.buttonMode = true;
         this.blockImg.anchor.x = 0.5; //??????????????????

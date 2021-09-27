@@ -2,12 +2,26 @@ import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
 import EditTeam from "./EditTeam.js";
 import { serverRequest } from "./Request.js"
+import GameTexture from "./GameTexture.js";
+import Background from "./Background.js";
+import RotatingButton from "./RotatingButton.js";
 
 export function standingsView(data, increaseRound = false, lastGameRersult = null, generateResults = false) {
     this.data = data;
     this.fixturesHeader;
     let fixturesContainer = new PIXI.Container;
     this.stage.alpha = 0;
+
+    let backgroundImg = new Background(this, {
+        gamePhase: "standingsViews",
+        sprite: new GameTexture(this, "bg33"),
+        bg_x: -this.width * 0.005,
+        bg_y: -this.height * 0.005,
+        bg_width: this.width * 1.005,
+        bg_height: this.height * 1.005
+    });
+    backgroundImg.alpha = 0.5;
+    this.stage.addChild(backgroundImg);
 
     let deleteProgress = () => {
         serverRequest(
@@ -79,20 +93,11 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.currentRound = data.currentRound;
     }
 
-
     increaseRound ? this.currentRound++ : null;
 
-    let addButton = () => {
-        const btnTexture = this.loader.resources.buttons.textures[`btn1`];
-        this.continueBtn = new PIXI.Sprite(btnTexture);
-        this.continueBtn.height = this.height * 0.1;
-        this.continueBtn.scale.x = this.continueBtn.scale.y;
-        this.continueBtn.x = this.width / 2;
-        this.continueBtn.y = this.height * 0.7;
-        this.continueBtn.anchor.set(0.5);
-        this.continueBtn.interactive = true;
-        this.continueBtn.interactive = true;
-        this.continueBtn.on('pointerdown', () => {
+    let addButtons = () => {
+        //---CONTIONUE BUTTON
+        let continueOnPointerDown = () => {
             if (
                 !this.seasonFixtures[this.currentRound + 1] &&
                 lastGameRersult &&
@@ -119,59 +124,26 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 this.stage.removeChildren();
                 this.startLevel();
             }
-        });
+        }
 
+        this.continueBtn = new RotatingButton(this, null, null, continueOnPointerDown);
         this.stage.addChild(this.continueBtn);
+        this.continueBtn.setButtonSize(this.height * 0.2, this.width / 2, this.height * 0.87);
+        this.continueBtn.addLabel(`Continue`, 0.24);
 
-        let continueBtnLabel = new PIXI.Text(`Continue`, {
-            fontFamily: this.config.mainFont,
-            fontSize: this.continueBtn.height / 2.5,
-            fill: '#ffffff',
-            align: 'center',
-            stroke: '#000000',
-            fontWeight: 200,
-            lineJoin: "bevel",
-            strokeThickness: 2
-        });
-        continueBtnLabel.position.set(
-            this.continueBtn.x,
-            this.continueBtn.y
-        );
-        continueBtnLabel.anchor.set(0.5, 0.5);
-        this.stage.addChild(continueBtnLabel);
+        //-----EDIT TEAM BTN
+        let editTeamOnPointerDown = () => {
+            TweenMax.to(this.stage, 0.35, {
+                alpha: 0, onComplete: () => {
+                    new EditTeam(this);
+                }
+            });
+        }
 
-        //EDIT TEAM BTN
-        const editBtnTexture = this.loader.resources.buttons.textures[`btn1`];
-        let editTeamBtn = new PIXI.Sprite(editBtnTexture);
-        editTeamBtn.height = this.height * 0.06;
-        editTeamBtn.scale.x = editTeamBtn.scale.y;
-        editTeamBtn.x = this.width * 0.7;
-        editTeamBtn.y = this.height * 0.9;
-        editTeamBtn.anchor.set(0.5);
-        editTeamBtn.interactive = true;
-        editTeamBtn.interactive = true;
-        editTeamBtn.on('pointerdown', () => {
-            new EditTeam(this);
-        });
-
-        this.stage.addChild(editTeamBtn);
-
-        let editBtnLabel = new PIXI.Text(`edit team`, {
-            fontFamily: this.config.mainFont,
-            fontSize: editTeamBtn.height / 2.5,
-            fill: '#ffffff',
-            align: 'center',
-            stroke: '#000000',
-            fontWeight: 200,
-            lineJoin: "bevel",
-            strokeThickness: 2
-        });
-        editBtnLabel.position.set(
-            editTeamBtn.x,
-            editTeamBtn.y
-        );
-        editBtnLabel.anchor.set(0.5, 0.5);
-        this.stage.addChild(editBtnLabel);
+        this.editTeameBtn = new RotatingButton(this, null, null, editTeamOnPointerDown);
+        this.stage.addChild(this.editTeameBtn);
+        this.editTeameBtn.setButtonSize(this.height * 0.15, this.width * 0.84, this.height * 0.89);
+        this.editTeameBtn.addLabel(`Edit\nTeam`, 0.24);
     }
 
     serverRequest(
@@ -185,7 +157,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         )
     ).then(res => {
         this.playerLineUp = res.players;
-        addButton();
+        addButtons();
         this.checkContinueAllowed();
     })
     getClubsData();
@@ -196,8 +168,8 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             fontSize: this.height / 50,
             fill: isPlayerClub ? "#6ddd48" : '#dbb7b7',
             align: 'center',
-            // stroke: '#dbb7b7',
-            strokeThickness: 0
+            stroke: '#000000',
+            strokeThickness: 3
         });
         text.position.set(x, y);
         text.anchor.set(anchorX, 0);
@@ -207,24 +179,24 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     let createStandings = () => {
         let standingsContainer = new PIXI.Container;
         let positionsX = {
-            name: this.width * 0.05,
-            won: this.width * 0.32,
-            ties: this.width * 0.4,
-            lost: this.width * 0.49,
-            goalsFor: this.width * 0.61,
-            goalsAgainst: this.width * 0.7,
-            goalsDifference: this.width * 0.80,
-            points: this.width * 0.9
+            name: this.width * 0.08,
+            won: this.width * 0.35,
+            ties: this.width * 0.43,
+            lost: this.width * 0.52,
+            goalsFor: this.width * 0.64,
+            goalsAgainst: this.width * 0.73,
+            goalsDifference: this.width * 0.83,
+            points: this.width * 0.93
         }
         let headersPositionsX = {
-            club: this.width * 0.05,
-            W: this.width * 0.32,
-            T: this.width * 0.4,
-            L: this.width * 0.49,
-            GF: this.width * 0.61,
-            GA: this.width * 0.7,
-            GD: this.width * 0.80,
-            P: this.width * 0.9
+            club: this.width * 0.08,
+            W: this.width * 0.35,
+            T: this.width * 0.43,
+            L: this.width * 0.52,
+            GF: this.width * 0.64,
+            GA: this.width * 0.73,
+            GD: this.width * 0.83,
+            P: this.width * 0.93
         }
 
         let separatorsPositionsX = {
@@ -269,7 +241,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         let createHeaders = () => {
             let row = new PIXI.Container;
             let y = 0;
-            row.addChild(createText("#", this.width * 0.02, y)); //this is position of the club 
+            row.addChild(createText("#", this.width * 0.03, y)); //this is position of the club 
             Object.keys(headersPositionsX).forEach((prop, index) => {
                 let isName = prop === "club";
                 let anchorX = isName ? 0 : 0.5;
@@ -297,7 +269,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             ));
         });
 
-        standingsContainer.y = this.height / 2 - standingsContainer.height / 2;
+        standingsContainer.y = this.height * 0.65 - standingsContainer.height / 2;
 
         // Object.keys(headersPositionsX).forEach((prop, index) => {
         //     let separator = createSeparator(
@@ -335,11 +307,10 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
         let addLogo = (clubName, x, y, height, anchorX, anchorY) => {
             let logo = this.allClubs.filter(club => club.name === clubName)[0].clubData.logo;
-            let logoTexture = this.loader.resources.logos.textures[`${logo}`];
-            let clubLogo = new PIXI.Sprite(logoTexture);
+            let clubLogo = new GameTexture(this, `${logo}`).sprite;
+            clubLogo.height = height;
             clubLogo.x = x;
             clubLogo.y = y;
-            clubLogo.height = height;
             clubLogo.scale.x = clubLogo.scale.y;
             clubLogo.anchor.set(anchorX, anchorY);
             return clubLogo;
@@ -348,7 +319,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         let displayFixtures = () => {
 
             //Header
-            let _y = this.height * 0.1;
+            let _y = this.height * 0.2;
             this.fixturesHeader = createText(
                 `Round ${this.currentRound}. Today's games:`,
                 this.width / 2,
@@ -446,7 +417,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
             recordFixtures(this.currentRound);
 
-            fixturesContainer.y = this.height / 4 - fixturesContainer.height / 2;
+            fixturesContainer.y = this.height * 0.4 - fixturesContainer.height / 2;
             this.stage.addChild(fixturesContainer);
             createStandings();
         }

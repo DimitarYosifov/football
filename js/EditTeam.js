@@ -1,16 +1,30 @@
 // import Background from "./Background.js";
 import Card from "./gameLevel/Card.js";
 import { recordClubPlayersParams } from "./recordClubPlayersParams.js";
+import GameTexture from "./GameTexture.js";
+import Background from "./Background.js";
+import RotatingButton from "./RotatingButton.js";
 
 export default class EditTeam {
     constructor(app) {
         this.app = app;
+        this.backgroundImg = new Background(this.app, {
+            gamePhase: "editTeam",
+            sprite: new GameTexture(this.app, "bg55"),
+            bg_x: -this.app.width * 0.005,
+            bg_y: -this.app.height * 0.005,
+            bg_width: this.app.width * 1.005,
+            bg_height: this.app.height * 1.005
+        });
+        // backgroundImg.alpha = 0.5;
+        this.app.stage.addChild(this.backgroundImg);
+        TweenMax.to(this.app.stage, 0.85, { alpha: 1, delay: 0.5 });
         this.container = new PIXI.Container;
         this.app.stage.addChild(this.container);
 
         //BG
         this.bg = new PIXI.Graphics();
-        this.bg.beginFill(0x000000, 1);
+        this.bg.beginFill(0x000000, 0);
         this.bg.drawRect(
             0,
             0,
@@ -139,6 +153,7 @@ export default class EditTeam {
 
     createTexts = {
         create: (_text, y, x, anchorX, anchorY, fontSize, returnText = false) => {
+            console.log(_text);
             let text = new PIXI.Text(_text, {
                 fontFamily: this.app.config.mainFont,
                 fontSize: fontSize,
@@ -249,57 +264,31 @@ export default class EditTeam {
     }
 
     addButtons() {
-        const btnTexture = this.app.loader.resources.buttons.textures[`save`];
-        this.saveBtn = new PIXI.Sprite(btnTexture);
-        this.saveBtn.height = this.app.height * 0.05;
-        this.saveBtn.scale.x = this.saveBtn.scale.y;
-        this.saveBtn.x = this.app.width;
-        this.saveBtn.y = this.app.height * 0.5;
-        this.saveBtn.anchor.set(1, 0.5);
-        this.saveBtn.interactive = true;
-        this.saveBtn.on('pointerdown', () => {
+
+        //  SAVE BUTTON
+        let saveOnPointerDown = () => {
             this.recordData();
             this.addSavedtext();
-        });
+        }
+        this.saveBtn = new RotatingButton(this.app, null, null, saveOnPointerDown);
         this.container.addChild(this.saveBtn);
+        this.saveBtn.setButtonSize(this.container.height * 0.1, this.container.width * 0.75, this.container.height * 0.22);
+        this.saveBtn.addLabel(`Save`, 0.4);
 
-        //BACK TEAM BTN
-        const backBtnTexture = this.app.loader.resources.buttons.textures[`btn1`];
-        let backBtn = new PIXI.Sprite(backBtnTexture);
-        backBtn.height = this.app.height * 0.06;
-        backBtn.scale.x = backBtn.scale.y;
-        backBtn.x = this.app.width * 0.89;
-        backBtn.y = this.app.height * 0.1;
-        backBtn.anchor.set(0.5);
-        backBtn.interactive = true;
-        backBtn.interactive = true;
-        backBtn.on('pointerdown', () => {
-            //this fixes bug with mixing subs.... :(
+        //--BACK BUTTON
+        let backOnPointerDown = () => {
+            // this fixes bug with mixing subs.... : (
             for (let i = 0; i < this.players.length; i++) {
                 this.app.playerLineUp[i].substitute = i < 6 ? false : true;
             }
             this.app.checkContinueAllowed();
             this.app.stage.removeChild(this.container);
-        });
-
-        this.container.addChild(backBtn);
-
-        let backBtnLabel = new PIXI.Text(`back`, {
-            fontFamily: this.app.config.mainFont,
-            fontSize: backBtn.height / 2.5,
-            fill: '#ffffff',
-            align: 'center',
-            stroke: '#000000',
-            fontWeight: 200,
-            lineJoin: "bevel",
-            strokeThickness: 2
-        });
-        backBtnLabel.position.set(
-            backBtn.x,
-            backBtn.y
-        );
-        backBtnLabel.anchor.set(0.5, 0.5);
-        this.container.addChild(backBtnLabel);
+            this.app.stage.removeChild(this.backgroundImg);
+        }
+        this.backBtn = new RotatingButton(this.app, null, null, backOnPointerDown);
+        this.container.addChild(this.backBtn);
+        this.backBtn.setButtonSize(this.container.height * 0.1, this.container.width * 0.75, this.container.height * 0.1);
+        this.backBtn.addLabel(`Back`, 0.4);
     }
 
     addSavedtext() {
@@ -307,7 +296,7 @@ export default class EditTeam {
         let changesSaved = new PIXI.Text(`saved`, {
             fontFamily: this.app.config.mainFont,
             fontSize: this.app.height / 8,
-            fill: '#ffffff',
+            fill: '#259325',
             align: 'center',
             stroke: '#000000',
             fontWeight: 200,

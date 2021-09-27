@@ -1,3 +1,4 @@
+import GameTexture from "./GameTexture.js";
 
 export default class AddParticles {
 
@@ -21,6 +22,7 @@ export default class AddParticles {
             // The collection of particle images to use
             // [PIXI.Texture.fromImage('image.jpg')],
             [this.app.loader.resources.main1.textures[`rain`]],
+            // [new GameTexture(this.app, "rain") ],
 
             // Emitter configuration, edit this to change the look
             // of the emitter

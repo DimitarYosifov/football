@@ -1,4 +1,4 @@
-import { gameResources } from "./FTPS_resources.js"
+import { gameResources } from "./resources.js"
 
 
 export default class Stage {
@@ -150,7 +150,7 @@ export default class Stage {
             console.log("progress: " + loader.progress + "%");
 
             document.getElementById('loading-progress').style.width = `${loader.progress}%`;
-            document.getElementById('loading-value').innerHTML = `${loader.progress}%`;
+            document.getElementById('loading-value').innerHTML = `${Math.ceil(loader.progress)}%`;
 
             //If you gave your files names as the first argument 
             //of the `add` method, you can access them like this

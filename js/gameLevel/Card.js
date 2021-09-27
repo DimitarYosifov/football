@@ -1,6 +1,7 @@
 import config from "../Config.js";
 import activeDefense from "./ActiveDefense.js";
 import fullAttack from "./FullAttack.js";
+import GameTexture from "../GameTexture.js";
 
 export default class Card extends PIXI.Container {
     constructor(data, app, showCurrentValues = true, randomColor) {
@@ -76,16 +77,14 @@ export default class Card extends PIXI.Container {
         }
 
         //card background
-        let cardTexture = this.app.loader.resources.players.textures[this.cardTexture];
-        this.cardImg = new PIXI.Sprite(cardTexture);
+        this.cardImg = new GameTexture(this.app, this.cardTexture).sprite;
         this.cardImg.x = this.card_x;
         this.cardImg.y = this.card_y;
         this.cardImg.width = this.card_width;
         this.cardImg.height = this.card_height;
 
         //attack section
-        let shoeTexture = this.app.loader.resources.main1.textures[this.shoeTexture];
-        this.shoe = new PIXI.Sprite(shoeTexture);
+        this.shoe = new GameTexture(this.app, this.shoeTexture).sprite;
         this.shoe.x = this.shoe_x;
         this.shoe.y = this.shoe_y;
         this.shoe.height = this.shoe_height;
@@ -93,8 +92,7 @@ export default class Card extends PIXI.Container {
         this.shoe.tint = '0x' + this.stats.attack_color;
 
         //defense section
-        let gloveTexture = PIXI.Texture.fromImage(this.gloveTexture);
-        this.glove = new PIXI.Sprite(gloveTexture);
+        this.glove = new GameTexture(this.app, this.gloveTexture).sprite;
         this.glove.x = this.glove_x;
         this.glove.y = this.glove_y;
         this.glove.height = this.glove_height;
@@ -322,7 +320,7 @@ export default class Card extends PIXI.Container {
             // this.selectable = false;
         }
         else if (hasRedCard) {
-            this.yellowCard.texture = this.app.loader.resources.main1.textures[`red_card`];
+            this.yellowCard.texture = new GameTexture(this.app, "red_card").finalTexture;
             this.yellowCard.visible = true;
             // this.selectable = false;
         }
@@ -334,8 +332,7 @@ export default class Card extends PIXI.Container {
     }
 
     addGoalsScored(x) {
-        let ballTexture = this.app.loader.resources.main1.textures[`ball_prototype`];
-        let ball = new PIXI.Sprite(ballTexture);
+        let ball = new GameTexture(this.app, "ball_prototype").sprite;
         ball.x = x;
         ball.y = this.card_y + this.card_height * 1.02;
         ball.width = this.card_width / 5;

@@ -1,3 +1,6 @@
+
+import GameTexture from "../GameTexture.js";
+
 export default class FullAttack extends PIXI.Sprite {
 
     constructor(app, tintValue, initialX, initialY, color, initiatorIndex) {
@@ -6,7 +9,7 @@ export default class FullAttack extends PIXI.Sprite {
         this.initiatorIndex = initiatorIndex;
         this.stageWidth = this.app.stage.width;
         this.stageHeight = this.app.stage.height;
-        this.texture = this.app.loader.resources.main1.textures[`shoe`];
+        this.texture = new GameTexture(this.app, "ball_prototype");
         this.height = this.stageHeight * 0.05;
         this.color = color;
         this.scale.x = this.scale.y;

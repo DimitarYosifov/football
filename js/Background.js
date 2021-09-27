@@ -1,4 +1,4 @@
-export default class Background extends PIXI.Container{
+export default class Background extends PIXI.Container {
 
     constructor(app, data) {
         super();
@@ -9,7 +9,7 @@ export default class Background extends PIXI.Container{
 
     createBG() {
         this.stage.gamePhase = this.bgData.gamePhase;
-        let bg = new PIXI.Sprite(this.bgData.bgTexture);
+        let bg = this.bgData.sprite.sprite;
         bg.position.x = this.bgData.bg_x;
         bg.position.y = this.bgData.bg_y;
         bg.width = this.bgData.bg_width;

@@ -119,7 +119,7 @@ export default class LogIn {
                     alpha: 0, onComplete: () => {
                         this.stage.removeChildren();
                         this.app.checkGameInProgress();
-                        TweenMax.killAll();
+                        gsap.killTweensOf("*");
                         this.wrapper.remove();
                         this.wrapper.style.display = "none";
                         this.stage.visible = true;

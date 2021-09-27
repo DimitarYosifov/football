@@ -5,13 +5,14 @@ import MatchStartPopup from "./gameLevel/MatchStartPopup.js";
 import Grid from "./gameLevel/Grid.js";
 import NewRoundPopup from "./gameLevel/NewRoundPopup.js";
 import Particles from "./AddParticles.js";
+import GameTexture from "./GameTexture.js";
 
 export default class Level extends PIXI.Container {
 
     constructor(app) {
 
         super();
-        TweenMax.killAll();
+        gsap.killTweensOf("*");
         this.app = app;
         this.config = Config;
         this.stage = app.stage;
@@ -49,7 +50,7 @@ export default class Level extends PIXI.Container {
         this.addAdditionalChildren = () => {
             this.bg = new Background(this.app, {
                 gamePhase: "level",
-                bgTexture: this.app.loader.resources.backgrounds.textures["pitch"],
+                sprite: new GameTexture(this.app, "pitch"),
                 bg_x: -this.app.width * 0.005,
                 bg_y: -this.app.height * 0.005,
                 bg_width: this.app.width * 1.005,
@@ -57,7 +58,7 @@ export default class Level extends PIXI.Container {
             });
             this.addChild(this.bg);
 
-            this.info = new PIXI.Sprite(this.app.loader.resources.main1.textures["info"]);
+            this.info = new GameTexture(this.app, "info").sprite;
             this.info.anchor.set(1, 0.5);
             this.info.x = this.app.width;
             this.info.y = this.app.height / 2;
@@ -69,13 +70,14 @@ export default class Level extends PIXI.Container {
                 this.infoPopup = new NewRoundPopup(this.app, false, false);
                 this.parent.addChild(this.infoPopup);
             });
-
-            this.spinningBall = new PIXI.Sprite(this.app.loader.resources.main1.textures["ball_prototype"]);
+            this.spinningBall = new GameTexture(this.app, "ball_prototype").sprite;
             this.spinningBall.anchor.set(0.5, 0.5);
             this.spinningBall.x = this.app.width * 0.96;
             this.spinningBall.y = this.app.height * (this.isPlayerHome ? 0.85 : 0.15);
-            this.spinningBall.width = this.app.width / 11;
-            this.spinningBall.scale.y = this.info.scale.x;
+            // this.spinningBall.width = this.app.width / 11;
+            // this.spinningBall.scale.y = this.info.scale.x;
+            this.spinningBall.height = this.app.height * 0.04;
+            this.spinningBall.scale.x = this.spinningBall.scale.y;
             this.addChild(this.spinningBall);
             TweenMax.to(this.spinningBall, 3000, {
                 rotation: 3600

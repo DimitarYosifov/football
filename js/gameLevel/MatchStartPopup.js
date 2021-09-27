@@ -1,3 +1,5 @@
+import GameTexture from "../GameTexture.js";
+
 export default class MatchStartPopup extends PIXI.Container {
     constructor(app) {
         super();
@@ -115,8 +117,7 @@ export default class MatchStartPopup extends PIXI.Container {
         this.addChild(this.container1);
 
         //PLAYER CLUB LOGO
-        const playerLogoTexture = this.app.loader.resources.logos.textures[`${this.app.playerClubData.logo}`];
-        this.playerClubLogo = new PIXI.Sprite(playerLogoTexture);
+        this.playerClubLogo = new GameTexture(this.app, `${this.app.playerClubData.logo}`).sprite;
         this.playerClubLogo.x = this.app.width / 2;
         this.playerClubLogo.y = this.app.height / 2;
         this.playerClubLogo.height = this.app.height / 2;
@@ -127,8 +128,7 @@ export default class MatchStartPopup extends PIXI.Container {
         //PLAYER CLUB STARS
         this.playerClubPower = this.app.playerClubData.power;
         for (let s = 0; s < this.playerClubPower; s++) {
-            const starTexture = this.app.loader.resources.main1.textures[`star`];
-            const star = new PIXI.Sprite(starTexture);
+            const star = new GameTexture(this.app, "star").sprite;
             star.height = this.app.height * 0.07;
             star.scale.x = star.scale.y;
             star.x = this.playerClubLogo.x - star.width * s + star.width * this.playerClubPower / 2 - star.width / 2;
@@ -165,8 +165,7 @@ export default class MatchStartPopup extends PIXI.Container {
         this.addChild(this.container2);
 
         //OPPONENT CLUB LOGO
-        const opponentLogoTexture = this.app.loader.resources.logos.textures[`${this.app.opponentClubData.logo}`];
-        this.opponentClubLogo = new PIXI.Sprite(opponentLogoTexture);
+        this.opponentClubLogo = new GameTexture(this.app, `${this.app.opponentClubData.logo}`).sprite;
         this.opponentClubLogo.x = this.app.width / 2;
         this.opponentClubLogo.y = this.app.height / 2;
         this.opponentClubLogo.height = this.app.height / 2;
@@ -177,8 +176,7 @@ export default class MatchStartPopup extends PIXI.Container {
         //OPPONENT CLUB STARS
         this.opponentClubPower = this.app.opponentClubData.power;
         for (let s = 0; s < this.opponentClubPower; s++) {
-            const starTexture = this.app.loader.resources.main1.textures[`star`];
-            const star = new PIXI.Sprite(starTexture);
+            const star = new GameTexture(this.app, "star").sprite;
             star.height = this.app.height * 0.07;
             star.scale.x = star.scale.y;
             star.x = this.opponentClubLogo.x - star.width * s + star.width * this.opponentClubPower / 2 - star.width / 2;

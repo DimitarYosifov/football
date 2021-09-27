@@ -1,11 +1,24 @@
 import { standingsView } from "./standingsView.js";
 import { recordClubPlayersParams } from "./recordClubPlayersParams.js";
 import { serverRequest } from "./Request.js"
+import Background from "./Background.js";
+import GameTexture from "./GameTexture.js";
 
 export function clubSelection(app, mode) {
-    let clubs = [];
+    let clubContainers = [];
     let isPlayerTurn = true;
     let selectClub;
+    app.stage.alpha = 0;
+    TweenMax.to(app.stage, 1, { alpha: 1 });
+    let backgroundImg = new Background(app, {
+        gamePhase: "level",
+        sprite: new GameTexture(app, "bg435"),
+        bg_x: -app.width * 0.005,
+        bg_y: -app.height * 0.005,
+        bg_width: app.width * 1.005,
+        bg_height: app.height * 1.005
+    });
+    app.stage.addChild(backgroundImg);
 
     let positions = [
         {
@@ -104,9 +117,7 @@ export function clubSelection(app, mode) {
         name.anchor.set(0.5, 0.5);
         container.addChild(name);
 
-        const logoTexture = app.loader.resources.logos.textures[`${club.clubData.logo}`];
-        app.stage.alpha = 1;
-        let logo = new PIXI.Sprite(logoTexture);
+        let logo = new GameTexture(app, `${club.clubData.logo}`).sprite;
         logo.x = name.x;
         logo.y = name.y - name.height / 2;
         logo.height = app.height / 10;
@@ -115,14 +126,37 @@ export function clubSelection(app, mode) {
         container.addChild(logo);
         logo.interactive = true;
         logo.on('pointerup', () => {
-            container.visible = false;
+            // container.visible = false;
             isPlayerTurn ? app.playerClubData = club.clubData : app.opponentClubData = club.clubData;
             app.stage.removeChild(selectClub);
             app.friendly = mode === "friendly";
             if (!app.friendly) {
-                recordClubPlayersParams(app);
-                app.stage.removeChildren();
-                standingsView.bind(app)();
+                clubContainers.forEach(element => {
+                    if (element !== container) {
+                        TweenMax.to(element, 1,
+                            {
+                                alpha: 0
+                            }
+                        );
+                    } else {
+                        let x = app.width / 2 - container.getLocalBounds().x - container.width / 2;
+                        let y = app.height / 2 - container.getLocalBounds().y - container.height / 2;
+                        TweenMax.to(container, 0.5,
+                            {
+                                delay: 1,
+                                x: x,
+                                y: y,
+                                onComplete: () => {
+                                    TweenMax.delayedCall(1, () => {
+                                        recordClubPlayersParams(app);
+                                        app.stage.removeChildren();
+                                        standingsView.bind(app)();
+                                    });
+                                }
+                            },
+                        );
+                    }
+                });
             }
             else {
                 if (isPlayerTurn) {
@@ -138,8 +172,7 @@ export function clubSelection(app, mode) {
 
         let power = club.clubData.power;
         for (let s = 0; s < power; s++) {
-            const starTexture = app.loader.resources.main1.textures[`star`];
-            const star = new PIXI.Sprite(starTexture);
+            const star = new GameTexture(app, `star`).sprite;
             star.height = app.height * 0.015;
             star.scale.x = star.scale.y;
             star.x = logo.x - star.width * s + star.width * power / 2;
@@ -147,5 +180,11 @@ export function clubSelection(app, mode) {
             star.anchor.set(1, 1);
             container.addChild(star);
         }
+        clubContainers.push(container);
+
+        // container.pivot.x = app.width / 2
+        // container.pivot.y = app.height / 2
+        // container.x += app.width / 2
+        // container.y += app.height / 2
     }
 }
