@@ -5,7 +5,7 @@ import LogIn from "./LogIn.js";
 import config from "./Config.js";
 import { createNewClub, getClubData } from "./newClub.js";
 import { clubSelection } from "./clubSelection.js";
-import { modeSelection } from "./modeSelection.js";
+import modeSelection from "./modeSelection.js";
 import { standingsView } from "./standingsView.js";
 import { generateResult } from "./generateResult.js";
 import LoadingView from "./LoadingView.js";
@@ -67,7 +67,7 @@ export default class App extends Stage {
             if (res.data) {
                 standingsView.bind(this)(res.data);
             } else {
-                modeSelection(this);
+                new modeSelection(this);
             }
         })
 
@@ -83,7 +83,7 @@ export default class App extends Stage {
             if (res.data) {
                 standingsView.bind(this)(res.data);
             } else {
-                modeSelection(this);
+                new modeSelection(this);
             }
         })
     }

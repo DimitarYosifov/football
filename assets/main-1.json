@@ -216,14 +216,38 @@
         "y": 0.5
       }
     },
+    "flame": {
+      "frame": {
+        "x": 548,
+        "y": 1957,
+        "w": 90,
+        "h": 38
+      },
+      "rotated": true,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 6,
+        "w": 90,
+        "h": 38
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 50
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "ball_red": {
       "frame": {
         "x": 647,
-        "y": 1500,
+        "y": 0,
         "w": 197,
         "h": 190
       },
-      "rotated": true,
+      "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 1,
@@ -242,12 +266,12 @@
     },
     "ball_prototype": {
       "frame": {
-        "x": 647,
-        "y": 1697,
+        "x": 844,
+        "y": 0,
         "w": 195,
         "h": 191
       },
-      "rotated": true,
+      "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 2,
@@ -266,12 +290,12 @@
     },
     "ball_yellow": {
       "frame": {
-        "x": 838,
-        "y": 1697,
+        "x": 647,
+        "y": 190,
         "w": 195,
         "h": 190
       },
-      "rotated": true,
+      "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 3,
@@ -290,7 +314,7 @@
     },
     "ball_green - Copy": {
       "frame": {
-        "x": 1028,
+        "x": 1039,
         "y": 0,
         "w": 194,
         "h": 190
@@ -314,12 +338,12 @@
     },
     "ball_orange": {
       "frame": {
-        "x": 837,
+        "x": 1233,
         "y": 0,
         "w": 194,
         "h": 190
       },
-      "rotated": true,
+      "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 3,
@@ -338,12 +362,12 @@
     },
     "ball_purple": {
       "frame": {
-        "x": 837,
-        "y": 194,
+        "x": 1427,
+        "y": 0,
         "w": 194,
         "h": 190
       },
-      "rotated": true,
+      "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 2,
@@ -362,8 +386,8 @@
     },
     "ball_blue": {
       "frame": {
-        "x": 546,
-        "y": 194,
+        "x": 1621,
+        "y": 0,
         "w": 193,
         "h": 190
       },
@@ -386,7 +410,7 @@
     },
     "ball_green": {
       "frame": {
-        "x": 1028,
+        "x": 1039,
         "y": 0,
         "w": 194,
         "h": 190
@@ -415,8 +439,8 @@
     "image": "main-1.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1222,
-      "h": 2038
+      "w": 1814,
+      "h": 2047
     },
     "scale": 1
   }

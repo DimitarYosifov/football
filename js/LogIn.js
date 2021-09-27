@@ -1,5 +1,3 @@
-import { clubSelection } from "./clubSelection.js";
-import { modeSelection } from "./modeSelection.js";
 import { serverRequest } from "./Request.js"
 
 export default class LogIn {

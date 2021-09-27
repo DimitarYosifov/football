@@ -2,7 +2,7 @@ import GameTexture from "./GameTexture.js";
 
 export default class AddParticles {
 
-    constructor(app, level) {
+    constructor(app, level, config, texture) {
         this.app = app;
         this.level = level;
         this.container = new PIXI.particles.ParticleContainer(6000, { scale: true, position: true, rotation: true, alpha: true });
@@ -11,7 +11,7 @@ export default class AddParticles {
         // or "const particles = require('pixi-particles')", the PIXI namespace will
         // not be modified, and may not exist - use "new particles.Emitter()", or whatever
         // your imported namespace is
-        var emitter = new PIXI.particles.Emitter(
+        this.emitter = new PIXI.particles.Emitter(
             // var emitter = new particles.Emitter()(
 
             // The PIXI.Container to put the emitter in
@@ -21,57 +21,62 @@ export default class AddParticles {
 
             // The collection of particle images to use
             // [PIXI.Texture.fromImage('image.jpg')],
-            [this.app.loader.resources.main1.textures[`rain`]],
+            // [this.app.loader.resources.main1.textures[`flame`]],
+            [new GameTexture(this.app, texture).finalTexture],
             // [new GameTexture(this.app, "rain") ],
 
             // Emitter configuration, edit this to change the look
             // of the emitter
-            {
-                "alpha": {
-                    "start": 0.4,
-                    "end": 0.4
-                },
-                "scale": {
-                    "start": 0.5,
-                    "end":  0.5
-                },
-                "color": {
-                    "start": "ffffff",
-                    "end": "ffffff"
-                },
-                "speed": {
-                    "start": 900,
-                    "end": 900
-                },
-                "startRotation": {
-                    "min": 80,
-                    "max": 80
-                },
-                "rotationSpeed": {
-                    "min": 0,
-                    "max": 0
-                },
-                "lifetime": {
-                    "min": 1,
-                    "max": 1
-                },
-                "blendMode": "normal",
-                "frequency": 0.009,
-                "emitterLifetime": 0,
-                "maxParticles": 10000,
-                "pos": {
-                    "x": 0,
-                    "y": 0
-                },
-                "addAtBack": false,
-                "spawnType": "rect",
-                "spawnRect": {
-                    "x": this.level.x,
-                    "y": this.level.y,
-                    "w": this.level.width * 0.95,
-                    "h": this.level.height * 0.5
-                }
-            }
+
+
+
+            // {
+            config
+            // "alpha": {
+            //     "start": 0.4,
+            //     "end": 0.4
+            // },
+            // "scale": {
+            //     "start": 0.5,
+            //     "end": 0.5
+            // },
+            // "color": {
+            //     "start": "ffffff",
+            //     "end": "ffffff"
+            // },
+            // "speed": {
+            //     "start": 900,
+            //     "end": 900
+            // },
+            // "startRotation": {
+            //     "min": 80,
+            //     "max": 80
+            // },
+            // "rotationSpeed": {
+            //     "min": 0,
+            //     "max": 0
+            // },
+            // "lifetime": {
+            //     "min": 1,
+            //     "max": 1
+            // },
+            // "blendMode": "normal",
+            // "frequency": 0.009,
+            // "emitterLifetime": 0,
+            // "maxParticles": 10000,
+            // "pos": {
+            //     "x": 0,
+            //     "y": 0
+            // },
+            // "addAtBack": false,
+            // "spawnType": "rect",
+            // "spawnRect": {
+            //     "x": 0,
+            //     "y": 0,
+            //     "w": 1111,
+            //     "h": 1111
+            // }
+            // }
         );
 
         // Calculate the current time
@@ -81,13 +86,14 @@ export default class AddParticles {
         this.update = () => {
 
             // Update the next frame
-            // requestAnimationFrame(this.update);
 
+            requestAnimationFrame(this.update);
             var now = Date.now();
+            console.log(now);
 
             // The emitter requires the elapsed
             // number of seconds since the last update
-            emitter.update((now - elapsed) * 0.001);
+            this.emitter.update((now - elapsed) * 0.001);
             elapsed = now;
 
             // Should re-render the PIXI Stage
@@ -95,7 +101,7 @@ export default class AddParticles {
         };
 
         // Start emitting
-        emitter.emit = true;
+        this.emitter.emit = true;
 
         setTimeout(() => {
             //      // test stop/destroy;
