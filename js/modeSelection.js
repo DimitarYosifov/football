@@ -11,12 +11,10 @@ export default class modeSelection {
         this.app.stage.visible = true;
         this.targetX = this.app.width / 2;
         this.addBG();
-        // this.createFlyingBall();
-        // this.createflyingBallTimeline();
         this.addFriendly();
         this.addLeague();
         this.setParticleConfigs();
-        setTimeout(() => {
+        TweenMax.delayedCall(1, () => {
             const loadingWrapper = document.getElementById("loading-wrapper");
             if (loadingWrapper) { loadingWrapper.remove() };
             TweenMax.to(app.stage, 1, {
@@ -25,11 +23,11 @@ export default class modeSelection {
                     this.createflyingBallTimeline();
                 }
             });
-        }, 1000);
+        });
     }
 
     addBG() {
-        let backgroundImg = new Background(this.app, {
+        this.backgroundImg = new Background(this.app, {
             gamePhase: "modeSelection",
             sprite: new GameTexture(this.app, "bg909"),
             bg_x: -this.app.width * 0.005,
@@ -37,7 +35,7 @@ export default class modeSelection {
             bg_width: this.app.width * 1.005,
             bg_height: this.app.height * 1.005
         });
-        this.app.stage.addChild(backgroundImg);
+        this.app.stage.addChild(this.backgroundImg);
     }
 
     addFriendly() {
@@ -238,6 +236,52 @@ export default class modeSelection {
                 "h": this.app.height * 0.05
             }
         }
+
+        this.starParticleConfig = {
+            "alpha": {
+                "start": 0.8,
+                "end": 0.1
+            },
+            "scale": {
+                "start": 0.6,
+                "end": 0.4
+            },
+            "color": {
+                "start": "#6c6c6c",
+                "end": "#ababab"
+            },
+            "speed": {
+                "start": 750,
+                "end": 50
+            },
+            "startRotation": {
+                "min": 0,
+                "max": 360
+            },
+            "rotationSpeed": {
+                "min": 0,
+                "max": 360
+            },
+            "lifetime": {
+                "min": 0.75,
+                "max": 1.25
+            },
+            "blendMode": "normal",
+            "frequency": 0.002,
+            "emitterLifetime": 0,
+            "maxParticles": 1000,
+            "pos": {
+                "x": this.app.width * 0.5,
+                "y": this.app.height * 0.5
+            },
+            "addAtBack": true,
+            "spawnType": "circle",
+            "spawnCircle": {
+                "x": 0,
+                "y": 0,
+                "r": 0
+            }
+        }
     }
 
     startParticles() {
@@ -266,7 +310,12 @@ export default class modeSelection {
             TweenMax.to(this.league, 0.4,
                 {
                     ease: Back.easeOut,
-                    x: this.targetX
+                    x: this.targetX,
+                    onComplete: () => {
+                        TweenMax.to(this.backgroundImg, 0.6, {
+                            alpha: 0.6
+                        })
+                    }
                 });
         });
         // league particle
@@ -372,7 +421,12 @@ export default class modeSelection {
                 y: this.app.height * 0.12,
                 width: startW * 9,
                 height: startH * 9,
-                ease: Linear.easeNone
+                ease: Linear.easeNone,
+                onStart: () => {
+                    TweenMax.delayedCall(0.14, () => {
+                        this.star_Particles();
+                    })
+                }
             }
         );
 
@@ -381,11 +435,28 @@ export default class modeSelection {
                 y: this.app.height * 0.5,
                 width: startW * 30,
                 height: startH * 30,
-                ease: Linear.easeNone,
-                onComplete: () => {
-                    this.startParticles();
-                }
+                ease: Linear.easeNone
             }
         );
+    }
+
+    star_Particles() {
+        let emitter = new Particles(this.app, this, this.starParticleConfig, "star-particle");
+        this.app.stage.addChildAt(emitter.container, 1);
+        // this.app.stage.addChild(emitter.container);
+        emitter.update();
+
+        TweenMax.delayedCall(0.3, () => {
+            emitter.emitter.emit = false;
+            TweenMax.delayedCall(1, () => {
+                emitter.emitter.destroy();
+                emitter.emitter.cleanup();
+                this.app.stage.removeChild(emitter.container);
+                emitter.update = () => { };
+            });
+            TweenMax.delayedCall(0.4, () => {
+                this.startParticles();
+            })
+        });
     }
 }

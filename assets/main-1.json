@@ -216,9 +216,33 @@
         "y": 0.5
       }
     },
-    "flame": {
+    "star-particle": {
       "frame": {
         "x": 548,
+        "y": 1957,
+        "w": 95,
+        "h": 91
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 3,
+        "y": 2,
+        "w": 95,
+        "h": 91
+      },
+      "sourceSize": {
+        "w": 100,
+        "h": 96
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "flame": {
+      "frame": {
+        "x": 449,
         "y": 1957,
         "w": 90,
         "h": 38
@@ -440,7 +464,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 1814,
-      "h": 2047
+      "h": 2048
     },
     "scale": 1
   }
