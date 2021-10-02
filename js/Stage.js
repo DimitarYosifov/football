@@ -30,7 +30,7 @@ export default class Stage {
 
         PIXI.settings.PRECISION_FRAGMENT = 'highp';
 
-        
+
         this.canvas = document.getElementById("stage");
         this.body = document.getElementById("body");
 
@@ -129,7 +129,7 @@ export default class Stage {
 
         let handleLoadComplete = () => {
             this.loaderLoaded = true;
-            this.checkLoaded();
+                this.checkLoaded();
         }
         this.loader.onComplete.add(handleLoadComplete);
 

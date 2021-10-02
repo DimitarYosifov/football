@@ -17,12 +17,12 @@ export default class App extends Stage {
         super();
         window.onload = () => {
             this.windowLoaded = true;
-            if (config.addTeam) {
-                createNewClub();
-            }
-            else {
+            // if (config.addTeam) {
+            //     createNewClub();
+            // }
+            // else {
                 this.checkLoaded();
-            }
+            // }
         };
     }
 
@@ -64,11 +64,10 @@ export default class App extends Stage {
             'application/json',
             JSON.stringify({ data: this.storageData })
         ).then(res => {
-            if (!res.authorized) {
-                this.login = new LogIn(this);
+            if (res.data) {
+                standingsView.bind(this)(res.data);
             } else {
-                this.user = localStorage.getItem('user');
-                this.checkGameInProgress();
+                new modeSelection(this);
             }
         })
 
