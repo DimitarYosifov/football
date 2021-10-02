@@ -240,8 +240,8 @@ export default class EditTeam {
         this.container.setChildIndex(card1, this.container.children.length - 1);
         this.container.setChildIndex(card2, this.container.children.length - 2);
 
-        TweenMax.to(card1.children, .5, { x: card1newX, y: card1newY });
-        TweenMax.to(card2.children, .5, { x: card2newX, y: card2newY });
+        TweenMax.to(card1.children, 0.5, { x: card1newX, y: card1newY, ease: Back.easeInOut });
+        TweenMax.to(card2.children, 0.5, { x: card2newX, y: card2newY, ease: Back.easeInOut });
 
         const card1Index = this.players.indexOf(this.players.find(x => x === card1.stats));
         const card2Index = this.players.indexOf(this.players.find(x => x === card2.stats));
@@ -296,7 +296,7 @@ export default class EditTeam {
         let changesSaved = new PIXI.Text(`saved`, {
             fontFamily: this.app.config.mainFont,
             fontSize: this.app.height / 8,
-            fill: '#259325',
+            fill: '#ffffff',
             align: 'center',
             stroke: '#000000',
             fontWeight: 200,
@@ -308,9 +308,9 @@ export default class EditTeam {
             this.app.height / 2
         );
         changesSaved.anchor.set(0.5, 0.5);
-        this.container.addChild(changesSaved);
+        this.app.stage.addChild(changesSaved);
         TweenMax.delayedCall(0.75, () => {
-            this.container.removeChild(changesSaved)
+            this.app.stage.removeChild(changesSaved);
         });
     }
     recordData() {

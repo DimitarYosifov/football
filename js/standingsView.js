@@ -168,8 +168,8 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             fontSize: this.height / 50,
             fill: isPlayerClub ? "#6ddd48" : '#dbb7b7',
             align: 'center',
-            stroke: '#000000',
-            strokeThickness: 3
+            // stroke: '#000000',
+            // strokeThickness: 3
         });
         text.position.set(x, y);
         text.anchor.set(anchorX, 0);

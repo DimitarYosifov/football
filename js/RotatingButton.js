@@ -11,26 +11,18 @@ export default class RotatingButton extends PIXI.Sprite {
         this.anchor.set(0.5);
         this.interactive = true;
         this.on('pointerdown', () => {
-            onPointerDown();
+            this.activate();
+            TweenMax.delayedCall(0.2, () => {
+                onPointerDown();
+                this.deactivate();
+            });
         })
         this.on('pointerover', () => {
-            this.label.style.stroke = "#f5f5dc";
-            this.label.style.fill = "#000000";
-            if (!this.btn_rotation) {
-                this.btn_rotation = TweenMax.to(this, 3000, {
-                    rotation: 360
-                });
-            } else {
-                this.btn_rotation.play();
-            }
-            this.texture = new GameTexture(this.app, this.onInteractionTexture).finalTexture;
+            this.activate();
         })
 
         this.on('pointerout', () => {
-            this.label.style.stroke = "#000000";
-            this.label.style.fill = "#f5f5dc";
-            this.btn_rotation.pause();
-            this.texture = new GameTexture(this.app, this.defaultTexture).finalTexture;
+            this.deactivate();
         })
     }
 
@@ -60,5 +52,25 @@ export default class RotatingButton extends PIXI.Sprite {
             this.y
         );
         this.parent.addChild(this.label);
+    }
+
+    activate() {
+        this.label.style.stroke = "#f5f5dc";
+        this.label.style.fill = "#000000";
+        if (!this.btn_rotation) {
+            this.btn_rotation = TweenMax.to(this, 3000, {
+                rotation: 360
+            });
+        } else {
+            this.btn_rotation.play();
+        }
+        this.texture = new GameTexture(this.app, this.onInteractionTexture).finalTexture;
+    }
+
+    deactivate() {
+        this.label.style.stroke = "#000000";
+        this.label.style.fill = "#f5f5dc";
+        this.btn_rotation.pause();
+        this.texture = new GameTexture(this.app, this.defaultTexture).finalTexture;
     }
 }

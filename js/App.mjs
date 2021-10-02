@@ -64,10 +64,11 @@ export default class App extends Stage {
             'application/json',
             JSON.stringify({ data: this.storageData })
         ).then(res => {
-            if (res.data) {
-                standingsView.bind(this)(res.data);
+            if (!res.authorized) {
+                this.login = new LogIn(this);
             } else {
-                new modeSelection(this);
+                this.user = localStorage.getItem('user');
+                this.checkGameInProgress();
             }
         })
 

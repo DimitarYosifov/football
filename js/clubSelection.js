@@ -105,11 +105,12 @@ export function clubSelection(app, mode) {
             fontSize: app.height / 30,
             fill: '#ffffff',
             align: 'center',
-            stroke: '#000000',
-            fontWeight: 800,
-            lineJoin: "bevel",
-            strokeThickness: 6
+            // stroke: '#000000',
+            // fontWeight: 800,
+            // lineJoin: "bevel",
+            // strokeThickness: 6
         });
+
         name.position.set(
             position.x,
             position.y
@@ -126,7 +127,7 @@ export function clubSelection(app, mode) {
         container.addChild(logo);
         logo.interactive = true;
         logo.on('pointerup', () => {
-            // container.visible = false;
+            logo.interactive = false;
             isPlayerTurn ? app.playerClubData = club.clubData : app.opponentClubData = club.clubData;
             app.stage.removeChild(selectClub);
             app.friendly = mode === "friendly";
@@ -141,17 +142,37 @@ export function clubSelection(app, mode) {
                     } else {
                         let x = app.width / 2 - container.getLocalBounds().x - container.width / 2;
                         let y = app.height / 2 - container.getLocalBounds().y - container.height / 2;
-                        TweenMax.to(container, 0.5,
+                        TweenMax.to(container, 0.3,
                             {
                                 delay: 1,
                                 x: x,
                                 y: y,
+                                ease: Back.easeOut,
                                 onComplete: () => {
-                                    TweenMax.delayedCall(1, () => {
-                                        recordClubPlayersParams(app);
-                                        app.stage.removeChildren();
-                                        standingsView.bind(app)();
-                                    });
+
+                                    let w = app.stage.width;
+                                    let h = app.stage.height;
+
+                                    TweenMax.to(app.stage, 0.5,
+                                        {
+                                            x: -w,
+                                            y: -h,
+                                            width: w * 3,
+                                            height: h * 3,
+                                            ease: Bounce.easeOut,
+                                            onComplete: () => {
+                                                TweenMax.delayedCall(1, () => {
+                                                    recordClubPlayersParams(app);
+                                                    app.stage.removeChildren();
+                                                    standingsView.bind(app)();
+                                                    app.stage.width = w;
+                                                    app.stage.height = h;
+                                                    app.stage.x = 0;
+                                                    app.stage.y = 0;
+                                                })
+                                            }
+                                        },
+                                    );
                                 }
                             },
                         );
@@ -181,10 +202,5 @@ export function clubSelection(app, mode) {
             container.addChild(star);
         }
         clubContainers.push(container);
-
-        // container.pivot.x = app.width / 2
-        // container.pivot.y = app.height / 2
-        // container.x += app.width / 2
-        // container.y += app.height / 2
     }
 }

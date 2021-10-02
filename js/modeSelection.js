@@ -111,34 +111,54 @@ export default class modeSelection {
     }
 
     modeSelected(mode) {
-        let friendlyTimeline = new TimelineMax();
-        friendlyTimeline.to(this.league, 0.3,
-            {
-                ease: Back.easeOut,
-                x: this.app.width + this.league.width / 2
-            }
-        );
-        friendlyTimeline.to(this.app.stage, 0.5,
-            {
-                alpha: 0,
-                onComplete: () => {
-                    this.app.stage.removeChildren();
-                    clubSelection(this.app, mode);
+        
+        this.friendly.interactive = false;
+        this.league.interactive = false;
+
+        this.star_Particles();
+        if (mode === "friendly") {
+            TweenMax.to(this.league, 0.35,
+                {
+                    alpha: 0.3
+                });
+        } else {
+            TweenMax.to(this.friendly, 0.35,
+                {
+                    alpha: 0.3
+                });
+        }
+
+        TweenMax.delayedCall(1, () => {
+            let friendlyTimeline = new TimelineMax();
+            friendlyTimeline.to(this.league, 0.3,
+                {
+                    ease: Back.easeOut,
+                    x: this.app.width + this.league.width / 2
                 }
-            }
-        )
-        let leagueTimeline = new TimelineMax();
-        leagueTimeline.to(this.friendly, 0.3,
-            {
-                ease: Back.easeOut,
-                x: -this.friendly.width / 2
-            }
-        );
-        leagueTimeline.to(this.app.stage, 0.5,
-            {
-                alpha: 0
-            }
-        )
+            );
+            friendlyTimeline.to(this.app.stage, 0.5,
+                {
+                    alpha: 0,
+                    onComplete: () => {
+                        this.app.stage.removeChildren();
+                        clubSelection(this.app, mode);
+                    }
+                }
+            )
+            let leagueTimeline = new TimelineMax();
+            leagueTimeline.to(this.friendly, 0.3,
+                {
+                    delay: 0.1,
+                    ease: Back.easeOut,
+                    x: -this.friendly.width / 2
+                }
+            );
+            leagueTimeline.to(this.app.stage, 0.5,
+                {
+                    alpha: 0
+                }
+            )
+        })
     }
 
     //particles-----
@@ -425,6 +445,9 @@ export default class modeSelection {
                 onStart: () => {
                     TweenMax.delayedCall(0.14, () => {
                         this.star_Particles();
+                        TweenMax.delayedCall(0.4, () => {
+                            this.startParticles();
+                        })
                     })
                 }
             }
@@ -443,7 +466,6 @@ export default class modeSelection {
     star_Particles() {
         let emitter = new Particles(this.app, this, this.starParticleConfig, "star-particle");
         this.app.stage.addChildAt(emitter.container, 1);
-        // this.app.stage.addChild(emitter.container);
         emitter.update();
 
         TweenMax.delayedCall(0.3, () => {
@@ -454,9 +476,6 @@ export default class modeSelection {
                 this.app.stage.removeChild(emitter.container);
                 emitter.update = () => { };
             });
-            TweenMax.delayedCall(0.4, () => {
-                this.startParticles();
-            })
         });
     }
 }

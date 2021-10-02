@@ -25,8 +25,12 @@ export default class Stage {
 
         // Disable interpolation when scaling, will make texture be pixelated
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+
         // PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
 
+        PIXI.settings.PRECISION_FRAGMENT = 'highp';
+
+        
         this.canvas = document.getElementById("stage");
         this.body = document.getElementById("body");
 
@@ -34,7 +38,7 @@ export default class Stage {
         this.width = 1080;
         this.height = 1920;
 
-        let resolutiion = () => { //16:9
+        let resolution = () => { //16:9
 
             //resume requestAnimationFrame 
             if (this.landscape && this.isMobile && window.screen.width < window.screen.height) {
@@ -96,10 +100,9 @@ export default class Stage {
             // forceCanvas: true
         });
 
-        // this.renderer.plugins.interaction.moveWhenInside = true;
-
+        PIXI.settings.ROUND_PIXELS = true;
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
-        resolutiion();
+        resolution();
         this.animationLoop = () => {
             if (this.level && this.level.snowContainer) {
                 this.level.snowContainer.update();
@@ -159,6 +162,6 @@ export default class Stage {
 
         this.loader.on("progress", loadProgressHandler);
         this.loader.load(this.setup);
-        window.onresize = resolutiion;
+        window.onresize = resolution;
     }
 }
