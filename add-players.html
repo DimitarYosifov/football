@@ -14,7 +14,18 @@
 <body>
     <form id="add-team-section" class="col-6">
         <main>
-            <h2 style="color: black; text-align: center;">CLUB</h2>
+            <div style="display: flex;align-items: center;">
+                <h2 style="color: black; text-align: center;">CLUB</h2>
+                <div class="ml-2" id="stars-container-club">
+                    <img src="images/main-1/star.png" class="club-power-stars">
+                    <img src="images/main-1/star.png" class="club-power-stars">
+                    <img src="images/main-1/star.png" class="club-power-stars">
+                    <img src="images/main-1/star.png" class="club-power-stars">
+                    <img src="images/main-1/star.png" class="club-power-stars">
+                    <img src="images/main-1/star.png" class="club-power-stars">
+                    <img src="images/main-1/star.png" class="club-power-stars">
+                </div>
+            </div>
             <table class="table table-bordered table-active table-sm table-striped">
                 <tr>
                     <td>
@@ -2858,6 +2869,58 @@
             }
         }
 
+        calcTotalTeamPower = () => {
+            let container = document.getElementById(`stars-container-club`);
+            let stars = container.querySelectorAll("img");
+            let totalPower = 0;
+            for (let playerIdx = 1; playerIdx <= 18; playerIdx++) {
+                let rows = document.getElementById(`addPlayer${playerIdx}`).querySelectorAll("tr");
+                let defense_full = [...rows].filter(r => r.querySelectorAll("td")[0].innerHTML.trim() === "defense_full");
+                let attack_full = [...rows].filter(r => r.querySelectorAll("td")[0].innerHTML.trim() === "attack_full");
+                let finalDefenseFull = defense_full[0].querySelectorAll("td")[1].children[0].value;
+                let finalAttackFull = attack_full[0].querySelectorAll("td")[1].children[0].value;
+                // if (!+finalDefenseFull || !+finalAttackFull) {
+                //     debugger
+                // }
+                totalPower += +finalDefenseFull + +finalAttackFull;
+            }
+            console.log(totalPower);
+            totalPower /= 18;
+            console.log(totalPower);
+
+
+
+            if (totalPower <= 25  ) {
+                totalPower = 7;
+            }
+            else if (totalPower > 25 && totalPower <= 27) {
+                totalPower = 6;
+            }
+            else if (totalPower > 27 && totalPower <= 29) {
+                totalPower = 5;
+            }
+            else if (totalPower > 29 && totalPower <= 31) {
+                totalPower = 4;
+            }
+            else if (totalPower > 31 && totalPower <= 33) {
+                totalPower = 3;
+            }
+            else if (totalPower > 33 && totalPower <= 35) {
+                totalPower = 2;
+            }
+            else if (totalPower > 35) {
+                totalPower = 1;
+            } else {
+                totalPower = 0;
+            }
+
+            for (let starIdx = 0; starIdx < stars.length; starIdx++) {
+                const opacityLevel = totalPower > starIdx ? 1 : 0.4;
+                stars[starIdx].style.opacity = opacityLevel;
+            }
+            console.log(totalPower);
+        }
+
         loadAllTeams = () => {
             let parent = document.getElementById("all-teams");
 
@@ -3041,6 +3104,7 @@
                 let totalPower = +finalDefenseFull + +finalAttackFull;
                 if (+finalDefenseFull && +finalAttackFull) {
                     calcPlayerPower(playerIdx, totalPower);
+                    calcTotalTeamPower();
                 }
             });
             attackEl.addEventListener('input', function (e) {
@@ -3049,8 +3113,10 @@
                 let totalPower = +finalDefenseFull + +finalAttackFull;
                 if (+finalDefenseFull && +finalAttackFull) {
                     calcPlayerPower(playerIdx, totalPower);
+                    calcTotalTeamPower();
                 }
             });
+            calcTotalTeamPower();
         }
     </script>
 </body>

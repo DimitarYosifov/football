@@ -197,6 +197,12 @@ body {
     height: 15px;
 }
 
+.club-power-stars{
+    width: 25px;
+    height: 25px;
+    opacity: 0.4;
+}
+
 /* #proton_canvas { 
     position: absolute;
     top: 0px
