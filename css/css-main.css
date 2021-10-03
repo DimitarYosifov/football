@@ -192,6 +192,11 @@ body {
     justify-content: center;
 }
 
+.player-power-stars{
+    width: 15px;
+    height: 15px;
+}
+
 /* #proton_canvas { 
     position: absolute;
     top: 0px
