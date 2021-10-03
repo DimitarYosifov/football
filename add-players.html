@@ -14,7 +14,7 @@
 <body>
     <form id="add-team-section" class="col-6">
         <main>
-            <h2 style="color: black;">CLUB</h2>
+            <h2 style="color: black; text-align: center;">CLUB</h2>
             <table class="table table-bordered table-active table-sm table-striped">
                 <tr>
                     <td>
@@ -2599,19 +2599,112 @@
         </div>
 
 
+        <button type="button" class="btn-lg m-2" style="position: absolute;left: 0px;  bottom: 0px;"
+            onclick="back()">Back</button>
         <button type="button" class="btn-lg m-2" style="position: absolute;right: 0px;  bottom: 0px;"
-            onclick="add();">Add</button>
+            onclick="save()">Save</button>
     </form>
 
+    <div id="selection" class="col-6">
+        <button type="button" class="btn-lg m-2" onclick="add()">Add new team</button>
+        <button type="button" class="btn-lg m-2" onclick="loadAllTeams()">Load team</button>
+    </div>
+
+    <div id="all-teams" class="col-6">
+        <button id="back" type="button" class="btn-lg m-2" style="position: absolute;left: 0px;  bottom: 0px;"
+            onclick="back()">Back</button>
+    </div>
+
     <script>
+        loadAllTeams = () => {
+            let parent = document.getElementById("all-teams");
+
+            document.getElementById("add-team-section").style.display = "none";
+            document.getElementById("selection").style.display = "none";
+            document.getElementById("all-teams").style.display = "flex";
+
+            if (parent.children.length > 1) {
+                return;
+            }
+            $.ajax({
+                url: "getAllClubsData",
+                type: 'POST',
+                contentType: 'application/json'
+            }).then(res => {
+                let allClubs = res.clubs;
+                res.clubs.forEach(club => {
+                    console.log(club.name);
+                    let element = document.createElement("div");
+                    element.innerHTML = (club.name);
+                    parent.appendChild(element);
+                    element.style.fontSize = "2rem";
+                    element.addEventListener('click', function (e) {
+                        loadTeam(club);
+                    });
+                });
+                console.log(res.clubs);
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+
+        loadTeam = (team) => {
+            add();
+
+            document.getElementById("clubName").value = team.clubData.name;
+            document.getElementById("colors");
+            document.getElementById("power").value = team.clubData.power;
+            document.getElementById("logo").value = team.clubData.logo;
+
+            for (let playerIdx = 1; playerIdx <= 18; playerIdx++) {
+                let rows = document.getElementById(`addPlayer${playerIdx}`).querySelectorAll("tr");
+                let player = team.players[playerIdx - 1];
+                for (let row = 0; row < rows.length; row++) {
+                    let key = rows[row].querySelectorAll("td")[0].innerHTML.trim();
+                    let value = rows[row].querySelectorAll("td")[1]
+                    let x;
+                    if (value.querySelectorAll("input")[0]) {
+                        value.querySelectorAll("input")[0].value = player[key];
+                    } else {
+                        console.log(player[key]);
+                        if (player[key] === "FF1D00") {
+                            x = "RED";
+                        } else if (player[key] === "3052FF") {
+                            x = "BLUE";
+
+                        } else if (player[key] === "2F7F07") {
+                            x = "GREEN";
+
+                        } else if (player[key] === "E2D841") {
+                            x = "YELLOW";
+
+                        } else if (player[key] === "B200FF") {
+                            x = "PURPLE";
+                        }
+                        value.querySelectorAll("select")[0].value = x;
+                    }
+                }
+            }
+        }
+
         add = () => {
+            document.getElementById("add-team-section").style.display = "flex";
+            document.getElementById("selection").style.display = "none";
+            document.getElementById("all-teams").style.display = "none";
+        }
 
+        back = () => {
+            document.getElementById("add-team-section").style.display = "none";
+            document.getElementById("selection").style.display = "flex";
+            document.getElementById("all-teams").style.display = "none";
+        }
+
+        save = () => {
             const throwErrorOnEmptyProperty = true;
-
             let clubData = {
                 name: document.getElementById("clubName").value,
                 colors: document.getElementById("colors"),
-                power: document.getElementById("power").value,
+                power: +document.getElementById("power").value,
                 logo: document.getElementById("logo").value
             }
             Object.keys(clubData).forEach(element => {
@@ -2637,7 +2730,6 @@
                             x = "FF1D00";
                         } else if (x === "BLUE") {
                             x = "3052FF";
-
                         } else if (x === "GREEN") {
                             x = "2F7F07";
 
@@ -2651,11 +2743,42 @@
                     if (x === "" && throwErrorOnEmptyProperty) {
                         throw `property ==>> ${key.trim().toLocaleUpperCase()} for player ${playerIdx} is empty!`;
                     }
+
+                    //check type => important, coz all input data is string... 
+                    // this is stupid workaround, but will do for now
+                    let el = value.querySelectorAll("input")[0];
+                    if (el) {
+                        if (el.type === "number") {
+                            x = +x;
+                        } else if (el.type === "text" && x === "false") {
+                            x = false;
+                        } else if (el.type === "text" && x === "true") {
+                            x = true;
+                        }
+                    }
+
                     playerData[key.trim()] = x;
                 }
                 allPlayers.push(playerData);
             }
             console.log(allPlayers);
+            // return;
+            $.ajax({
+                url: "addClub",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(
+                    {
+                        name: clubData.name,
+                        clubData: clubData,
+                        players: allPlayers
+                    }
+                )
+            }).then(x => {
+                alert('Successfully added')
+            }).catch(err => {
+                console.log(err);
+            })
         }
     </script>
 </body>

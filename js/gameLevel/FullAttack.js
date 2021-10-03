@@ -9,7 +9,7 @@ export default class FullAttack extends PIXI.Sprite {
         this.initiatorIndex = initiatorIndex;
         this.stageWidth = this.app.stage.width;
         this.stageHeight = this.app.stage.height;
-        this.texture = new GameTexture(this.app, "ball_prototype");
+        this.texture = new GameTexture(this.app, "shoe").finalTexture;
         this.height = this.stageHeight * 0.05;
         this.color = color;
         this.scale.x = this.scale.y;

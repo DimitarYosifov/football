@@ -95,6 +95,7 @@ export default class Grid extends PIXI.Container {
                 //              START OF PROTON EFFECT AFTER MATCH
                 let matches = this.checkGridForMatches();
                 if (matches.length !== 0) {
+                    this.app.level.animationInProgress = true;
                     if (this.hintTimeout) {
                         this.hintTimeout.kill();
                     }
@@ -331,7 +332,7 @@ export default class Grid extends PIXI.Container {
             //random target
             let redCardTarget = redCardTargets[Math.floor(Math.random() * redCardTargets.length)];
             redCardTarget.hasRedCard = true;
-            redCardTarget.yellowCard.texture = new GameTexture(this.app, "red_card");
+            redCardTarget.yellowCard.texture = new GameTexture(this.app, "red_card").finalTexture;
             redCardTarget.yellowCard.visible = true;
             this.bounceTarget(redCardTarget.yellowCard);
         }
@@ -348,7 +349,7 @@ export default class Grid extends PIXI.Container {
             let yellowCardTarget = yellowCardTargets[Math.floor(Math.random() * yellowCardTargets.length)];
             if (yellowCardTarget.hasYellowCard) {
                 yellowCardTarget.hasRedCard = true;
-                yellowCardTarget.yellowCard.texture = new GameTexture(this.app, "red_card");
+                yellowCardTarget.yellowCard.texture = new GameTexture(this.app, "red_card").finalTexture;
             }
             yellowCardTarget.hasYellowCard = true;
             yellowCardTarget.yellowCard.visible = true;
@@ -907,7 +908,7 @@ export default class Grid extends PIXI.Container {
                 return;
             }
 
-            this.app.level.animationInProgress = true;
+            // this.app.level.animationInProgress = true;
             this.swapBlocks(this.gridPosition_x, this.gridPosition_y, dir);
         }
     }

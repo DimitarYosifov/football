@@ -165,8 +165,31 @@ body {
     margin: 0 auto;
     color: white;
     flex-direction: column;
+    display: none;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#selection{
+    background: #9d9d9d;
+    margin: 0 auto;
+    color: white;
+    flex-direction: column;
     display: flex;
     align-items: center;
+    min-height: 100vh;
+    justify-content: center;
+}
+
+#all-teams{
+    background: #9d9d9d;
+    margin: 0 auto;
+    color: white;
+    flex-direction: column;
+    display: none;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: center;
 }
 
 /* #proton_canvas { 

@@ -165,7 +165,7 @@ export default class NewRoundPopup extends PIXI.Container {
 
             //continue button
             this.app.level.grid.interactive = false;
-            this.continueBtn =      new GameTexture(this.app, "btn1").sprite;
+            this.continueBtn = new GameTexture(this.app, "btn1").sprite;
             this.continueBtn.height = this.app.height * 0.1;
             this.continueBtn.scale.x = this.continueBtn.scale.y;
             this.continueBtn.x = this.app.width / 2;

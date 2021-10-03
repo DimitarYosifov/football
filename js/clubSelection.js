@@ -181,6 +181,7 @@ export function clubSelection(app, mode) {
             }
             else {
                 if (isPlayerTurn) {
+                    container.alpha = 0;
                     isPlayerTurn = false;
                     createText(false);
                 } else {
