@@ -134,7 +134,7 @@ export default class EditTeam {
             card.playerPosition = playerPosition;
             card.isSub = isSub;
 
-            let goals = card.createTexts.create(`${player.goalsScored}`, card_y + card_height * 1.015, card_x + card_width * 0.4, 1, 0, this.app.height / 75, true);
+            let goals = card.createTexts.create(`${player.goalsScored}`, card_y + card_height * 1.035, card_x + card_width * 0.4, 1, 0, this.app.height / 75, true);
             card.addGoalsScored(goals.x - goals.width);
             card.createTexts.create(`exp ${player.EXP}`, card_y + card_height * 1.03, card_x + card_width * 0.5, 0, 0, this.app.height / 90);
             card.createTexts.create(`${player.leagueYellowCards}`, card_y + card_height * 1.2, card_x + card_width * 0.5, 0, 0, this.app.height / 75);

@@ -19,17 +19,10 @@ export default class Stage {
         }
 
         this.landscape = this.isMobile && window.screen.width > window.screen.height;
-        // Use the native window resolution as the default resolution
-        // will support high-density displays when rendering
-        PIXI.settings.RESOLUTION = window.devicePixelRatio;    //??????????????
-
         // Disable interpolation when scaling, will make texture be pixelated
         PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-
         // PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
-
         PIXI.settings.PRECISION_FRAGMENT = 'highp';
-
 
         this.canvas = document.getElementById("stage");
         this.body = document.getElementById("body");
@@ -38,7 +31,7 @@ export default class Stage {
         this.width = 1080;
         this.height = 1920;
 
-        let resolution = () => { //16:9
+        let onresize = () => { //16:9
 
             //resume requestAnimationFrame 
             if (this.landscape && this.isMobile && window.screen.width < window.screen.height) {
@@ -88,10 +81,11 @@ export default class Stage {
             this.stage.scale.y = this.stage.scale.x;
         }
 
+        const minResolution = 2;
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height,
             {
                 transparent: true,
-                resolution: window.devicePixelRatio || 1,//2, //7 :) //DPR
+                resolution: Math.max(minResolution, window.devicePixelRatio),
                 view: this.canvas,
                 autoResize: true,
                 autoDensity: true,
@@ -101,8 +95,7 @@ export default class Stage {
         });
 
         PIXI.settings.ROUND_PIXELS = true;
-        PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
-        resolution();
+        onresize();
         this.animationLoop = () => {
             if (this.level && this.level.snowContainer) {
                 this.level.snowContainer.update();
@@ -124,12 +117,9 @@ export default class Stage {
             this.loader.add(resource[0], resource[1]);
         })
 
-        // this.loader.add('Girassol', 'fonts/Girassol-Regular.ttf');
-        //this is needed to handle weird texture not loaded issue 
-
         let handleLoadComplete = () => {
             this.loaderLoaded = true;
-                this.checkLoaded();
+            this.checkLoaded();
         }
         this.loader.onComplete.add(handleLoadComplete);
 
@@ -162,6 +152,6 @@ export default class Stage {
 
         this.loader.on("progress", loadProgressHandler);
         this.loader.load(this.setup);
-        window.onresize = resolution;
+        window.onresize = onresize;
     }
 }
