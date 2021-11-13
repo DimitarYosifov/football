@@ -161,7 +161,7 @@ export default class NewRoundPopup extends PIXI.Container {
 
         if (this.matchFinished) {
 
-            TweenMax.killAll();
+            // TweenMax.killAll();
 
             //continue button
             this.app.level.grid.interactive = false;

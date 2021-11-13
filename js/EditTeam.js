@@ -128,7 +128,16 @@ export default class EditTeam {
                 injury_x: card_x + card_width / 2,
                 injury_y: card_y + card_height / 2,
                 injury_width: card_width * 0.75,
+
+                starsTexture: `star`,
+                stars_x: card_x + card_width / 2,
+                stars_y: card_y,
+                stars_width: card_width * 0.12,
+
+                totalPower: player.defense_full + player.attack_full
+
             }, this.app, false, false);
+
             this.container.addChild(card);
             this.allCards.push(card);
             card.playerPosition = playerPosition;
@@ -144,11 +153,11 @@ export default class EditTeam {
 
         this.makeInteractive();
 
-        this.createTexts.create('goalkeepers', this.app.height * 0.055, 0, 0, 0.5, this.app.height / 45);
-        this.createTexts.create('defenders', this.app.height * 0.245, 0, 0, 0.5, this.app.height / 45);
-        this.createTexts.create('midfielders', this.app.height * 0.435, 0, 0, 0.5, this.app.height / 45);
-        this.createTexts.create('forwards', this.app.height * 0.625, 0, 0, 0.5, this.app.height / 45);
-        this.createTexts.create('starting line-up', this.app.height * 0.815, 0, 0, 0.5, this.app.height / 45);
+        this.createTexts.create('goalkeepers', this.app.height * 0.05, 0, 0, 0.5, this.app.height / 45);
+        this.createTexts.create('defenders', this.app.height * 0.24, 0, 0, 0.5, this.app.height / 45);
+        this.createTexts.create('midfielders', this.app.height * 0.43, 0, 0, 0.5, this.app.height / 45);
+        this.createTexts.create('forwards', this.app.height * 0.62, 0, 0, 0.5, this.app.height / 45);
+        this.createTexts.create('starting line-up', this.app.height * 0.81, 0, 0, 0.5, this.app.height / 45);
     }
 
     createTexts = {

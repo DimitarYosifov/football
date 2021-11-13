@@ -48,7 +48,7 @@
                         power
                     </td>
                     <td>
-                        <input id="power" value="0" type="number">
+                        <input id="power" value="0" type="number" disabled>
                     </td>
                 </tr>
                 <tr>
@@ -2862,7 +2862,7 @@
             } else {
                 finalPower = 0;
             }
-
+            // console.log(finalPower);
             for (let starIdx = 0; starIdx < stars.length; starIdx++) {
                 const opacityLevel = finalPower > starIdx ? 1 : 0.4;
                 stars[starIdx].style.opacity = opacityLevel;
@@ -2884,13 +2884,11 @@
                 // }
                 totalPower += +finalDefenseFull + +finalAttackFull;
             }
-            console.log(totalPower);
+            console.log(`total players power => ${totalPower}`);
             totalPower /= 18;
-            console.log(totalPower);
+            console.log(`average players' power => ${totalPower}`);
 
-
-
-            if (totalPower <= 25  ) {
+            if (totalPower <= 25) {
                 totalPower = 7;
             }
             else if (totalPower > 25 && totalPower <= 27) {
@@ -2918,7 +2916,8 @@
                 const opacityLevel = totalPower > starIdx ? 1 : 0.4;
                 stars[starIdx].style.opacity = opacityLevel;
             }
-            console.log(totalPower);
+            document.getElementById("power").value = totalPower;
+            console.log(`team power => ${totalPower}`);
         }
 
         loadAllTeams = () => {
@@ -2965,7 +2964,7 @@
                 let player = team.players[playerIdx - 1];
                 let totalPower = player.attack_full + player.defense_full;
                 calcPlayerPower(playerIdx, totalPower);
-                addListeners(playerIdx);
+                // addListeners(playerIdx);
                 for (let row = 0; row < rows.length; row++) {
                     let key = rows[row].querySelectorAll("td")[0].innerHTML.trim();
                     let value = rows[row].querySelectorAll("td")[1];
@@ -2991,16 +2990,15 @@
                     }
                 }
             }
+            for (let playerIdx = 1; playerIdx <= 18; playerIdx++) {
+                addListeners(playerIdx);
+            }
         }
 
         add = () => {
             document.getElementById("add-team-section").style.display = "flex";
             document.getElementById("selection").style.display = "none";
             document.getElementById("all-teams").style.display = "none";
-            for (let playerIdx = 1; playerIdx <= 18; playerIdx++) {
-                calcPlayerPower(playerIdx, 100);
-                addListeners(playerIdx);
-            }
         }
 
         back = () => {
@@ -3118,6 +3116,8 @@
             });
             calcTotalTeamPower();
         }
+        // calcTotalTeamPower();
+
     </script>
 </body>
 

@@ -44,6 +44,11 @@ export default class Card extends PIXI.Container {
         this.injury_x = data.injury_x;
         this.injury_y = data.injury_y;
 
+        this.starsTexture = data.starsTexture;
+        this.stars_width = data.stars_width;
+        this.stars_x = data.stars_x;
+        this.stars_y = data.stars_y;
+
         this.border_height = data.border_height;
         this.border_width = data.border_width;
         this.border_x = data.border_x;
@@ -60,6 +65,9 @@ export default class Card extends PIXI.Container {
         this.showCurrentValues = showCurrentValues;
         this.goalsScored = 0;
         this.randomColor = randomColor;
+
+        this.totalPower = this.calculatePlayerStars(data.totalPower);
+
         this.createCard();
     }
 
@@ -161,6 +169,36 @@ export default class Card extends PIXI.Container {
 
         this.attackValuesText.name = "attackValuesText";
         this.defenseValuesText.name = "defenseValuesText";
+
+
+        //------player;s stars
+        this.starsContainer = new PIXI.Container();
+        for (let index = 0; index < this.totalPower; index++) {
+            let starsTexture = PIXI.Texture.fromImage(this.starsTexture);
+            this.stars = new PIXI.Sprite(starsTexture);
+            this.stars.x = this.starsContainer.width;
+            // this.stars.y = this.stars_y;
+            this.stars.width = this.stars_width;
+            this.stars.scale.y = this.stars.scale.x;
+            this.stars.anchor.set(0, 1);
+            this.starsContainer.addChild(this.stars);
+        }
+
+        this.starsContainer.x = this.stars_x - this.starsContainer.width / 2;
+        this.starsContainer.y = this.stars_y;
+
+        this.starsBG = new PIXI.Graphics;
+        this.starsBG.beginFill(0x000000, 0.75);
+        this.starsBG.drawRect(
+            0,
+            -this.starsContainer.height,
+            this.starsContainer.width,
+            this.starsContainer.height
+        );
+        this.starsBG.endFill();
+        this.starsContainer.addChildAt(this.starsBG, 0);
+
+        this.addChild(this.starsContainer);
 
         this.addChild(this.attackValuesText);
         this.addChild(this.defenseValuesText);
@@ -355,5 +393,34 @@ export default class Card extends PIXI.Container {
             this.addChild(text);
             if (returnText) return text;
         }
+    }
+
+    calculatePlayerStars(totalPower) {
+        let finalPower;
+
+        if (totalPower <= 25) {
+            finalPower = 7;
+        }
+        else if (totalPower === 26 || totalPower === 27) {
+            finalPower = 6;
+        }
+        else if (totalPower === 28 || totalPower === 29) {
+            finalPower = 5;
+        }
+        else if (totalPower === 30 || totalPower === 31) {
+            finalPower = 4;
+        }
+        else if (totalPower === 32 || totalPower === 33) {
+            finalPower = 3;
+        }
+        else if (totalPower === 34 || totalPower === 35) {
+            finalPower = 2;
+        }
+        else if (totalPower > 35 && totalPower < 100) {
+            finalPower = 1;
+        } else {
+            finalPower = 0;
+        }
+        return finalPower;
     }
 }

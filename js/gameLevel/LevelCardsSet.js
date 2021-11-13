@@ -65,7 +65,14 @@ export default class LevelCardsSet extends PIXI.Container {
                 border_x: card_x + card_width,
                 border_y: card_y,
                 border_width: 0,
-                border_height: card_height
+                border_height: card_height,
+
+                starsTexture: `star`,
+                stars_x: card_x + card_width / 2,
+                stars_y: card_y,
+                stars_width: card_width * 0.12,
+
+                totalPower: this.lineUps.player[i].defense_full + this.lineUps.player[i].attack_full
             }, this.parent.app, false, false)
             this.addChild(card);
         }
@@ -122,7 +129,14 @@ export default class LevelCardsSet extends PIXI.Container {
                 border_x: (this.stageWidth / 6) * i,
                 border_y: this.stageHeight * 0,
                 border_width: 0,
-                border_height: 0
+                border_height: 0,
+
+                starsTexture: `star`,
+                stars_x: card_x + card_width / 2,
+                stars_y: card_height + card_width * 0.12,
+                stars_width: card_width * 0.12,
+
+                totalPower: this.lineUps.opponent[i].defense_full + this.lineUps.opponent[i].attack_full
             }, this.parent.app, false, true)
             this.addChild(card);
         }
