@@ -330,7 +330,19 @@ export default class Grid extends PIXI.Container {
         for (let redCard = 0; redCard < redCards; redCard++) {
 
             //random target
-            let redCardTarget = redCardTargets[Math.floor(Math.random() * redCardTargets.length)];
+            const targetIndex = Math.floor(Math.random() * redCardTargets.length);
+            let redCardTarget = redCardTargets[targetIndex];
+
+            //remove target
+            redCardTargets.splice(targetIndex, 1);
+
+            if (!redCardTarget) {
+                // this means that this team can't continue
+                // all are injured or have red cards
+                this.stopGame();
+                return;
+            }
+
             redCardTarget.hasRedCard = true;
             redCardTarget.yellowCard.texture = new GameTexture(this.app, "red_card").finalTexture;
             redCardTarget.yellowCard.visible = true;
@@ -361,15 +373,32 @@ export default class Grid extends PIXI.Container {
         let injuries = Math.floor(matches.map(m => m.type).filter(m => m === "red_cross").length / 3);
         if (!injuries) { return };
         //array of all players who do not have red cards and are not injured
-        let injuryTargets = this.parent[deck].children.filter(player => !player.hasInjury);
+        let injuryTargets = this.parent[deck].children.filter(player => !player.hasInjury && !player.hasRedCard);
         for (let injury = 0; injury < injuries; injury++) {
+
             //random target
-            let injuryTarget = injuryTargets[Math.floor(Math.random() * injuryTargets.length)];
+            const targetIndex = Math.floor(Math.random() * injuryTargets.length);
+            let injuryTarget = injuryTargets[targetIndex];
+
+            //remove target
+            injuryTargets.splice(targetIndex, 1);
+
+            if (!injuryTarget) {
+                // this means that this team can't continue
+                // all are injured or have red cards
+                this.stopGame();
+                return;
+            }
+
             injuryTarget.hasInjury = true;
             injuryTarget.injury.visible = true;
             this.bounceTarget(injuryTarget.injury);
         }
+    }
 
+    stopGame() {
+        // TODO - handle this situation...
+        alert("one of the teams can't continue dut to lack of players!");
     }
 
     bounceTarget(target) {

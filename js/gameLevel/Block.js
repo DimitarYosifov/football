@@ -21,6 +21,7 @@ export default class Block extends PIXI.Container {
         if (!this.config.isGridInDebug) {
             while (figureMissing) {
                 this.img = this.generateRandomColorBlock();
+                console.log(this.img);
                 figureMissing = this.createNonMatchingGrid(this.row, this.col, this.img);
             }
         } else {

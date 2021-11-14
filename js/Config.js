@@ -7,7 +7,7 @@ export default {
     mainFont: 'Girassol',
 
     //for tests and adding teams to DB
-    addTeam: false,
+    // addTeam: false,
 
     //visibility  delay between game phases
     fadeTimeBetweenPhases: 0.5,
@@ -22,13 +22,13 @@ export default {
 
     debugGrid: [
         ["ball_purple", "red_cross", "ball_red", "red_cross", "red_card", "red_cross"],
-        ["ball_green", "ball_yellow", "yellow_card", "ball_red", "red_cross", "ball_yellow"],
+        ["ball_green", "ball_yellow", "yellow_card", "ball_red", "red_card", "ball_yellow"],
         ["red_card", "yellow_card", "ball_green", "ball_red", "red_card", "ball_green"],
         ["ball_purple", "ball_yellow", "ball_purple", "red_cross", "red_card", "ball_blue"],
         ["ball_yellow", "ball_red", "ball_blue", "ball_yellow", "ball_blue", "yellow_card"],
-        ["ball_red", "ball_red", "ball_red", "ball_red", "ball_green", "red_cross"],
-        ["ball_red", "ball_red", "ball_red", "ball_red", "red_cross", "ball_red"],
-        ["ball_red", "ball_red", "ball_red", "red_cross", "ball_red", "red_cross"]
+        ["ball_red", "ball_red", "red_card", "ball_red", "red_card", "red_card"],
+        ["ball_red", "red_card", "ball_red", "ball_red", "red_cross", "red_card"],
+        ["red_card", "red_card", "red_card", "red_cross", "red_card", "red_cross"]
     ],
     roundsInMatch: 20,
 
@@ -45,8 +45,12 @@ export default {
         1: { "win": 45, "tie": 75, "lose": 100 },
         0: { "win": 30, "tie": 70, "lose": 100 },
     },
+
+    // NOTE!    
     // color of every newly created block - for tests!
+    // if this is not null - set isGridInDebug to true, otherwise game will crash!!!!
     predefinedBlockColor: null,
+
     maxInjuryDuration: 5,
     yellowCardsToMissGame: 5
 }
