@@ -33,6 +33,11 @@ export default class Stage {
 
         let onresize = () => { //16:9
 
+            const scaleFactor = Math.min(
+                window.innerWidth / 1080,
+                window.innerHeight / 1920
+            );
+
             //resume requestAnimationFrame 
             if (this.landscape && this.isMobile && window.screen.width < window.screen.height) {
                 requestAnimationFrame(this.animationLoop);
@@ -54,34 +59,37 @@ export default class Stage {
                 return;
             }
 
-            this.height = window.innerHeight;
-            this.width = 1080 * this.height / 1920;
+            this.height = 1920 * scaleFactor;
+            this.width = 1080 * scaleFactor;
 
-            if (this.width > window.innerWidth) {
-                this.width = window.innerWidth;
-                this.height = this.width * 1.77;
-            }
+            // this.height = window.innerHeight;
+            // this.width = 1080 * this.height / 1920;
+            // if (this.width > window.innerWidth) {
+            //     this.width = window.innerWidth;
+            //     this.height = this.width * 1.77;
+            // }
 
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
+            this.canvas.width = Math.floor(this.width);
+            this.canvas.height = Math.floor(this.height);
 
-            this.stage.height = this.canvas.height;
-            this.stage.width = this.canvas.width;
+            // this.stage.height = Math.floor(this.width);
+            // this.stage.width = Math.floor(this.height);
 
-            this.renderer.resize(this.canvas.width, this.canvas.height);
+            this.renderer.resize(this.width, this.height);
 
             if (!this.isAppStarted) {
                 this.isAppStarted = true;
                 this.checkLoaded();
             }
 
-            if (this.stage.scale.x > 1) {
-                this.stage.scale.x = 1;
-            }
-            this.stage.scale.y = this.stage.scale.x;
+            // if (this.stage.scale.x > 1) {
+            //     this.stage.scale.x = 1;
+            // }
+            // this.stage.scale.y = this.stage.scale.x;
         }
 
         const minResolution = 2;
+
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height,
             {
                 transparent: true,

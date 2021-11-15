@@ -10,11 +10,6 @@
       "folder": ""
     },
     {
-      "name": "ball_green - Copy.png",
-      "path": "C:/Users/User/Desktop/football/images/main-1/ball_green - Copy.png",
-      "folder": ""
-    },
-    {
       "name": "ball_green.png",
       "path": "C:/Users/User/Desktop/football/images/main-1/ball_green.png",
       "folder": ""
@@ -62,6 +57,16 @@
     {
       "name": "info.png",
       "path": "C:/Users/User/Desktop/football/images/main-1/info.png",
+      "folder": ""
+    },
+    {
+      "name": "next.png",
+      "path": "C:/Users/User/Desktop/football/images/main-1/next.png",
+      "folder": ""
+    },
+    {
+      "name": "prev.png",
+      "path": "C:/Users/User/Desktop/football/images/main-1/prev.png",
       "folder": ""
     },
     {

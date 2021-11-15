@@ -91,12 +91,11 @@ export default class Level extends PIXI.Container {
             // this.addSnow();
         }
 
-        this.addSnow = () => {
-            this.snowContainer = new Particles(this.app, this);
-            this.addChild(this.snowContainer.container);
-            this.snowContainer.update();
-        }
-
+        // this.addSnow = () => {
+        //     this.snowContainer = new Particles(this.app, this);
+        //     this.addChild(this.snowContainer.container);
+        //     this.snowContainer.update();
+        // }
 
         const createCards = async () => {
             let [player, opponent] = await

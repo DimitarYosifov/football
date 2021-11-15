@@ -5,14 +5,15 @@ import { serverRequest } from "./Request.js"
 import GameTexture from "./GameTexture.js";
 import Background from "./Background.js";
 import RotatingButton from "./RotatingButton.js";
+import Particles from "./AddParticles.js";
 
 export function standingsView(data, increaseRound = false, lastGameRersult = null, generateResults = false) {
     this.data = data;
     this.fixturesHeader;
-    let fixturesContainer = new PIXI.Container;
+    this.fixturesContainer = new PIXI.Container;
     this.stage.alpha = 0;
 
-    let backgroundImg = new Background(this, {
+    this.backgroundImg = new Background(this, {
         gamePhase: "standingsViews",
         sprite: new GameTexture(this, "bg33"),
         bg_x: -this.width * 0.005,
@@ -20,8 +21,8 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         bg_width: this.width * 1.005,
         bg_height: this.height * 1.005
     });
-    backgroundImg.alpha = 0.5;
-    this.stage.addChild(backgroundImg);
+    this.backgroundImg.alpha = 0.5;
+    this.stage.addChild(this.backgroundImg);
 
     let deleteProgress = () => {
         serverRequest(
@@ -111,16 +112,15 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 alert("You have reached the end of the season.Thank you for playing :)");
                 location.reload();
             }
-            else if (lastGameRersult || this.seasonFixtures[this.currentRound][0].split(" ")[1]) {
-                this.currentRound++;
+            else if (this.selectedRound !== this.currentRound + 1) {
                 increaseRound = false;
                 lastGameRersult = null;
                 generateResults = false;
-                this.stage.removeChild(this.fixturesHeader);
-                fixturesContainer.removeChildren();
-                createFixtures();
+                scrollToCurrentRound(0, this.selectedRound === this.currentRound);
             }
             else {
+                this.currentRound++;
+                ballParticle();
                 this.stage.removeChildren();
                 this.startLevel();
             }
@@ -303,127 +303,157 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         })
     }
 
+    let addLogo = (clubName, x, y, height, anchorX, anchorY) => {
+        let logo = this.allClubs.filter(club => club.name === clubName)[0].clubData.logo;
+        let clubLogo = new GameTexture(this, `${logo}`).sprite;
+        clubLogo.height = height;
+        clubLogo.x = x;
+        clubLogo.y = y;
+        clubLogo.scale.x = clubLogo.scale.y;
+        clubLogo.anchor.set(anchorX, anchorY);
+        return clubLogo;
+    }
+
+    let scrollToCurrentRound = (delay, additionalScroll = 0) => {
+        this.selectedRound = this.currentRound;
+        if (additionalScroll) this.selectedRound++;
+        let x = this.width * (this.currentRound - 1 + additionalScroll) * -1;
+        TweenMax.to(this.fixturesContainer, 0.75,
+            {
+                delay: delay,
+                // ease: Back.easeIn,
+                x: x,
+                onStart: () => {
+                    this.prev.interactive = false;
+                    this.next.interactive = false;
+                },
+                onComplete: () => {
+                    if (this.selectedRound !== 1) {
+                        this.prev.interactive = true;
+                        this.prev.alpha = 1;
+                    }
+                    this.next.interactive = true;
+                    this.next.alpha = 1;
+                    this.prev.interactive = this.selectedRound !== 1;
+                    this.next.interactive = this.selectedRound !== this.leagueRounds;
+                }
+            }
+        );
+    }
+
     let createFixtures = () => {
-
-        let addLogo = (clubName, x, y, height, anchorX, anchorY) => {
-            let logo = this.allClubs.filter(club => club.name === clubName)[0].clubData.logo;
-            let clubLogo = new GameTexture(this, `${logo}`).sprite;
-            clubLogo.height = height;
-            clubLogo.x = x;
-            clubLogo.y = y;
-            clubLogo.scale.x = clubLogo.scale.y;
-            clubLogo.anchor.set(anchorX, anchorY);
-            return clubLogo;
-        }
-
         let displayFixtures = () => {
 
-            //Header
-            let _y = this.height * 0.2;
-            this.fixturesHeader = createText(
-                `Round ${this.currentRound}. Today's games:`,
-                this.width / 2,
-                _y,
-                0.5,
-                false
-            );
-            this.fixturesHeader.style.fontSize = this.height / 30;
-            this.stage.addChild(this.fixturesHeader);
-
             let playerClub = this.playerClubData.name;
-            this.seasonFixtures[this.currentRound].forEach((game, i) => {
-                let splitGame = game.split(' ')[0];
-                let firstClub = splitGame.split(":")[0];
-                let secondClub = splitGame.split(":")[1];
 
-                if (firstClub === playerClub) {
-                    this.opponentClubData = this.allClubs.find(c => c.name === secondClub).clubData;
-                    this.isPlayerHome = true;
-                } else if (secondClub === playerClub) {
-                    this.opponentClubData = this.allClubs.find(c => c.name === firstClub).clubData;
-                    this.isPlayerHome = false;
-                }
-
-                let row = new PIXI.Container;
-                let y = fixturesContainer.height;
-
-                let generateResult = generateResults;
-                let result;
-
-                if (firstClub !== playerClub && secondClub !== playerClub) {
-                    if (generateResult) {
-                        result = randomResult(firstClub, secondClub, i);
-                    } else {
-                        result = this.seasonFixtures[this.currentRound][i].split(" ")[1];
-                    }
-                } else {
-                    if (lastGameRersult) {
-                        result = lastGameRersult;
-                        //this is dirty hack here to remove undefined...
-                        this.seasonFixtures[this.currentRound][i] = this.seasonFixtures[this.currentRound][i].split(" ")[0];
-                        this.seasonFixtures[this.currentRound][i] += ` ${result}`;
-                    } else {
-                        result = this.seasonFixtures[this.currentRound][i].split(" ")[1];
-                    }
-                    if (generateResults) {
-                        calculatePoints(firstClub, secondClub, result)
-                    }
-                }
-
-                let team1 = game.split(" ")[0].split(":")[0];
-                let team2 = game.split(" ")[0].split(":")[1];
-
-                //result text
-                let _resultText = createText(
-                    result,
-                    this.width / 2,
-                    y,
+            this.leagueRounds = Array.isArray(this.seasonFixtures) ? this.seasonFixtures.length - 1 : [null, ...Object.values(this.seasonFixtures)].length - 1;
+            for (let round = 1; round <= this.leagueRounds; round++) {
+                //Header
+                let _y = this.height * 0.2;
+                this.fixturesHeader = createText(
+                    `Round ${round}`,
+                    this.width / 2 + this.width * (round - 1),
+                    0,
                     0.5,
                     false
                 );
-                _resultText.style.fontSize = this.height / 30;
-                row.addChild(_resultText);
-
-                let logo1 = addLogo(firstClub, _resultText.x - _resultText.width, _resultText.y, _resultText.height * 1.25, 1, 0)
-                row.addChild(logo1);
-
-                //first club
-                let _team1 = createText(
-                    `${team1} `,
-                    logo1.x - logo1.width,
-                    y,
-                    1,
-                    false
-                );
-                _team1.style.fontSize = this.height / 30;
-                row.addChild(_team1);
+                this.fixturesHeader.style.fontSize = this.height / 30;
+                this.fixturesContainer.addChild(this.fixturesHeader);
 
 
-                let logo2 = addLogo(secondClub, _resultText.x + _resultText.width, _resultText.y, _resultText.height * 1.25, 0, 0)
-                row.addChild(logo2);
+                this.seasonFixtures[round].forEach((game, i) => {
+                    let splitGame = game.split(' ')[0];
+                    let firstClub = splitGame.split(":")[0];
+                    let secondClub = splitGame.split(":")[1];
 
-                //second club
-                let _team2 = createText(
-                    ` ${team2}`,
-                    logo2.x + logo2.width,
-                    y,
-                    0,
-                    false
-                );
-                _team2.style.fontSize = this.height / 30;
-                row.addChild(_team2);
-                fixturesContainer.addChild(row);
-            })
+                    if (firstClub === playerClub) {
+                        this.opponentClubData = this.allClubs.find(c => c.name === secondClub).clubData;
+                        this.isPlayerHome = true;
+                    } else if (secondClub === playerClub) {
+                        this.opponentClubData = this.allClubs.find(c => c.name === firstClub).clubData;
+                        this.isPlayerHome = false;
+                    }
+
+                    let row = new PIXI.Container;
+                    let y = this.height * 0.1 + this.height * 0.05 * i
+
+                    let generateResult = generateResults;
+                    let result;
+
+                    if (firstClub !== playerClub && secondClub !== playerClub) {
+                        if (generateResult && round === this.currentRound) {
+                            result = randomResult(firstClub, secondClub, i);
+                        } else {
+                            result = this.seasonFixtures[round][i].split(" ")[1];
+                        }
+                    } else {
+                        if (lastGameRersult && round === this.currentRound) {
+                            result = lastGameRersult;
+                            //this is dirty hack here to remove undefined...
+                            this.seasonFixtures[round][i] = this.seasonFixtures[round][i].split(" ")[0];
+                            this.seasonFixtures[round][i] += ` ${result}`;
+                        } else {
+                            result = this.seasonFixtures[round][i].split(" ")[1];
+                        }
+                        if (generateResults && round === this.currentRound) {
+                            calculatePoints(firstClub, secondClub, result)
+                        }
+                    }
+
+                    let team1 = game.split(" ")[0].split(":")[0];
+                    let team2 = game.split(" ")[0].split(":")[1];
+
+                    //result text
+                    let _resultText = createText(
+                        result,
+                        this.width / 2 + (this.width * (round - 1)),
+                        y,
+                        0.5,
+                        false
+                    );
+                    _resultText.style.fontSize = this.height / 30;
+                    row.addChild(_resultText);
+
+                    let logo1 = addLogo(firstClub, _resultText.x - _resultText.width, _resultText.y, _resultText.height * 1.25, 1, 0)
+                    row.addChild(logo1);
+
+                    //first club
+                    let _team1 = createText(
+                        `${team1} `,
+                        logo1.x - logo1.width,
+                        y,
+                        1,
+                        false
+                    );
+                    _team1.style.fontSize = this.height / 30;
+                    row.addChild(_team1);
+
+
+                    let logo2 = addLogo(secondClub, _resultText.x + _resultText.width, _resultText.y, _resultText.height * 1.25, 0, 0)
+                    row.addChild(logo2);
+
+                    //second club
+                    let _team2 = createText(
+                        ` ${team2}`,
+                        logo2.x + logo2.width,
+                        y,
+                        0,
+                        false
+                    );
+                    _team2.style.fontSize = this.height / 30;
+                    row.addChild(_team2);
+                    this.fixturesContainer.addChild(row);
+                })
+            }
 
             recordFixtures(this.currentRound);
 
-            fixturesContainer.y = this.height * 0.4 - fixturesContainer.height / 2;
-            this.stage.addChild(fixturesContainer);
+            this.fixturesContainer.y = this.height * 0.33 - this.fixturesContainer.height / 2;
+            this.stage.addChild(this.fixturesContainer);
             createStandings();
         }
 
         let randomResult = (firstClub, secondClub, i) => {
-
             let result = generateResult(
                 this.allClubs.find(club => club.name === firstClub).clubData.power,
                 this.allClubs.find(club => club.name === secondClub).clubData.power
@@ -455,5 +485,153 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         }
 
         displayFixtures();
+        addPagination();
+        scrollToCurrentRound(1.2);
     }
+
+    let getWidth = () => {
+        return this.width;
+    }
+
+    let addPagination = () => {
+        this.prev = new GameTexture(this, `prev`).sprite;
+        this.prev.x = this.width * 0.02;
+        this.prev.y = this.height * 0.18;
+        this.prev.width = this.width * 0.075;
+        this.prev.scale.y = this.prev.scale.x;
+        this.prev.anchor.set(0, 0);
+        this.stage.addChild(this.prev);
+        this.prev.interactive = true;
+        this.prev.on('pointerdown', () => {
+            let x = this.fixturesContainer.x;
+            this.selectedRound--;
+             TweenMax.to(this.fixturesContainer, 0.5,
+                {
+                    x: x += this.width,
+                    ease: Back.easeInOut,
+                    onStart: () => {
+                        this.prev.interactive = false;
+                        this.next.interactive = false;
+                        this.prev.alpha = 0.35;
+                        this.next.alpha = 0.35;
+                    },
+                    onComplete: () => {
+                        if (this.selectedRound !== 1) {
+                            this.prev.interactive = true;
+                            this.prev.alpha = 1;
+                        }
+                        this.next.interactive = true;
+                        this.next.alpha = 1;
+                    }
+                }
+            );
+        })
+
+        this.next = new GameTexture(this, `next`).sprite;
+        this.next.x = this.width * 0.98;
+        this.next.y = this.height * 0.18;
+        this.next.width = this.width * 0.075;
+        this.next.scale.y = this.next.scale.x;
+        this.next.anchor.set(1, 0);
+        this.stage.addChild(this.next);
+        this.next.interactive = true;
+        this.next.on('pointerdown', () => {
+            let x = this.fixturesContainer.x;
+            this.selectedRound++;
+            TweenMax.to(this.fixturesContainer, 0.5,
+                {
+                    x: x -= this.width,
+                    ease: Back.easeInOut,
+                    onStart: () => {
+                        this.prev.interactive = false;
+                        this.next.interactive = false;
+                        this.prev.alpha = 0.35;
+                        this.next.alpha = 0.35;
+                    },
+                    onComplete: () => {
+                        this.prev.interactive = true;
+                        this.prev.alpha = 1;
+                        if (this.selectedRound !== this.leagueRounds) {
+                            this.next.interactive = true;
+                            this.next.alpha = 1;
+                        }
+                    }
+                }
+            );
+        })
+    }
+
+    let ballParticle = ((action) => {
+        let ballParticleConfig = {
+            "alpha": {
+                "start": 1,
+                "end": 0.6
+            },
+            "scale": {
+                "start": 0.035,
+                "end": 0.035
+            },
+            "color": {
+                "start": "#6c6c6c",
+                "end": "#ababab"
+            },
+            "speed": {
+                "start": 65,
+                "end": 45
+            },
+            "startRotation": {
+                "min": 80,
+                "max": 100
+            },
+            "rotationSpeed": {
+                "min": 0,
+                "max": 360
+            },
+            "lifetime": {
+                "min": 20,
+                "max": 20
+            },
+            "blendMode": "normal",
+            "frequency": 0.7,
+            "emitterLifetime": 0,
+            "maxParticles": 40,
+            "pos": {
+                "x": 0,
+                "y": 0
+            },
+            "addAtBack": true,
+            "spawnType": "rect",
+            "spawnRect": {
+                "x": 0,
+                "y": 0,
+                "w": getWidth(),
+                "h": 1
+            }
+        }
+        const textures = [
+            "ball_prototype",
+            "ball_red",
+            "ball_green",
+            "ball_blue",
+            "ball_orange",
+            "ball_purple",
+            "ball_yellow"
+        ]
+
+        let emitter = new Particles(this, null, ballParticleConfig, textures);
+        return (action) => {
+            if (action === "add") {
+                this.stage.addChildAt(emitter.container, 1);
+                emitter.update();
+            } else {
+                emitter.emitter.destroy();
+                emitter.emitter.cleanup();
+                this.stage.removeChild(emitter.container);
+                emitter.update = () => { };
+            }
+        }
+    })()
+    setTimeout(() => {
+        ballParticle("add");
+    }, 1000);
 }

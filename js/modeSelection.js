@@ -312,7 +312,7 @@ export default class modeSelection {
                 x: this.targetX
             });
         //friendly particle
-        let emitter = new Particles(this.app, this, this.friendlyParticleConfig, "flame");
+        let emitter = new Particles(this.app, this, this.friendlyParticleConfig, ["flame"]);
         this.app.stage.addChild(emitter.container);
         emitter.update();
 
@@ -340,7 +340,7 @@ export default class modeSelection {
         });
         // league particle
         TweenMax.delayedCall(0.4, () => {
-            let emitter = new Particles(this.app, this, this.leagueParticleConfig, "flame");
+            let emitter = new Particles(this.app, this, this.leagueParticleConfig, ["flame"]);
             this.app.stage.addChild(emitter.container);
             emitter.update();
             TweenMax.delayedCall(0.2, () => {
@@ -464,7 +464,7 @@ export default class modeSelection {
     }
 
     star_Particles() {
-        let emitter = new Particles(this.app, this, this.starParticleConfig, "star-particle");
+        let emitter = new Particles(this.app, this, this.starParticleConfig, ["star-particle"]);
         this.app.stage.addChildAt(emitter.container, 1);
         emitter.update();
 

@@ -281,7 +281,7 @@ export default class EditTeam {
         }
         this.saveBtn = new RotatingButton(this.app, null, null, saveOnPointerDown);
         this.container.addChild(this.saveBtn);
-        this.saveBtn.setButtonSize(this.container.height * 0.1, this.container.width * 0.75, this.container.height * 0.22);
+        this.saveBtn.setButtonSize(this.container.height * 0.1, this.container.width * 0.7, this.container.height * 0.22);
         this.saveBtn.addLabel(`Save`, 0.4);
 
         //--BACK BUTTON
@@ -296,7 +296,7 @@ export default class EditTeam {
         }
         this.backBtn = new RotatingButton(this.app, null, null, backOnPointerDown);
         this.container.addChild(this.backBtn);
-        this.backBtn.setButtonSize(this.container.height * 0.1, this.container.width * 0.75, this.container.height * 0.1);
+        this.backBtn.setButtonSize(this.container.height * 0.1, this.container.width * 0.7, this.container.height * 0.1);
         this.backBtn.addLabel(`Back`, 0.4);
     }
 

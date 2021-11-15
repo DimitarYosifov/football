@@ -336,7 +336,7 @@
         "y": 0.5
       }
     },
-    "ball_green - Copy": {
+    "ball_green": {
       "frame": {
         "x": 1039,
         "y": 0,
@@ -432,24 +432,48 @@
         "y": 0.5
       }
     },
-    "ball_green": {
+    "next": {
       "frame": {
-        "x": 1039,
+        "x": 1814,
         "y": 0,
-        "w": 194,
-        "h": 190
+        "w": 150,
+        "h": 150
       },
       "rotated": false,
-      "trimmed": true,
+      "trimmed": false,
       "spriteSourceSize": {
-        "x": 3,
-        "y": 5,
-        "w": 194,
-        "h": 190
+        "x": 0,
+        "y": 0,
+        "w": 150,
+        "h": 150
       },
       "sourceSize": {
-        "w": 200,
-        "h": 200
+        "w": 150,
+        "h": 150
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "prev": {
+      "frame": {
+        "x": 1814,
+        "y": 150,
+        "w": 150,
+        "h": 150
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 150,
+        "h": 150
+      },
+      "sourceSize": {
+        "w": 150,
+        "h": 150
       },
       "pivot": {
         "x": 0.5,
@@ -463,7 +487,7 @@
     "image": "main-1.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1814,
+      "w": 1964,
       "h": 2048
     },
     "scale": 1
