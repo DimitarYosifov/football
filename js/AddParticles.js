@@ -9,6 +9,7 @@ export default class AddParticles {
         this.container = new PIXI.particles.ParticleContainer(6000, { scale: true, position: true, rotation: true, alpha: true });
 
         this.emitter = new PIXI.particles.Emitter(
+            this.container ,
             this.textures,
             config
         );
