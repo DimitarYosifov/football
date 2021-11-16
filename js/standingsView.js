@@ -1,6 +1,7 @@
 import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
 import EditTeam from "./EditTeam.js";
+import TopScorers from "./TopScorers.js";
 import { serverRequest } from "./Request.js"
 import GameTexture from "./GameTexture.js";
 import Background from "./Background.js";
@@ -12,6 +13,8 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     this.fixturesHeader;
     this.fixturesContainer = new PIXI.Container;
     this.stage.alpha = 0;
+    this.lastRoundGoals = {};
+    if (!this.topScorers && this.data) this.topScorers = this.data.topScorers;
 
     this.backgroundImg = new Background(this, {
         gamePhase: "standingsViews",
@@ -68,6 +71,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             this.allClubNames = this.allClubs.map(club => club.name);
             if (!this.seasonFixtures) {
                 this.teams = [];
+                this.topScorers = {};
                 this.allClubNames.forEach((club, clubIdx) => {
                     let team = {};
                     team.name = club;
@@ -79,6 +83,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     team.goalsDifference = "0";
                     team.points = 0;
                     this.teams.push(team);
+                    this.topScorers[club] = [0, 0, 0, 0, 0, 0];
                 })
                 this.currentRound = 1;
                 this.seasonFixtures = new SeasonFixtures(this.allClubNames).seasonFixtures;
@@ -94,7 +99,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.currentRound = data.currentRound;
     }
 
-    increaseRound ? this.currentRound++ : null;
+    // increaseRound ? this.currentRound++ : null;
 
     let addButtons = () => {
         //---CONTIONUE BUTTON
@@ -112,14 +117,18 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 alert("You have reached the end of the season.Thank you for playing :)");
                 location.reload();
             }
-            else if (this.selectedRound !== this.currentRound + 1) {
+            else if (this.selectedRound === 1 && this.currentRound === 1) {//this is lame but works
+                ballParticle();
+                this.stage.removeChildren();
+                this.startLevel();
+            }
+            else if (this.selectedRound !== this.currentRound || (this.selectedRound === 2 && this.currentRound === 1)) {
                 increaseRound = false;
                 lastGameRersult = null;
                 generateResults = false;
                 scrollToCurrentRound(0, this.selectedRound === this.currentRound);
             }
             else {
-                this.currentRound++;
                 ballParticle();
                 this.stage.removeChildren();
                 this.startLevel();
@@ -144,6 +153,21 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.stage.addChild(this.editTeameBtn);
         this.editTeameBtn.setButtonSize(this.height * 0.15, this.width * 0.84, this.height * 0.89);
         this.editTeameBtn.addLabel(`Edit\nTeam`, 0.24);
+
+        //-----TOP SCORERS TEAM BTN
+        let topScorersOnPointerDown = () => {
+            TweenMax.to(this.stage, 0.35, {
+                alpha: 0, onComplete: () => {
+                    this.topScorersContainer = new TopScorers(this);
+                    this.stage.addChild(this.topScorersContainer);
+                }
+            });
+        }
+
+        this.topScorerBtn = new RotatingButton(this, null, null, topScorersOnPointerDown);
+        this.stage.addChild(this.topScorerBtn);
+        this.topScorerBtn.setButtonSize(this.height * 0.15, this.width * 0.16, this.height * 0.89);
+        this.topScorerBtn.addLabel(`Top\nScorers`, 0.24);
     }
 
     serverRequest(
@@ -295,7 +319,8 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     user: this.user,
                     currentRound: currentRound,
                     playerClubData: this.playerClubData,
-                    teams: this.teams
+                    teams: this.teams,
+                    topScorers: this.topScorers
                 }
             )
         ).then(res => {
@@ -315,18 +340,24 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     }
 
     let scrollToCurrentRound = (delay, additionalScroll = 0) => {
+        this.prev.interactive = false;
+        this.next.interactive = false;
+        this.prev.alpha = 0.35;
+        this.prev.alpha = 0.35;
         this.selectedRound = this.currentRound;
         if (additionalScroll) this.selectedRound++;
         let x = this.width * (this.currentRound - 1 + additionalScroll) * -1;
+
+        if (increaseRound) {
+            x += this.width;
+            delay = 0;
+        }
         TweenMax.to(this.fixturesContainer, 0.75,
             {
                 delay: delay,
                 // ease: Back.easeIn,
                 x: x,
-                onStart: () => {
-                    this.prev.interactive = false;
-                    this.next.interactive = false;
-                },
+                onStart: () => { },
                 onComplete: () => {
                     if (this.selectedRound !== 1) {
                         this.prev.interactive = true;
@@ -389,6 +420,11 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     } else {
                         if (lastGameRersult && round === this.currentRound) {
                             result = lastGameRersult;
+                            if (firstClub !== playerClub) {
+                                this.lastRoundGoals[firstClub] = result.split("-")[0];
+                            } else {
+                                this.lastRoundGoals[firstClub] = result.split("-")[1];
+                            }
                             //this is dirty hack here to remove undefined...
                             this.seasonFixtures[round][i] = this.seasonFixtures[round][i].split(" ")[0];
                             this.seasonFixtures[round][i] += ` ${result}`;
@@ -446,6 +482,10 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 })
             }
 
+            if (increaseRound) {
+                generateRoundScorers();
+            }
+            increaseRound ? this.currentRound++ : null;
             recordFixtures(this.currentRound);
 
             this.fixturesContainer.y = this.height * 0.33 - this.fixturesContainer.height / 2;
@@ -458,6 +498,8 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 this.allClubs.find(club => club.name === firstClub).clubData.power,
                 this.allClubs.find(club => club.name === secondClub).clubData.power
             );
+            this.lastRoundGoals[firstClub] = result.split("-")[0];
+            this.lastRoundGoals[secondClub] = result.split("-")[1];
 
             this.seasonFixtures[this.currentRound][i] += ` ${result}`;
             calculatePoints(firstClub, secondClub, result);
@@ -502,10 +544,11 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.prev.anchor.set(0, 0);
         this.stage.addChild(this.prev);
         this.prev.interactive = true;
+        this.prev.alpha = this.currentRound === 1 ? 0.35 : 1;
         this.prev.on('pointerdown', () => {
             let x = this.fixturesContainer.x;
             this.selectedRound--;
-             TweenMax.to(this.fixturesContainer, 0.5,
+            TweenMax.to(this.fixturesContainer, 0.5,
                 {
                     x: x += this.width,
                     ease: Back.easeInOut,
@@ -535,6 +578,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.next.anchor.set(1, 0);
         this.stage.addChild(this.next);
         this.next.interactive = true;
+        this.next.alpha = this.currentRound === this.leagueRounds ? 0.35 : 1;
         this.next.on('pointerdown', () => {
             let x = this.fixturesContainer.x;
             this.selectedRound++;
@@ -558,6 +602,35 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     }
                 }
             );
+        })
+    }
+
+    let generateRoundScorers = () => {
+
+        Object.keys(this.lastRoundGoals).forEach((team, index) => {
+            for (let index = 0; index < this.lastRoundGoals[team]; index++) {
+                let rnd = Math.floor(Math.random() * 100) + 1;
+                let scorerIndex;
+                if (rnd <= 5) {
+                    scorerIndex = 0;
+                }
+                else if (rnd <= 15) {
+                    scorerIndex = 1;
+                }
+                else if (rnd <= 25) {
+                    scorerIndex = 2;
+                }
+                else if (rnd <= 45) {
+                    scorerIndex = 3;
+                }
+                else if (rnd <= 65) {
+                    scorerIndex = 4;
+                }
+                else {
+                    scorerIndex = 5;
+                }
+                this.topScorers[team][scorerIndex]++;
+            }
         })
     }
 

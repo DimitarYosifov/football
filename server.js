@@ -124,13 +124,15 @@ app.post('/fixtures', async (req, res) => {
     let playerClubData = req.body.playerClubData;
     let currentRound = req.body.currentRound;
     let teams = req.body.teams;
+    let topScorers = req.body.topScorers;
     res.set('Content-Type', 'application/json');
     firebase.database().ref('/users/' + user + `/fixtures`).set({
         seasonFixtures: {
             seasonFixtures: seasonFixtures,
             currentRound: currentRound,
             playerClubData: playerClubData,
-            teams: teams
+            teams: teams,
+            topScorers:topScorers
         }
     }, function (error) {
         if (error) {

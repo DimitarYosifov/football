@@ -281,8 +281,14 @@ export default class EditTeam {
         }
         this.saveBtn = new RotatingButton(this.app, null, null, saveOnPointerDown);
         this.container.addChild(this.saveBtn);
-        this.saveBtn.setButtonSize(this.container.height * 0.1, this.container.width * 0.7, this.container.height * 0.22);
+        this.saveBtn.setButtonSize(this.app.height * 0.1, this.app.width * 1.2, this.container.height * 0.2);
         this.saveBtn.addLabel(`Save`, 0.4);
+        TweenMax.to([this.saveBtn, this.saveBtn.label], 0.3, {
+            delay: 0.8,
+            ease: Back.easeOut,
+            x: this.app.width * 0.9,
+            onComplete: () => { }
+        });
 
         //--BACK BUTTON
         let backOnPointerDown = () => {
@@ -290,14 +296,35 @@ export default class EditTeam {
             for (let i = 0; i < this.players.length; i++) {
                 this.app.playerLineUp[i].substitute = i < 6 ? false : true;
             }
-            this.app.checkContinueAllowed();
-            this.app.stage.removeChild(this.container);
-            this.app.stage.removeChild(this.backgroundImg);
+            TweenMax.to([this.saveBtn, this.saveBtn.label], 0.3, {
+                delay: 0.1,
+                ease: Back.easeIn,
+                x: this.app.width * 1.2,
+                onComplete: () => {
+                    TweenMax.delayedCall(0.25, () => {
+                        this.app.checkContinueAllowed();
+                        this.app.stage.removeChild(this.container);
+                        this.app.stage.removeChild(this.backgroundImg);
+                    });
+                }
+            });
+            TweenMax.to([this.backBtn, this.backBtn.label], 0.3, {
+                // delay: 0.2,
+                ease: Back.easeIn,
+                x: this.app.width * 1.2,
+                onComplete: () => { }
+            });
         }
         this.backBtn = new RotatingButton(this.app, null, null, backOnPointerDown);
         this.container.addChild(this.backBtn);
-        this.backBtn.setButtonSize(this.container.height * 0.1, this.container.width * 0.7, this.container.height * 0.1);
+        this.backBtn.setButtonSize(this.app.height * 0.1, this.app.width * 1.2, this.container.height * 0.1);
         this.backBtn.addLabel(`Back`, 0.4);
+        TweenMax.to([this.backBtn, this.backBtn.label], 0.3, {
+            delay: 0.9,
+            ease: Back.easeOut,
+            x: this.app.width * 0.9,
+            onComplete: () => { }
+        });
     }
 
     addSavedtext() {

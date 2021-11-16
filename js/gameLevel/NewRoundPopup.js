@@ -180,7 +180,7 @@ export default class NewRoundPopup extends PIXI.Container {
                 }
                 else {
                     recordClubPlayersParams(this.app, true);
-                    standingsView.bind(this.app,)(true, false, this.result._text, true);
+                    standingsView.bind(this.app,)(true, true, this.result._text, true);
                 }
             });
             this.addChild(this.continueBtn);

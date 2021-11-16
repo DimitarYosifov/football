@@ -24,6 +24,30 @@
         "y": 0.5
       }
     },
+    "scorer": {
+      "frame": {
+        "x": 0,
+        "y": 1485,
+        "w": 225,
+        "h": 400
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 225,
+        "h": 400
+      },
+      "sourceSize": {
+        "w": 225,
+        "h": 400
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
     "bg55": {
       "frame": {
         "x": 750,
@@ -104,7 +128,7 @@
     "format": "RGBA8888",
     "size": {
       "w": 1710,
-      "h": 1867
+      "h": 1885
     },
     "scale": 1
   }
