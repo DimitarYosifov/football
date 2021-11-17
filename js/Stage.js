@@ -72,22 +72,22 @@ export default class Stage {
             this.canvas.width = Math.floor(this.width);
             this.canvas.height = Math.floor(this.height);
 
-            this.stage.width = Math.floor(this.width) * 14;
+            // this.stage.width = Math.floor(this.width) * 14;
             // this.stage.height = Math.floor(this.height);
-            if (this.stage.scale.x > 1) {
-                this.stage.scale.x = 1;
-            }
-            this.stage.scale.y = this.stage.scale.x;
+            // if (this.stage.scale.x > 1) {
+            //     this.stage.scale.x = 1;
+            // }
+            // this.stage.scale.y = this.stage.scale.x;
 
-            this.renderer.resize(this.width, this.height);
+            this.renderer.resize(this.canvas.width, this.canvas.height);
             if (!this.isAppStarted) {
                 this.isAppStarted = true;
                 this.checkLoaded();
             }
-            this.renderer.render(this.stage);
+            // this.renderer.render(this.stage);
         }
 
-        const minResolution = 3; 
+        const minResolution = 2; 
 
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height,
             {

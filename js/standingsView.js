@@ -89,6 +89,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 this.seasonFixtures = new SeasonFixtures(this.allClubNames).seasonFixtures;
             }
             createFixtures();
+            if (this.selectedRound !== 1 && increaseRound) this.selectedRound--;
         })
     }
 
