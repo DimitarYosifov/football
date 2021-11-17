@@ -329,25 +329,43 @@ export default class EditTeam {
 
     addSavedtext() {
         //changes saved text
+        this.saveBtn.interactive = false;
         let changesSaved = new PIXI.Text(`saved`, {
             fontFamily: this.app.config.mainFont,
             fontSize: this.app.height / 8,
-            fill: '#ffffff',
+            fill: '#32cf56',
             align: 'center',
             stroke: '#000000',
-            fontWeight: 200,
+            fontWeight: 800,
             lineJoin: "bevel",
-            strokeThickness: 2
+            strokeThickness: 6
         });
         changesSaved.position.set(
-            this.app.width / 2,
+            -400,
             this.app.height / 2
         );
+        TweenMax.to(changesSaved, 0.35, {
+            // delay: 0.3,
+            ease: Back.easeOut,
+            x: this.app.width / 2,
+            onComplete: () => { }
+        });
+        TweenMax.to(changesSaved, 0.35, {
+            delay: 1.1,
+            ease: Back.easeIn,
+            x: this.app.width + 400,
+            onComplete: () => {
+                this.app.stage.removeChild(changesSaved);
+                this.saveBtn.interactive = true;
+            }
+        });
+
+
         changesSaved.anchor.set(0.5, 0.5);
         this.app.stage.addChild(changesSaved);
-        TweenMax.delayedCall(0.75, () => {
-            this.app.stage.removeChild(changesSaved);
-        });
+        // TweenMax.delayedCall(0.75, () => {
+        // this.app.stage.removeChild(changesSaved);
+        // });
     }
     recordData() {
         let club = this.app.allClubs.find(t => t.name === this.clubName)

@@ -31,7 +31,7 @@ export default class Stage {
         this.width = 1080;
         this.height = 1920;
 
-        let onresize = () => { //16:9
+        let onresize = () => { //9:16
 
             const scaleFactor = Math.min(
                 window.innerWidth / 1080,
@@ -72,23 +72,22 @@ export default class Stage {
             this.canvas.width = Math.floor(this.width);
             this.canvas.height = Math.floor(this.height);
 
-            // this.stage.height = Math.floor(this.width);
-            // this.stage.width = Math.floor(this.height);
+            this.stage.width = Math.floor(this.width) * 14;
+            // this.stage.height = Math.floor(this.height);
+            if (this.stage.scale.x > 1) {
+                this.stage.scale.x = 1;
+            }
+            this.stage.scale.y = this.stage.scale.x;
 
             this.renderer.resize(this.width, this.height);
-
             if (!this.isAppStarted) {
                 this.isAppStarted = true;
                 this.checkLoaded();
             }
-
-            // if (this.stage.scale.x > 1) {
-            //     this.stage.scale.x = 1;
-            // }
-            // this.stage.scale.y = this.stage.scale.x;
+            this.renderer.render(this.stage);
         }
 
-        const minResolution = 2;
+        const minResolution = 3; 
 
         this.renderer = PIXI.autoDetectRenderer(this.canvas.width, this.canvas.height,
             {
@@ -99,15 +98,15 @@ export default class Stage {
                 autoDensity: true,
                 antialias: true
             }, {
-            // forceCanvas: true
+            forceCanvas: true
         });
 
         PIXI.settings.ROUND_PIXELS = true;
         onresize();
         this.animationLoop = () => {
-            if (this.level && this.level.snowContainer) {
-                this.level.snowContainer.update();
-            }
+            // if (this.level && this.level.snowContainer) {
+            //     this.level.snowContainer.update();
+            // }
             this.renderer.render(this.stage);
             if (!this.landscape) {
                 requestAnimationFrame(this.animationLoop);

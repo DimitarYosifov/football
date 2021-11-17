@@ -397,10 +397,10 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     let firstClub = splitGame.split(":")[0];
                     let secondClub = splitGame.split(":")[1];
 
-                    if (firstClub === playerClub) {
+                    if (firstClub === playerClub && round === this.currentRound) {
                         this.opponentClubData = this.allClubs.find(c => c.name === secondClub).clubData;
                         this.isPlayerHome = true;
-                    } else if (secondClub === playerClub) {
+                    } else if (secondClub === playerClub && round === this.currentRound) {
                         this.opponentClubData = this.allClubs.find(c => c.name === firstClub).clubData;
                         this.isPlayerHome = false;
                     }

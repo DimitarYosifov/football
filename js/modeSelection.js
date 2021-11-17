@@ -30,10 +30,10 @@ export default class modeSelection {
         this.backgroundImg = new Background(this.app, {
             gamePhase: "modeSelection",
             sprite: new GameTexture(this.app, "bg909"),
-            bg_x: -this.app.width * 0.005,
-            bg_y: -this.app.height * 0.005,
-            bg_width: this.app.width * 1.005,
-            bg_height: this.app.height * 1.005
+            bg_x:  this.app.width * 0 ,
+            bg_y:  this.app.height * 0 ,
+            bg_width: this.app.width * 1 ,
+            bg_height: this.app.height * 1 
         });
         this.app.stage.addChild(this.backgroundImg);
     }
