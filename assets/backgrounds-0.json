@@ -24,10 +24,58 @@
         "y": 0.5
       }
     },
-    "scorer": {
+    "yellowCardsBG": {
       "frame": {
         "x": 0,
         "y": 1485,
+        "w": 450,
+        "h": 800
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 450,
+        "h": 800
+      },
+      "sourceSize": {
+        "w": 450,
+        "h": 800
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "bg55": {
+      "frame": {
+        "x": 800,
+        "y": 0,
+        "w": 640,
+        "h": 960
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 640,
+        "h": 960
+      },
+      "sourceSize": {
+        "w": 640,
+        "h": 960
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "scorer": {
+      "frame": {
+        "x": 1760,
+        "y": 0,
         "w": 225,
         "h": 400
       },
@@ -48,58 +96,10 @@
         "y": 0.5
       }
     },
-    "bg55": {
-      "frame": {
-        "x": 750,
-        "y": 0,
-        "w": 640,
-        "h": 960
-      },
-      "rotated": true,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 640,
-        "h": 960
-      },
-      "sourceSize": {
-        "w": 640,
-        "h": 960
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    "bg909": {
-      "frame": {
-        "x": 750,
-        "y": 640,
-        "w": 570,
-        "h": 946
-      },
-      "rotated": true,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 570,
-        "h": 946
-      },
-      "sourceSize": {
-        "w": 570,
-        "h": 946
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
     "bg33": {
       "frame": {
         "x": 750,
-        "y": 1210,
+        "y": 640,
         "w": 657,
         "h": 875
       },
@@ -114,6 +114,30 @@
       "sourceSize": {
         "w": 657,
         "h": 875
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "bg435": {
+      "frame": {
+        "x": 800,
+        "y": 1297,
+        "w": 626,
+        "h": 939
+      },
+      "rotated": true,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 626,
+        "h": 939
+      },
+      "sourceSize": {
+        "w": 626,
+        "h": 939
       },
       "pivot": {
         "x": 0.5,
@@ -127,8 +151,8 @@
     "image": "backgrounds-0.png",
     "format": "RGBA8888",
     "size": {
-      "w": 1710,
-      "h": 1885
+      "w": 1985,
+      "h": 1935
     },
     "scale": 1
   }

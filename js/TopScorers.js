@@ -61,8 +61,8 @@ export default class TopScorers extends PIXI.Container {
             // fill: isPlayerClub ? "#6ddd48" : '#dbb7b7',
             fill: '#dbb7b7',
             align: 'center',
-            // stroke: '#000000',
-            // strokeThickness: 3
+            stroke: '#000000',
+            strokeThickness: 3
         });
         this.header.position.set(this.app.width / 2, -200);
         this.header.anchor.set(0.5, 0);
@@ -86,8 +86,8 @@ export default class TopScorers extends PIXI.Container {
                 fontSize: this.app.height / 25,
                 fill: '#dbb7b7',
                 // align: 'center',
-                // stroke: '#000000',
-                // strokeThickness: 3
+                stroke: '#000000',
+                strokeThickness: 3
             });
             index.position.set(this.app.width * 0.05, y + this.app.height * 0.01);
             index.anchor.set(0.5, 0);
@@ -105,8 +105,8 @@ export default class TopScorers extends PIXI.Container {
                 fontSize: this.app.height / 30,
                 fill: '#dbb7b7',
                 // align: 'center',
-                // stroke: '#000000',
-                // strokeThickness: 3
+                stroke: '#000000',
+                strokeThickness: 3
             });
             team.position.set(this.app.width * 0.4, y + this.app.height * 0.01);
             team.anchor.set(0, 0);
@@ -117,8 +117,8 @@ export default class TopScorers extends PIXI.Container {
                 fontSize: this.app.height / 25,
                 fill: '#dbb7b7',
                 // align: 'center',
-                // stroke: '#000000',
-                // strokeThickness: 3
+                stroke: '#000000',
+                strokeThickness: 3
             });
             goals.position.set(this.app.width * 0.75, y + this.app.height * 0.01);
             goals.anchor.set(0, 0);

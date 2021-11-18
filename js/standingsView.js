@@ -2,6 +2,7 @@ import SeasonFixtures from "./SeasonFixtures.js";
 import { generateResult } from "./generateResult.js";
 import EditTeam from "./EditTeam.js";
 import TopScorers from "./TopScorers.js";
+import MostYellowCards from "./MostYellowCards.js";
 import { serverRequest } from "./Request.js"
 import GameTexture from "./GameTexture.js";
 import Background from "./Background.js";
@@ -15,6 +16,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     this.stage.alpha = 0;
     this.lastRoundGoals = {};
     if (!this.topScorers && this.data) this.topScorers = this.data.topScorers;
+    if (!this.mostYellowCards && this.data) this.mostYellowCards = this.data.mostYellowCards;
 
     this.backgroundImg = new Background(this, {
         gamePhase: "standingsViews",
@@ -72,6 +74,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
             if (!this.seasonFixtures) {
                 this.teams = [];
                 this.topScorers = {};
+                this.mostYellowCards = {};
                 this.allClubNames.forEach((club, clubIdx) => {
                     let team = {};
                     team.name = club;
@@ -84,6 +87,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     team.points = 0;
                     this.teams.push(team);
                     this.topScorers[club] = [0, 0, 0, 0, 0, 0];
+                    this.mostYellowCards[club] = [0, 0, 0, 0, 0, 0];
                 })
                 this.currentRound = 1;
                 this.seasonFixtures = new SeasonFixtures(this.allClubNames).seasonFixtures;
@@ -106,7 +110,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         //---CONTIONUE BUTTON
         let continueOnPointerDown = () => {
             if (
-                !this.seasonFixtures[this.currentRound + 1] &&
+                !this.seasonFixtures[this.currentRound] &&
                 lastGameRersult &&
                 typeof this.data === "boolean"
             ) {
@@ -119,6 +123,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 location.reload();
             }
             else if (this.selectedRound === 1 && this.currentRound === 1) {//this is lame but works
+                getNextOpponent();
                 ballParticle();
                 this.stage.removeChildren();
                 this.startLevel();
@@ -130,6 +135,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 scrollToCurrentRound(0, this.selectedRound === this.currentRound);
             }
             else {
+                getNextOpponent();
                 ballParticle();
                 this.stage.removeChildren();
                 this.startLevel();
@@ -155,7 +161,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.editTeameBtn.setButtonSize(this.height * 0.15, this.width * 0.84, this.height * 0.89);
         this.editTeameBtn.addLabel(`Edit\nTeam`, 0.24);
 
-        //-----TOP SCORERS TEAM BTN
+        //-----TOP SCORERS BTN
         let topScorersOnPointerDown = () => {
             TweenMax.to(this.stage, 0.35, {
                 alpha: 0, onComplete: () => {
@@ -167,8 +173,23 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
         this.topScorerBtn = new RotatingButton(this, null, null, topScorersOnPointerDown);
         this.stage.addChild(this.topScorerBtn);
-        this.topScorerBtn.setButtonSize(this.height * 0.15, this.width * 0.16, this.height * 0.89);
+        this.topScorerBtn.setButtonSize(this.height * 0.10, this.width * 0.16, this.height * 0.91);
         this.topScorerBtn.addLabel(`Top\nScorers`, 0.24);
+
+        //-----MOST YELLOW CARDS BTN
+        let mostYellowCardsOnPointerDown = () => {
+            TweenMax.to(this.stage, 0.35, {
+                alpha: 0, onComplete: () => {
+                    this.mostYellowCardsContainer = new MostYellowCards(this);
+                    this.stage.addChild(this.mostYellowCardsContainer);
+                }
+            });
+        }
+
+        this.mostYellowCardsBtn = new RotatingButton(this, null, null, mostYellowCardsOnPointerDown);
+        this.stage.addChild(this.mostYellowCardsBtn);
+        this.mostYellowCardsBtn.setButtonSize(this.height * 0.10, this.width * 0.16, this.height * 0.81);
+        this.mostYellowCardsBtn.addLabel(`Yellow\nCards`, 0.24);
     }
 
     serverRequest(
@@ -321,7 +342,8 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     currentRound: currentRound,
                     playerClubData: this.playerClubData,
                     teams: this.teams,
-                    topScorers: this.topScorers
+                    topScorers: this.topScorers,
+                    mostYellowCards: this.mostYellowCards
                 }
             )
         ).then(res => {
@@ -398,13 +420,13 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     let firstClub = splitGame.split(":")[0];
                     let secondClub = splitGame.split(":")[1];
 
-                    if (firstClub === playerClub && round === this.currentRound) {
-                        this.opponentClubData = this.allClubs.find(c => c.name === secondClub).clubData;
-                        this.isPlayerHome = true;
-                    } else if (secondClub === playerClub && round === this.currentRound) {
-                        this.opponentClubData = this.allClubs.find(c => c.name === firstClub).clubData;
-                        this.isPlayerHome = false;
-                    }
+                    // if (firstClub === playerClub && round === this.currentRound) {
+                    //     this.opponentClubData = this.allClubs.find(c => c.name === secondClub).clubData;
+                    //     this.isPlayerHome = true;
+                    // } else if (secondClub === playerClub && round === this.currentRound) {
+                    //     this.opponentClubData = this.allClubs.find(c => c.name === firstClub).clubData;
+                    //     this.isPlayerHome = false;
+                    // }
 
                     let row = new PIXI.Container;
                     let y = this.height * 0.1 + this.height * 0.05 * i
@@ -485,6 +507,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
             if (increaseRound) {
                 generateRoundScorers();
+                generateRoundYellowCards();
             }
             increaseRound ? this.currentRound++ : null;
             recordFixtures(this.currentRound);
@@ -606,8 +629,22 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         })
     }
 
-    let generateRoundScorers = () => {
+    let getNextOpponent = () => {
+        let playerClub = this.playerClubData.name;
+        let game = this.seasonFixtures[this.currentRound].find(x => x.includes(playerClub));
+        let firstClub = game.split(":")[0];
+        let secondClub = game.split(":")[1];
 
+        if (firstClub === playerClub) {
+            this.opponentClubData = this.allClubs.find(c => c.name === secondClub).clubData;
+            this.isPlayerHome = true;
+        } else if (secondClub === playerClub) {
+            this.opponentClubData = this.allClubs.find(c => c.name === firstClub).clubData;
+            this.isPlayerHome = false;
+        }
+    }
+
+    let generateRoundScorers = () => {
         Object.keys(this.lastRoundGoals).forEach((team, index) => {
             for (let index = 0; index < this.lastRoundGoals[team]; index++) {
                 let rnd = Math.floor(Math.random() * 100) + 1;
@@ -633,6 +670,31 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                 this.topScorers[team][scorerIndex]++;
             }
         })
+    }
+
+    let generateRoundYellowCards = () => {
+        const playerClub = this.playerClubData.name;
+        const opponentClub = this.opponentClubData.name;
+        for (let index = 0; index < this.allClubNames.length; index++) {
+            const club = this.allClubs[index].name;
+            let randomYellowCardsNum = Math.floor(Math.random() * 5);
+            if (club === playerClub) {
+                continue;
+            } else if (club === opponentClub) {
+                for (let x = 0; x < this.level.opponentCards.children.length; x++) {
+                    let card = this.level.opponentCards.children[x];
+                    if (card.hasRedCard || card.hasYellowCard) {
+                        this.mostYellowCards[club][x]++;
+                    }
+                }
+            } else {
+                for (let x = 0; x < randomYellowCardsNum; x++) {
+                    //random player
+                    let randomPLayerIdx = Math.floor(Math.random() * 5);
+                    this.mostYellowCards[club][randomPLayerIdx]++;
+                }
+            }
+        }
     }
 
     let ballParticle = ((action) => {

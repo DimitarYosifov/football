@@ -1,23 +1,23 @@
 {
   "frames": {
-    "bg435": {
+    "bg909": {
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 626,
-        "h": 939
+        "w": 570,
+        "h": 946
       },
       "rotated": false,
       "trimmed": false,
       "spriteSourceSize": {
         "x": 0,
         "y": 0,
-        "w": 626,
-        "h": 939
+        "w": 570,
+        "h": 946
       },
       "sourceSize": {
-        "w": 626,
-        "h": 939
+        "w": 570,
+        "h": 946
       },
       "pivot": {
         "x": 0.5,
@@ -31,8 +31,8 @@
     "image": "backgrounds-1.png",
     "format": "RGBA8888",
     "size": {
-      "w": 626,
-      "h": 939
+      "w": 570,
+      "h": 946
     },
     "scale": 1
   }
