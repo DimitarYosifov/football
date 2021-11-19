@@ -5,9 +5,19 @@ import TopScorers from "./TopScorers.js";
 import MostYellowCards from "./MostYellowCards.js";
 import { serverRequest } from "./Request.js"
 import GameTexture from "./GameTexture.js";
+import Animation from "./Animation.js";
 import Background from "./Background.js";
 import RotatingButton from "./RotatingButton.js";
 import Particles from "./AddParticles.js";
+
+
+
+
+import MatchEndWinningsPopup from "./gameLevel/MatchEndWinningsPopup.js";//remove later
+
+
+
+
 
 export function standingsView(data, increaseRound = false, lastGameRersult = null, generateResults = false) {
     this.data = data;
@@ -677,7 +687,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         const opponentClub = this.opponentClubData.name;
         for (let index = 0; index < this.allClubNames.length; index++) {
             const club = this.allClubs[index].name;
-            let randomYellowCardsNum = Math.floor(Math.random() * 5);
+            let randomYellowCardsNum = Math.floor(Math.random() * 3);
             if (club === playerClub) {
                 continue;
             } else if (club === opponentClub) {
@@ -770,4 +780,61 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     setTimeout(() => {
         ballParticle("add");
     }, 1000);
+
+    let addMoneySection = () => {
+
+        this.moneySectionContainer = new PIXI.Container();
+
+        // section bg
+        this.moneySectionBG = new GameTexture(this, `container4`).sprite;
+        this.moneySectionBG.width = this.width * 0.4;
+        this.moneySectionBG.scale.y = this.moneySectionBG.scale.x;
+        this.moneySectionBG.anchor.set(0, 0);
+        this.moneySectionContainer.addChild(this.moneySectionBG);
+
+        //coin animation
+        let coinAnimData = {
+            name: "coins_anim",
+            frames: 10,
+            speed: 0.3,
+            loop: true,
+            paused: false
+        }
+        this.coin = new Animation(this, coinAnimData);
+        this.coin.x = this.moneySectionContainer.width * 0.1;
+        this.coin.y = this.moneySectionContainer.height * 0.07;
+        this.coin.width = this.width * 0.08;
+        this.coin.scale.y = this.coin.scale.x;
+        this.moneySectionContainer.addChild(this.coin);
+
+        // money amount text
+        this.cashText = new PIXI.Text(this.playerCash || 110, {
+            fontFamily: this.config.mainFont,
+            fontSize: this.height / 35,
+            fill: '#dbb7b7',
+            align: 'center',
+            stroke: '#000000',
+            strokeThickness: 1.5
+        });
+        this.cashText.position.set(this.coin.x + this.coin.width, this.moneySectionContainer.height / 2);
+        this.cashText.anchor.set(0, 0.5);
+        this.moneySectionContainer.addChild(this.cashText);
+
+        this.stage.addChild(this.moneySectionContainer);
+        this.moneySectionContainer.x = this.width * 0.02;
+        this.moneySectionContainer.y = this.height * 0.015;
+
+    }
+    addMoneySection();
+
+
+
+
+
+    // test!!!!!!!!!!!!!!!!!!
+    // setTimeout(() => {
+    //     let test = new MatchEndWinningsPopup(this);
+    //     this.stage.removeChildren();
+    //     this.stage.addChild(test);
+    // }, 1111);
 }

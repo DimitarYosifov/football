@@ -92,7 +92,6 @@ export default class Grid extends PIXI.Container {
                 item1.gridPosition = item2.gridPosition;
                 item2.type = type1;
                 item2.gridPosition = gridPosition1;
-                //              START OF PROTON EFFECT AFTER MATCH
                 let matches = this.checkGridForMatches();
                 if (matches.length !== 0) {
                     this.app.level.animationInProgress = true;
@@ -827,7 +826,7 @@ export default class Grid extends PIXI.Container {
                         y: newY,
                         // delay: fallDelay,
                         onComplete: () => {
-                            // TweenMax.killAll();
+                            // gsap.globalTimeline.clear();
                             this.gridArrays[rowIndex + shouldFall][colIndex] = tweenTarget.parent.type;
                         }
                     });
@@ -847,7 +846,6 @@ export default class Grid extends PIXI.Container {
                     let block = this.blocks[row][colIndex].blockImg;
 
                     let img = block.parent.generateRandomColorBlock();
-                    // let img = "ball_green";    //for test only
 
                     block.texture = new GameTexture(this.app, `${img}`).finalTexture;
                     let startY = this.globalBlocksPositions[el.holes - hole - 1][colIndex].y;
@@ -857,10 +855,8 @@ export default class Grid extends PIXI.Container {
                     TweenMax.to(block, .31 * el.holes, {
                         y: startY,
                         onComplete: () => {
-                            // TweenMax.killAll();
+                            // gsap.globalTimeline.clear();
                             this.gridArrays[el.holes - hole - 1][colIndex] = block.parent.img = img;
-                            // console.table(this.gridArrays);
-                            // console.log(this.blocks);
                         }
                     });
                 }

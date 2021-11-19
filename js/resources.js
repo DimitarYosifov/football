@@ -6,6 +6,7 @@ export function gameResources() {
         ["backgrounds-0", "assets/backgrounds-0.json"],
         ["backgrounds-1", "assets/backgrounds-1.json"],
         ["buttons", "assets/buttons.json"],
+        ["anims", "assets/anims.json"],
         ['Girassol', 'fonts/Girassol-Regular.ttf']
     ]
 }

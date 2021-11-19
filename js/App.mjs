@@ -1,14 +1,9 @@
 import Level from "./Level.js";
 import Stage from "./Stage.js";
-// import ProtonEffects from "./ProtonEffects.js";
 import LogIn from "./LogIn.js";
 import config from "./Config.js";
-import { createNewClub, getClubData } from "./newClub.js";
-import { clubSelection } from "./clubSelection.js";
 import modeSelection from "./modeSelection.js";
 import { standingsView } from "./standingsView.js";
-import { generateResult } from "./generateResult.js";
-import LoadingView from "./LoadingView.js";
 import { serverRequest } from "./Request.js"
 
 export default class App extends Stage {
@@ -48,7 +43,6 @@ export default class App extends Stage {
     }
 
     startLevel() {
-        // this.proton = new ProtonEffects(this);
         this.level = new Level(this);
         this.stage.addChild(this.level);
     }
