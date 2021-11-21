@@ -9,15 +9,7 @@ import Animation from "./Animation.js";
 import Background from "./Background.js";
 import RotatingButton from "./RotatingButton.js";
 import Particles from "./AddParticles.js";
-
-
-
-
-import MatchEndWinningsPopup from "./gameLevel/MatchEndWinningsPopup.js";//remove later
-
-
-
-
+import BangUp from "./BangUp.js";
 
 export function standingsView(data, increaseRound = false, lastGameRersult = null, generateResults = false) {
     this.data = data;
@@ -25,8 +17,10 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
     this.fixturesContainer = new PIXI.Container;
     this.stage.alpha = 0;
     this.lastRoundGoals = {};
+
     if (!this.topScorers && this.data) this.topScorers = this.data.topScorers;
     if (!this.mostYellowCards && this.data) this.mostYellowCards = this.data.mostYellowCards;
+    if ( this.playerCash === undefined && this.data) this.playerCash = this.data.playerCash;
 
     this.backgroundImg = new Background(this, {
         gamePhase: "standingsViews",
@@ -98,6 +92,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     this.teams.push(team);
                     this.topScorers[club] = [0, 0, 0, 0, 0, 0];
                     this.mostYellowCards[club] = [0, 0, 0, 0, 0, 0];
+                    this.playerCash = 0;
                 })
                 this.currentRound = 1;
                 this.seasonFixtures = new SeasonFixtures(this.allClubNames).seasonFixtures;
@@ -353,7 +348,8 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
                     playerClubData: this.playerClubData,
                     teams: this.teams,
                     topScorers: this.topScorers,
-                    mostYellowCards: this.mostYellowCards
+                    mostYellowCards: this.mostYellowCards,
+                    playerCash: this.playerCash
                 }
             )
         ).then(res => {
@@ -787,7 +783,7 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
 
         // section bg
         this.moneySectionBG = new GameTexture(this, `container4`).sprite;
-        this.moneySectionBG.width = this.width * 0.4;
+        this.moneySectionBG.width = this.width * 0.3;
         this.moneySectionBG.scale.y = this.moneySectionBG.scale.x;
         this.moneySectionBG.anchor.set(0, 0);
         this.moneySectionContainer.addChild(this.moneySectionBG);
@@ -796,21 +792,21 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         let coinAnimData = {
             name: "coins_anim",
             frames: 10,
-            speed: 0.3,
+            speed: 0.2,
             loop: true,
             paused: false
         }
         this.coin = new Animation(this, coinAnimData);
         this.coin.x = this.moneySectionContainer.width * 0.1;
         this.coin.y = this.moneySectionContainer.height * 0.07;
-        this.coin.width = this.width * 0.08;
+        this.coin.width = this.width * 0.06;
         this.coin.scale.y = this.coin.scale.x;
         this.moneySectionContainer.addChild(this.coin);
 
         // money amount text
-        this.cashText = new PIXI.Text(this.playerCash || 110, {
+        this.cashText = new PIXI.Text(this.playerCash || 0, {
             fontFamily: this.config.mainFont,
-            fontSize: this.height / 35,
+            fontSize: this.height / 45,
             fill: '#dbb7b7',
             align: 'center',
             stroke: '#000000',
@@ -824,17 +820,11 @@ export function standingsView(data, increaseRound = false, lastGameRersult = nul
         this.moneySectionContainer.x = this.width * 0.02;
         this.moneySectionContainer.y = this.height * 0.015;
 
+        if (lastGameRersult) {
+            this.playerCash += this.lastGameWinnings;
+            let cashBangUp = new BangUp(this, this.cashText, 1, this.cashText.text, this.playerCash, 1);
+        }
+
     }
     addMoneySection();
-
-
-
-
-
-    // test!!!!!!!!!!!!!!!!!!
-    // setTimeout(() => {
-    //     let test = new MatchEndWinningsPopup(this);
-    //     this.stage.removeChildren();
-    //     this.stage.addChild(test);
-    // }, 1111);
 }

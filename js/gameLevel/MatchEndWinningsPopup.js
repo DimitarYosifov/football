@@ -1,24 +1,50 @@
 import GameTexture from "../GameTexture.js";
 import Animation from "./../Animation.js";
 import BangUp from "./../BangUp.js";
+import RotatingButton from "./../RotatingButton.js";
+import { standingsView } from "./../standingsView.js";
+import { recordClubPlayersParams } from "./../recordClubPlayersParams.js";
+import MatchEndWinningsConfig from "./../MatchEndWinningsConfig.js";
 
 export default class MatchEndWinningsPopup extends PIXI.Container {
     constructor(app) {
         super();
         this.app = app;
-
+        this.result = `${this.app.level.playerScore}-${this.app.level.opponentScore}`
         this.totalWinnings = 0;
 
-        this.points = 3;   //check player points
-        this.cashPerPoint = 10;  //create config for this
+
+        //POINTS
+        this.points = 0;
+        if (this.app.level.playerScore > this.app.level.opponentScore) {
+            this.points = 3;
+        }
+        else if (this.app.level.playerScore === this.app.level.opponentScore) {
+            this.points = 1;
+        }
+        this.cashPerPoint = MatchEndWinningsConfig.cashPerPoint;
         this.totalPointsWinnings = this.points * this.cashPerPoint;
 
-        this.goals = 4;   //check player points
-        this.cashPerGoal = 3;  //create config for this
+        //GOALS
+        this.goals = this.app.level.playerScore;
+        this.cashPerGoal = MatchEndWinningsConfig.cashPerGoal;
         this.totalGoalsWinnings = this.goals * this.cashPerGoal;
 
-        this.tickets = 100;   //check player points
-        this.cashPerTicket = 1;  //create config for this
+        ///TICKETS
+        const playerClubPower = this.app.playerClubData.power;
+        const opponentClubPower = this.app.opponentClubData.power;
+        let min = 0;
+        let max = 0;
+        if (this.app.isPlayerHome) {
+            min = MatchEndWinningsConfig.attendance.home[playerClubPower].min;
+            max = MatchEndWinningsConfig.attendance.home[playerClubPower].max;
+            this.cashPerTicket = MatchEndWinningsConfig.ticketPrice[playerClubPower];
+        } else {
+            min = MatchEndWinningsConfig.attendance.away[playerClubPower].min;
+            max = MatchEndWinningsConfig.attendance.away[playerClubPower].max;
+            this.cashPerTicket = MatchEndWinningsConfig.ticketPrice[opponentClubPower];
+        }
+        this.tickets = this.getRandomInt(min, max);
         this.totalTicketsWinnings = this.tickets * this.cashPerTicket;
 
         this.create();
@@ -33,7 +59,7 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
     create() {
         //BG
         this.bg = new PIXI.Graphics();
-        this.bg.beginFill(0x000000, 0.75);
+        this.bg.beginFill(0x000000, 0.85);
         this.bg.drawRect(
             0,
             0,
@@ -105,6 +131,7 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
     }
 
     startTicketsBangUps() {
+        this.continue();
         this.ticketssBangUp = new BangUp(this.app, this.ticketsText, 1, this.ticketsText.text, 0, 0);
         this.totalWinningsBangUp = new BangUp(this.app, this.totalWinningsText, 1, this.totalWinnings, +this.ticketsText.text + this.totalWinnings, 0);
     }
@@ -165,7 +192,7 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
         });
         this.pointsText.anchor.set(0, 0);
         this.pointsRowContainer.addChild(this.pointsText);
-        this.pointsText.position.set(this.app.width * 0.4, this.app.height * 0.465);
+        this.pointsText.position.set(this.app.width * 0.35, this.app.height * 0.465);
 
         // TOTAL POINTS WINNINGS  
         this.pointsText = new PIXI.Text(`${this.totalPointsWinnings}`, {
@@ -182,9 +209,9 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
 
         // COIN IMG
         this.pointsCoinImg = new GameTexture(this.app, `coin`).sprite;
-        this.pointsCoinImg.height = this.app.height * 0.04;
+        this.pointsCoinImg.height = this.app.height * 0.03;
         this.pointsCoinImg.x = this.pointsText.x;
-        this.pointsCoinImg.y = this.app.height * 0.4625;
+        this.pointsCoinImg.y = this.app.height * 0.4725;
         this.pointsCoinImg.scale.x = this.pointsCoinImg.scale.y;
         this.pointsRowContainer.addChild(this.pointsCoinImg);
 
@@ -218,7 +245,7 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
         });
         this.goalsText.anchor.set(0, 0);
         this.goalsRowContainer.addChild(this.goalsText);
-        this.goalsText.position.set(this.app.width * 0.4, this.app.height * 0.545);
+        this.goalsText.position.set(this.app.width * 0.35, this.app.height * 0.545);
 
         // TOTAL POINTS WINNINGS  
         this.goalsText = new PIXI.Text(`${this.totalGoalsWinnings}`, {
@@ -235,9 +262,9 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
 
         // COIN IMG
         this.goalsCoinImg = new GameTexture(this.app, `coin`).sprite;
-        this.goalsCoinImg.height = this.app.height * 0.04;
+        this.goalsCoinImg.height = this.app.height * 0.03;
         this.goalsCoinImg.x = this.goalsText.x;
-        this.goalsCoinImg.y = this.app.height * 0.5425;
+        this.goalsCoinImg.y = this.app.height * 0.5525;
         this.goalsCoinImg.scale.x = this.goalsCoinImg.scale.y;
         this.goalsRowContainer.addChild(this.goalsCoinImg);
 
@@ -271,7 +298,7 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
         });
         this.ticketsText.anchor.set(0, 0);
         this.ticketsRowContainer.addChild(this.ticketsText);
-        this.ticketsText.position.set(this.app.width * 0.4, this.app.height * 0.625);
+        this.ticketsText.position.set(this.app.width * 0.35, this.app.height * 0.625);
 
         // TOTAL TICKETS WINNINGS  
         this.ticketsText = new PIXI.Text(`${this.totalTicketsWinnings}`, {
@@ -288,12 +315,41 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
 
         // COIN IMG
         this.ticketsCoinImg = new GameTexture(this.app, `coin`).sprite;
-        this.ticketsCoinImg.height = this.app.height * 0.04;
+        this.ticketsCoinImg.height = this.app.height * 0.03;
         this.ticketsCoinImg.x = this.ticketsText.x;
-        this.ticketsCoinImg.y = this.app.height * 0.6225;
+        this.ticketsCoinImg.y = this.app.height * 0.6325;
         this.ticketsCoinImg.scale.x = this.ticketsCoinImg.scale.y;
         this.ticketsRowContainer.addChild(this.ticketsCoinImg);
 
         this.addChild(this.ticketsRowContainer);
+    }
+
+    continue() {
+        //  CONTINUE BUTTON
+        let continueOnPointerDown = () => {
+            this.app.stage.removeChildren();
+            this.app.lastGameWinnings = +this.totalWinningsText.text;
+            recordClubPlayersParams(this.app, true);
+            standingsView.bind(this.app,)(true, true, this.result, true);
+        }
+        this.contionueBtn = new RotatingButton(this.app, null, null, continueOnPointerDown);
+        this.addChild(this.contionueBtn);
+        this.contionueBtn.setButtonSize(this.app.height * 0.2, this.app.width * 0.5, this.app.height * 1.25);
+        this.contionueBtn.addLabel(`Continue`, 0.25);
+        this.contionueBtn.interactive = false;
+        TweenMax.to([this.contionueBtn, this.contionueBtn.label], 0.35, {
+            delay: 1.2,
+            ease: Back.easeOut,
+            y: this.app.height * 0.85,
+            onComplete: () => {
+                this.contionueBtn.interactive = true;
+            }
+        });
+    }
+
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }

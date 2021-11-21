@@ -1,6 +1,7 @@
 import { standingsView } from "./../standingsView.js";
 import { recordClubPlayersParams } from "./../recordClubPlayersParams.js";
 import GameTexture from "./../GameTexture.js";
+import MatchEndWinningsPopup from "./MatchEndWinningsPopup.js";
 
 export default class NewRoundPopup extends PIXI.Container {
 
@@ -174,13 +175,13 @@ export default class NewRoundPopup extends PIXI.Container {
             this.continueBtn.interactive = true;
             this.continueBtn.interactive = true;
             this.continueBtn.on('pointerdown', () => {
-                this.app.stage.removeChildren();
                 if (this.app.friendly) {
+                    this.app.stage.removeChildren();
                     location.reload();
-                }
-                else {
-                    recordClubPlayersParams(this.app, true);
-                    standingsView.bind(this.app,)(true, true, this.result._text, true);
+                } else {
+                    let matchEndWinningsPopup = new MatchEndWinningsPopup(this.app);
+                    this.alpha = 0;
+                    this.app.stage.addChild(matchEndWinningsPopup);
                 }
             });
             this.addChild(this.continueBtn);

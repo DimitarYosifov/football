@@ -126,6 +126,7 @@ app.post('/fixtures', async (req, res) => {
     let teams = req.body.teams;
     let topScorers = req.body.topScorers;
     let mostYellowCards = req.body.mostYellowCards;
+    let playerCash = req.body.playerCash;
     res.set('Content-Type', 'application/json');
     firebase.database().ref('/users/' + user + `/fixtures`).set({
         seasonFixtures: {
@@ -135,6 +136,7 @@ app.post('/fixtures', async (req, res) => {
             teams: teams,
             topScorers: topScorers,
             mostYellowCards: mostYellowCards,
+            playerCash: playerCash
         }
     }, function (error) {
         if (error) {
