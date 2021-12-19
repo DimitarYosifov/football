@@ -1,6 +1,6 @@
 export default {
     cashPerPoint: 30000,
-    cashPerGoal: 2000,
+    cashPerGoal: 5000,
     attendance: {
         home: {
             //keys here mean club power
@@ -76,5 +76,11 @@ export default {
         5: 5,
         6: 6,
         7: 7
+    },
+    yellowCardFine: 2000,
+    redCardFine: 10000,
+    injuriesExpenses: {
+        min: 3000,
+        max: 20000
     }
 }
