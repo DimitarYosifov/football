@@ -14,9 +14,9 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
         if (!this.app.isPlayerHome) this.result = this.result.split("").reverse().join("");
         this.totalWinnings = 0;
 
-        this.totalYellowCards = 3//app.level.playerCards.children.filter(c => c.hasYellowCard).length;
-        this.totalRedCards = 1// app.level.playerCards.children.filter(c => c.hasRedCard).length;
-        this.totalInjuries = 1// app.level.playerCards.children.filter(c => c.hasInjury).length;
+        this.totalYellowCards = app.level.playerCards.children.filter(c => c.hasYellowCard).length;
+        this.totalRedCards = app.level.playerCards.children.filter(c => c.hasRedCard).length;
+        this.totalInjuries = app.level.playerCards.children.filter(c => c.hasInjury).length;
 
         this.finePerYellowCard = MatchEndWinningsConfig.yellowCardFine;
         this.finePerRedCard = MatchEndWinningsConfig.redCardFine;
