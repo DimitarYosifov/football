@@ -98,7 +98,7 @@ export default class Stage {
                 autoDensity: true,
                 antialias: true
             }, {
-            forceCanvas: true
+            // forceCanvas: true
         });
 
         PIXI.settings.ROUND_PIXELS = true;

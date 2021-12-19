@@ -10,7 +10,8 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
     constructor(app) {
         super();
         this.app = app;
-        this.result = `${this.app.level.playerScore}-${this.app.level.opponentScore}`
+        this.result = `${this.app.level.playerScore}-${this.app.level.opponentScore}`;
+        if (!this.app.isPlayerHome) this.result = this.result.split("").reverse().join("");
         this.totalWinnings = 0;
 
 
