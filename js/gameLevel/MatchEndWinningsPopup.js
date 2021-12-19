@@ -199,7 +199,7 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
 
     startInjuriesBangUps() {
         this.continue();
-        this.injurisBangUp = new BangUp(this.app, this.totalInjuriesExpensesText, 1, this.totalInjuriesExpensesText.text, 0, 0);
+        this.injurisBangUp = new BangUp(this.app, this.totalInjuriesExpensesText, 1, +this.totalInjuriesExpensesText.text, 0, 0);
         this.totalWinningsBangUp = new BangUp(this.app, this.totalWinningsText, 1, +this.totalWinningsText.text, +this.totalWinningsText.text - Math.abs(+this.totalInjuriesExpensesText.text), 0);
     }
 
@@ -496,7 +496,7 @@ export default class MatchEndWinningsPopup extends PIXI.Container {
         this.injuriesImg.position.set(this.app.width * 0.1, this.app.height * 0.695);
 
         // INJURIES AMOUNT
-        this.injuriesAmountText = new PIXI.Text(`${this.injurieExpense}`, {
+        this.injuriesAmountText = new PIXI.Text(`${this.totalInjuriesExpenses}`, {
             fontFamily: this.app.config.mainFont,
             fontSize: this.app.height / 30,
             fill: '#dbb7b7',

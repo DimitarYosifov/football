@@ -21,12 +21,12 @@ export default {
     isPlayerHome: true,
 
     debugGrid: [
-        ["ball_purple", "red_cross", "ball_red", "red_cross", "red_card", "red_cross"],
-        ["ball_green", "ball_yellow", "yellow_card", "ball_red", "red_card", "ball_yellow"],
-        ["red_card", "yellow_card", "ball_green", "ball_red", "red_card", "ball_green"],
-        ["ball_purple", "ball_yellow", "ball_purple", "red_cross", "red_card", "ball_blue"],
-        ["ball_yellow", "ball_red", "ball_blue", "ball_yellow", "ball_blue", "yellow_card"],
-        ["ball_red", "ball_red", "red_card", "ball_red", "red_card", "red_card"],
+        ["red_cross", "red_cross", "ball_red", "red_cross", "red_cross", "red_cross"],
+        ["yellow_card", "yellow_card", "yellow_card", "ball_red", "red_card", "red_cross"],
+        ["red_card", "yellow_card", "red_cross", "ball_red", "red_card", "ball_green"],
+        ["ball_purple", "red_cross", "yellow_card", "red_cross", "red_card", "ball_blue"],
+        ["ball_yellow", "red_cross", "ball_blue", "ball_yellow", "ball_blue", "yellow_card"],
+        ["ball_red", "ball_red", "red_card", "yellow_card", "red_card", "red_card"],
         ["ball_red", "red_card", "ball_red", "ball_red", "red_cross", "red_card"],
         ["red_card", "red_card", "red_card", "red_cross", "red_card", "red_cross"]
     ],
